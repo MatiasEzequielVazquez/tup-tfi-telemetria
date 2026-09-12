@@ -1,0 +1,151 @@
+<mxfile host="app.diagrams.net" agent="Claude">
+  <diagram id="modelo_datos" name="Base de Datos">
+    <mxGraphModel dx="2327" dy="1103" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t2" parent="1" style="swimlane;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;align=center;" value="users" vertex="1">
+          <mxGeometry height="134" width="220" x="920" y="678" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" parent="t2" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[PK] id" vertex="1">
+          <mxGeometry height="26" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" parent="t2" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="email" vertex="1">
+          <mxGeometry height="26" width="220" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" parent="t2" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="role" vertex="1">
+          <mxGeometry height="26" width="220" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" parent="t2" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="created_at" vertex="1">
+          <mxGeometry height="26" width="220" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="t7" parent="1" style="swimlane;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;align=center;" value="pids_catalog" vertex="1">
+          <mxGeometry height="160" width="220" x="320" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="r8" parent="t7" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[PK] pid_code" vertex="1">
+          <mxGeometry height="26" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r9" parent="t7" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="name" vertex="1">
+          <mxGeometry height="26" width="220" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="r10" parent="t7" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="unit" vertex="1">
+          <mxGeometry height="26" width="220" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="r11" parent="t7" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="formula_hint" vertex="1">
+          <mxGeometry height="26" width="220" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="r12" parent="t7" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="is_active" vertex="1">
+          <mxGeometry height="26" width="220" y="134" as="geometry" />
+        </mxCell>
+        <mxCell id="t13" parent="1" style="swimlane;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;align=center;" value="devices" vertex="1">
+          <mxGeometry height="186" width="220" x="880" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r14" parent="t13" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[PK] id" vertex="1">
+          <mxGeometry height="26" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r15" parent="t13" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[UK] device_uid" vertex="1">
+          <mxGeometry height="26" width="220" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="r16" parent="t13" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[FK/UK] vehicle_id" vertex="1">
+          <mxGeometry height="26" width="220" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="r17" parent="t13" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="status" vertex="1">
+          <mxGeometry height="26" width="220" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="r18" parent="t13" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="last_seen_at" vertex="1">
+          <mxGeometry height="26" width="220" y="134" as="geometry" />
+        </mxCell>
+        <mxCell id="r19" parent="t13" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="created_at" vertex="1">
+          <mxGeometry height="26" width="220" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t20" parent="1" style="swimlane;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;align=center;" value="vehicles" vertex="1">
+          <mxGeometry height="212" width="220" x="600" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="r21" parent="t20" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[PK] id" vertex="1">
+          <mxGeometry height="26" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r22" parent="t20" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[UK] patente" vertex="1">
+          <mxGeometry height="26" width="220" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="r23" parent="t20" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="modelo" vertex="1">
+          <mxGeometry height="26" width="220" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="r24" parent="t20" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="vin" vertex="1">
+          <mxGeometry height="26" width="220" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="r25" parent="t20" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="tipo" vertex="1">
+          <mxGeometry height="26" width="220" y="134" as="geometry" />
+        </mxCell>
+        <mxCell id="r26" parent="t20" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[FK] owner_id" vertex="1">
+          <mxGeometry height="26" width="220" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="r27" parent="t20" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="created_at" vertex="1">
+          <mxGeometry height="26" width="220" y="186" as="geometry" />
+        </mxCell>
+        <mxCell id="t28" parent="1" style="swimlane;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;align=center;" value="alerts" vertex="1">
+          <mxGeometry height="212" width="220" x="40" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="r29" parent="t28" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[PK] id" vertex="1">
+          <mxGeometry height="26" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r30" parent="t28" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[FK] vehicle_id" vertex="1">
+          <mxGeometry height="26" width="220" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="r31" parent="t28" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[FK] pid_code" vertex="1">
+          <mxGeometry height="26" width="220" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="r32" parent="t28" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="condition" vertex="1">
+          <mxGeometry height="26" width="220" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="r33" parent="t28" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="threshold" vertex="1">
+          <mxGeometry height="26" width="220" y="134" as="geometry" />
+        </mxCell>
+        <mxCell id="r34" parent="t28" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="status" vertex="1">
+          <mxGeometry height="26" width="220" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="r35" parent="t28" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="triggered_at" vertex="1">
+          <mxGeometry height="26" width="220" y="186" as="geometry" />
+        </mxCell>
+        <mxCell id="t36" parent="1" style="swimlane;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;align=center;" value="telemetry_readings" vertex="1">
+          <mxGeometry height="186" width="220" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r37" parent="t36" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[PK] id" vertex="1">
+          <mxGeometry height="26" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r38" parent="t36" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[FK] device_id" vertex="1">
+          <mxGeometry height="26" width="220" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="r39" parent="t36" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="[FK] pid_code" vertex="1">
+          <mxGeometry height="26" width="220" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="r40" parent="t36" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="value" vertex="1">
+          <mxGeometry height="26" width="220" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="r41" parent="t36" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="recorded_at" vertex="1">
+          <mxGeometry height="26" width="220" y="134" as="geometry" />
+        </mxCell>
+        <mxCell id="r42" parent="t36" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11.5;strokeColor=#c9d9ef;fillColor=none;" value="received_at" vertex="1">
+          <mxGeometry height="26" width="220" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="e43" edge="1" parent="1" source="r26" style="edgeStyle=entityRelationEdgeStyle;fontSize=10;html=1;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="r3" value="owner_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e44" edge="1" parent="1" source="r16" style="edgeStyle=entityRelationEdgeStyle;fontSize=10;html=1;startArrow=ERone;startFill=0;endArrow=ERone;endFill=0;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="r21" value="vehicle_id (1:1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e45" edge="1" parent="1" source="r38" style="edgeStyle=entityRelationEdgeStyle;fontSize=10;html=1;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="r14" value="device_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e46" edge="1" parent="1" source="r39" style="edgeStyle=entityRelationEdgeStyle;fontSize=10;html=1;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="r8" value="pid_code">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e47" edge="1" parent="1" source="r30" style="edgeStyle=entityRelationEdgeStyle;fontSize=10;html=1;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="r21" value="vehicle_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e48" edge="1" parent="1" source="r31" style="edgeStyle=entityRelationEdgeStyle;fontSize=10;html=1;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="r8" value="pid_code">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
