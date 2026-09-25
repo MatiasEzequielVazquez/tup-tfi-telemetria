@@ -1,0 +1,139 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Modelo de datos" id="d1">
+    <mxGraphModel dx="2327" dy="1103" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" value="Modelo de datos — Sistema de Telemetría Vehicular" vertex="1">
+          <mxGeometry height="40" width="900" x="450" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="usu" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;usuarios&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;email&lt;br&gt;nombre&lt;br&gt;rol: admin | mantenimiento&lt;br&gt;created_at" vertex="1">
+          <mxGeometry height="140" width="260" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="uni" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;unidades&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;patente&lt;br&gt;marca, modelo, anio&lt;br&gt;tenencia: propia | fletero&lt;br&gt;titular&lt;br&gt;protocolo: J1939 | J1979&lt;br&gt;km_actual&lt;br&gt;km_fuente" vertex="1">
+          <mxGeometry height="200" width="280" x="740" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="dis" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;dispositivos&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;device_uid (único)&lt;br&gt;unidad_id (FK, único, nullable)&lt;br&gt;estado: activo|inactivo|sin_reportar&lt;br&gt;ultima_comunicacion" vertex="1">
+          <mxGeometry height="150" width="260" x="1080" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lec" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;lecturas&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;dispositivo_id (FK)&lt;br&gt;tipo: km|horas_motor|dtc|heartbeat&lt;br&gt;payload (jsonb)&lt;br&gt;marca_tiempo_dispositivo&lt;br&gt;marca_tiempo_recepcion&lt;br&gt;consistente (bool)" vertex="1">
+          <mxGeometry height="170" width="300" x="1520" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;planes_mantenimiento&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;unidad_id (FK)&lt;br&gt;tarea_id (FK)&lt;br&gt;intervalo_km&lt;br&gt;umbral_aviso_km&lt;br&gt;km_ultimo_service&lt;br&gt;estado: al_dia|proxima|vencida|postergada&lt;br&gt;created_at" vertex="1">
+          <mxGeometry height="220" width="300" x="680" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="srv" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;services&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;unidad_id (FK)&lt;br&gt;fecha&lt;br&gt;km&lt;br&gt;observaciones&lt;br&gt;usuario_id (FK)&lt;br&gt;created_at" vertex="1">
+          <mxGeometry height="170" width="260" x="1440" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="st" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;service_tareas&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;service_id (FK, PK)&lt;br&gt;plan_id (FK, PK)" vertex="1">
+          <mxGeometry height="90" width="260" x="1440" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="pos" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;postergaciones&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;plan_id (FK)&lt;br&gt;motivo&lt;br&gt;motivo_descripcion&lt;br&gt;km_limite_nuevo&lt;br&gt;usuario_id (FK)&lt;br&gt;fecha&lt;br&gt;cerrada (bool)" vertex="1">
+          <mxGeometry height="190" width="300" x="200" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="fal" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;fallas&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;unidad_id (FK)&lt;br&gt;codigo&lt;br&gt;estado: activo|inactivo&lt;br&gt;fecha_aparicion&lt;br&gt;fecha_cierre" vertex="1">
+          <mxGeometry height="150" width="260" x="680" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ale" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;alertas&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;unidad_id (FK)&lt;br&gt;tipo&lt;br&gt;referencia_id&lt;br&gt;estado: abierta|revisada&lt;br&gt;usuario_revisor_id (FK)&lt;br&gt;fecha_generada&lt;br&gt;fecha_revisada" vertex="1">
+          <mxGeometry height="190" width="300" x="40" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="kh" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;kilometraje_historial&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;unidad_id (FK)&lt;br&gt;km&lt;br&gt;fuente: manual&lt;br&gt;usuario_id (FK)&lt;br&gt;fecha" vertex="1">
+          <mxGeometry height="150" width="300" x="1320" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="uni" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=0.879;exitY=0.005;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;exitPerimeter=0;" target="dis" value="1 : 0..1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="986.1" y="125" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="dis" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="lec" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1520" y="170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="uni" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="880" y="758.02" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="tc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="pm" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="uni" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.1;entryY=0;entryDx=0;entryDy=0;" target="srv" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1466" y="490" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="uni" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="fal" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="uni" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=0.1;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="ale" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="768" y="655" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="uni" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="kh" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1170" y="440" />
+              <mxPoint x="1170" y="390" />
+              <mxPoint x="1320" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="pm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="pos" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="640" y="815" />
+              <mxPoint x="640" y="415" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="srv" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" target="st" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="pm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="st" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="980" y="875" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="usu" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="srv" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="70" />
+              <mxPoint x="1850" y="70" />
+              <mxPoint x="1850" y="705" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="usu" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="pos" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="350" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="usu" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=none;startArrow=none;fontSize=11;labelBackgroundColor=#FFFFFF;strokeColor=#546E7A;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="ale" value="1 : N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="20" y="150" />
+              <mxPoint x="20" y="655" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tc" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00897B;fontSize=12;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontStyle=1;" value="&lt;b&gt;tareas_catalogo&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;&lt;u&gt;id&lt;/u&gt; (PK)&lt;br&gt;nombre&lt;br&gt;intervalo_km_default&lt;br&gt;umbral_aviso_km_default" vertex="1">
+          <mxGeometry height="120" width="260" x="40" y="800" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

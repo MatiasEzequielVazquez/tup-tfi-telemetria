@@ -16,6 +16,7 @@ Las pymes de transporte con flotas mixtas (camiones de distintas marcas, propios
 | Documento | Contenido |
 |---|---|
 | [1ª Entrega — Propuesta de proyecto](docs/entregas/01-propuesta-proyecto.md) | Problemática y evidencia (caso de estudio), propuesta de valor, actores, alcance, requerimientos funcionales y no funcionales, reglas de negocio, casos de uso, plan de trabajo y ficha de la entrevista. |
+| [2ª Entrega — Arquitectura y módulos](docs/entregas/02-arquitectura-modulos.md) | Esquema de base de datos (PostgreSQL/Supabase) y listado de módulos a desarrollar. |
 | [Diagramas](docs/diagramas/) | Diagramas en PNG, con sus archivos editables en draw.io. |
 
 ## Arquitectura
@@ -46,19 +47,31 @@ Computadora del vehículo (SAE J1939 / J1979)
 ```
 .
 ├── README.md
+├── .gitignore
 ├── docs/
 │   ├── entregas/            # Informes de cada instancia de entrega
 │   └── diagramas/           # Diagramas en PNG
 │       └── drawio/          # Fuentes editables (.drawio)
-├── backend/                 # API REST + ingestor MQTT (Node.js)
-├── frontend/                # Dashboard web (React)
+├── backend/                 # API REST + ingestor MQTT
+│   └── .env.example         # Variables de entorno necesarias
+├── frontend/                # Dashboard web
 ├── firmware/                # Código del ESP32
-└── db/                      # Esquemas y scripts de Supabase (PostgreSQL)
+└── db/
+    └── schema.sql           # Script DDL del esquema (PostgreSQL/Supabase), con RLS habilitado
 ```
+
+## Base de datos
+
+El esquema completo (12 tablas, restricciones e índices) está en [`db/schema.sql`](db/schema.sql) y ya fue aplicado en el proyecto de Supabase del equipo. Row Level Security está habilitado en todas las tablas: el acceso es exclusivo del backend a través de la `service_role key`, ningún cliente (dashboard, mobile, etc.) accede directo a la base.
+
+Para levantar el backend localmente, copiar `backend/.env.example` a `backend/.env` y completar las credenciales de Supabase y HiveMQ Cloud.
 
 ## Estado del proyecto
 
-Etapa de análisis y diseño (1ª entrega). El desarrollo del backend, el frontend y el firmware comienza una vez aprobada la documentación.
+- 1ª entrega enviada, en espera de aprobación del tutor.
+- 2ª entrega (esquema de base de datos y listado de módulos) completa: esquema aplicado en Supabase, módulos documentados y desglosados en GitHub Projects.
+
+*El desarrollo del backend, el frontend y el firmware comienza una vez aprobada la documentación.*
 
 ## Instalación y ejecución
 

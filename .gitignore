@@ -1,0 +1,24 @@
+# Variables de entorno
+.env
+.env.local
+*.env
+!*.env.example
+
+# Node.js
+node_modules/
+dist/
+build/
+npm-debug.log*
+
+# Frontend (Vite/React)
+frontend/dist/
+frontend/.env
+
+# Firmware / PlatformIO
+firmware/.pio/
+
+# Sistema operativo / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
