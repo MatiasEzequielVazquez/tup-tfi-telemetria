@@ -54,42 +54,61 @@ Se descarta un motor documental porque el dominio central del sistema —unidade
 
 ### 2.1 Diagrama entidad-relación
 
-![Modelo de datos](../diagramas/07-modelo-datos.png)
+![Diagrama entidad-relación](../diagramas/07-diagrama-entidad-relacion.png)
 
 ### 2.2 Tablas
+
+**Convenciones de tipos.**
+- **Claves primarias:** `bigint` autoincremental (`GENERATED ALWAYS AS IDENTITY`). La única excepción es `usuarios.id`, que es `uuid` porque replica el id del usuario en Supabase Auth (`auth.users`). Por eso las FK hacia `usuarios` son `uuid` y el resto `bigint`.
+- **Textos:** `varchar(n)` cuando el dato tiene un largo máximo razonable (patente, email, código de falla) y `text` solo para campos libres (`observaciones`).
+- **Valores cerrados:** las columnas con un conjunto fijo de valores (rol, estados, tipos, motivos) usan tipos `ENUM` de PostgreSQL:
+
+| Tipo | Valores |
+|---|---|
+| `rol_usuario` | `admin`, `mantenimiento` |
+| `tenencia_unidad` | `propia`, `fletero` |
+| `protocolo_vehiculo` | `J1939`, `J1979` |
+| `fuente_km` | `odometro`, `estimado`, `manual` |
+| `estado_dispositivo` | `activo`, `inactivo`, `sin_reportar` |
+| `tipo_lectura` | `km`, `horas_motor`, `dtc`, `heartbeat` |
+| `estado_plan` | `al_dia`, `proxima`, `vencida`, `postergada` |
+| `motivo_postergacion` | `falta_espacio`, `salida_urgente`, `otro` |
+| `estado_falla` | `activo`, `inactivo` |
+| `tipo_alerta` | `tarea_proxima`, `tarea_vencida`, `falla_nueva`, `dispositivo_sin_reportar` |
+| `estado_alerta` | `abierta`, `revisada` |
 
 #### `usuarios`
 
 | Columna | Tipo | Notas |
 |---|---|---|
 | `id` | uuid, PK | Gestionado por Supabase Auth. |
-| `email` | text, único | RF01. |
-| `nombre` | text | |
-| `rol` | text | `admin` \| `mantenimiento` (RN11). |
+| `email` | varchar(100), único | RF01. |
+| `nombre` | varchar(100), nullable | |
+| `rol` | `rol_usuario` | `admin` \| `mantenimiento` (RN11). |
 | `created_at` | timestamptz | |
 
 #### `unidades`
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `patente` | text, único | RF02. |
-| `marca`, `modelo`, `anio` | text, text, int | RF02. |
-| `tenencia` | text | `propia` \| `fletero` (RF02, RN01). |
-| `titular` | text | Dueño de la unidad si es de un fletero. |
-| `protocolo` | text | `J1939` \| `J1979`, protocolo del vehículo (RN08, RNF08). |
-| `km_actual` | numeric | Último kilometraje válido conocido (RF05). |
-| `km_fuente` | text | `odometro` \| `estimado` \| `manual` (RF05, RN08). |
+| `id` | bigint, PK autoincremental | |
+| `patente` | varchar(10), único | RF02. |
+| `marca`, `modelo`, `anio` | varchar(50), varchar(50), smallint | RF02. |
+| `tenencia` | `tenencia_unidad` | `propia` \| `fletero` (RF02, RN01). |
+| `titular` | varchar(100), nullable | Dueño de la unidad si es de un fletero. |
+| `protocolo` | `protocolo_vehiculo` | `J1939` \| `J1979`, protocolo del vehículo (RN08, RNF08). |
+| `km_actual` | numeric(10,1) | Último kilometraje válido conocido (RF05). |
+| `km_fuente` | `fuente_km` | `odometro` \| `estimado` \| `manual` (RF05, RN08). |
 | `created_at` | timestamptz | |
 
 #### `dispositivos`
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `device_uid` | text, único | Identificador que envía el firmware (RF03). |
-| `unidad_id` | uuid, FK → `unidades.id`, único, nullable | Único para que una unidad tenga a lo sumo un dispositivo activo y un dispositivo esté vinculado a lo sumo a una unidad (RN02). `NULL` mientras el dispositivo no está vinculado. |
-| `estado` | text | `activo` \| `inactivo` \| `sin_reportar` (RF03, RN10). |
+| `id` | bigint, PK autoincremental | |
+| `device_uid` | varchar(50), único | Identificador que envía el firmware (RF03). |
+| `unidad_id` | bigint, FK → `unidades.id`, único, nullable | Único para que una unidad tenga a lo sumo un dispositivo activo y un dispositivo esté vinculado a lo sumo a una unidad (RN02). `NULL` mientras el dispositivo no está vinculado. |
+| `estado` | `estado_dispositivo` | `activo` \| `inactivo` \| `sin_reportar` (RF03, RN10). |
 | `ultima_comunicacion` | timestamptz | Actualizada en cada mensaje MQTT válido; la usa el temporizador de CU14. |
 | `created_at` | timestamptz | |
 
@@ -101,9 +120,10 @@ No se modela como tabla separada en esta versión: el tipo de lectura (`km`, `ho
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `dispositivo_id` | uuid, FK → `dispositivos.id` | RF04. |
-| `tipo` | text | `km` \| `horas_motor` \| `dtc` \| `heartbeat`. |
+| `id` | bigint, PK autoincremental | |
+| `dispositivo_id` | bigint, FK → `dispositivos.id` | RF04. |
+| `unidad_id` | bigint, FK → `unidades.id` | Unidad a la que estaba vinculado el dispositivo al momento de la lectura. Ver 2.4. |
+| `tipo` | `tipo_lectura` | `km` \| `horas_motor` \| `dtc` \| `heartbeat`. |
 | `payload` | jsonb | Datos crudos del mensaje: protocolo, y según el tipo, valor numérico o código de falla, más el identificador del parámetro de origen (PGN+SPN o PID). |
 | `marca_tiempo_dispositivo` | timestamptz | Timestamp original del dispositivo (RNF02). |
 | `marca_tiempo_recepcion` | timestamptz | RF04. |
@@ -115,8 +135,8 @@ Catálogo de tipos de tarea de mantenimiento, con los intervalos por defecto rel
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `nombre` | text | Ej.: "Cambio de aceite de motor", "Filtro secador de aire de frenos", "Aceite de caja y diferencial". |
+| `id` | bigint, PK autoincremental | |
+| `nombre` | varchar(100), único | Ej.: "Cambio de aceite de motor", "Filtro secador de aire de frenos", "Aceite de caja y diferencial". |
 | `intervalo_km_default` | int | 40.000 / 100.000 / 150.000 según la tarea. |
 | `umbral_aviso_km_default` | int | 4.000 km por defecto (RN05). |
 
@@ -126,28 +146,30 @@ Instancia cada tarea del catálogo sobre una unidad concreta (RF07). Es también
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `unidad_id` | uuid, FK → `unidades.id` | |
-| `tarea_id` | uuid, FK → `tareas_catalogo.id` | |
+| `id` | bigint, PK autoincremental | |
+| `unidad_id` | bigint, FK → `unidades.id` | |
+| `tarea_id` | bigint, FK → `tareas_catalogo.id` | |
 | `intervalo_km` | int | Copiado del catálogo al crear el plan; editable por unidad (RN03). |
 | `umbral_aviso_km` | int | Ídem. |
-| `km_ultimo_service` | numeric | Kilometraje desde el que se cuenta el intervalo; se reinicia al registrar un service (RN06). |
-| `estado` | text | `al_dia` \| `proxima` \| `vencida` \| `postergada`, calculado según RN04, RN05, RN07. |
+| `km_ultimo_service` | numeric(10,1) | Kilometraje desde el que se cuenta el intervalo; se reinicia al registrar un service (RN06). |
+| `estado` | `estado_plan` | `al_dia` \| `proxima` \| `vencida` \| `postergada`, calculado según RN04, RN05, RN07. |
 | `created_at` | timestamptz | |
 
-Restricción: única combinación `(unidad_id, tarea_id)` activa por unidad.
+Restricciones: combinación `(unidad_id, tarea_id)` única, para no duplicar una tarea en la misma unidad; y `(id, unidad_id)` única, que es el destino de las FK compuestas de `service_tareas` y `alertas`.
 
 #### `services`
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `unidad_id` | uuid, FK → `unidades.id` | |
+| `id` | bigint, PK autoincremental | |
+| `unidad_id` | bigint, FK → `unidades.id` | |
 | `fecha` | date | RF09. |
-| `km` | numeric | Kilometraje al momento del service; si supera el `km_actual` de la unidad, la actualiza (RN08). |
-| `observaciones` | text | |
+| `km` | numeric(10,1) | Kilometraje al momento del service; si supera el `km_actual` de la unidad, la actualiza (RN08). |
+| `observaciones` | text, nullable | |
 | `usuario_id` | uuid, FK → `usuarios.id` | Trazabilidad (RNF11). |
 | `created_at` | timestamptz | |
+
+Restricción: `(id, unidad_id)` única, destino de la FK compuesta de `service_tareas`.
 
 #### `service_tareas`
 
@@ -155,19 +177,20 @@ Tabla de unión: un service puede cubrir varias tareas del plan de mantenimiento
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `service_id` | uuid, FK → `services.id` | |
-| `plan_id` | uuid, FK → `planes_mantenimiento.id` | |
+| `service_id` | bigint, PK, FK → `services.id` | FK compuesta `(service_id, unidad_id)` → `services (id, unidad_id)`. |
+| `plan_id` | bigint, PK, FK → `planes_mantenimiento.id` | FK compuesta `(plan_id, unidad_id)` → `planes_mantenimiento (id, unidad_id)`. |
+| `unidad_id` | bigint, FK | Unidad del service y del plan. Al formar parte de las dos FK compuestas, obliga a que ambos sean de la misma unidad. |
 
-Clave primaria compuesta `(service_id, plan_id)`.
+Clave primaria compuesta `(service_id, plan_id)`. Ver 2.4 sobre las FK compuestas.
 
 #### `postergaciones`
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `plan_id` | uuid, FK → `planes_mantenimiento.id` | |
-| `motivo` | text | `falta_espacio` \| `salida_urgente` \| `otro` (RF10, RN07). |
-| `motivo_descripcion` | text | Obligatorio si `motivo = 'otro'`. |
+| `id` | bigint, PK autoincremental | |
+| `plan_id` | bigint, FK → `planes_mantenimiento.id` | |
+| `motivo` | `motivo_postergacion` | `falta_espacio` \| `salida_urgente` \| `otro` (RF10, RN07). |
+| `motivo_descripcion` | varchar(255), nullable | Obligatorio si `motivo = 'otro'` (restricción `postergaciones_descripcion_si_otro`). |
 | `km_limite_nuevo` | int | RN07. |
 | `usuario_id` | uuid, FK → `usuarios.id` | RNF11. |
 | `fecha` | timestamptz | |
@@ -179,25 +202,31 @@ Códigos de falla (DTC) informados por una unidad (RF11).
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `unidad_id` | uuid, FK → `unidades.id` | |
-| `codigo` | text | Código de falla informado por el vehículo (DM1 en J1939, DTC en J1979). |
-| `estado` | text | `activo` \| `inactivo` (RN12). |
+| `id` | bigint, PK autoincremental | |
+| `unidad_id` | bigint, FK → `unidades.id` | |
+| `codigo` | varchar(30) | Código de falla informado por el vehículo (DM1 en J1939, DTC en J1979). |
+| `estado` | `estado_falla` | `activo` \| `inactivo` (RN12). |
 | `fecha_aparicion` | timestamptz | |
 | `fecha_cierre` | timestamptz | Nula mientras está activo. |
+
+Restricción: `(id, unidad_id)` única, destino de la FK compuesta de `alertas`.
 
 #### `alertas`
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `unidad_id` | uuid, FK → `unidades.id` | |
-| `tipo` | text | `tarea_proxima` \| `tarea_vencida` \| `falla_nueva` \| `dispositivo_sin_reportar` (RF12). |
-| `referencia_id` | uuid | Apunta a `planes_mantenimiento.id`, `fallas.id` o `dispositivos.id` según `tipo`. |
-| `estado` | text | `abierta` \| `revisada` (RF13). |
+| `id` | bigint, PK autoincremental | |
+| `unidad_id` | bigint, FK → `unidades.id` | |
+| `tipo` | `tipo_alerta` | `tarea_proxima` \| `tarea_vencida` \| `falla_nueva` \| `dispositivo_sin_reportar` (RF12). |
+| `plan_id` | bigint, FK → `planes_mantenimiento.id`, nullable | Cargado solo si `tipo` es `tarea_proxima` o `tarea_vencida`. FK compuesta `(plan_id, unidad_id)`: el plan tiene que ser de la misma unidad. |
+| `falla_id` | bigint, FK → `fallas.id`, nullable | Cargado solo si `tipo = 'falla_nueva'`. FK compuesta `(falla_id, unidad_id)`: la falla tiene que ser de la misma unidad. |
+| `dispositivo_id` | bigint, FK → `dispositivos.id`, nullable | Cargado solo si `tipo = 'dispositivo_sin_reportar'`. No se ata a la unidad: el dispositivo puede cambiar de unidad después de generada la alerta. |
+| `estado` | `estado_alerta` | `abierta` \| `revisada` (RF13). |
 | `usuario_revisor_id` | uuid, FK → `usuarios.id`, nullable | |
 | `fecha_generada` | timestamptz | |
 | `fecha_revisada` | timestamptz, nullable | |
+
+Restricción `alertas_referencia_segun_tipo`: exactamente una de `plan_id`, `falla_id`, `dispositivo_id` tiene valor, y es la que corresponde a `tipo`.
 
 #### `kilometraje_historial`
 
@@ -205,23 +234,29 @@ Registra cada carga manual de kilometraje, para trazabilidad y para el historial
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `id` | uuid, PK | |
-| `unidad_id` | uuid, FK → `unidades.id` | |
-| `km` | numeric | |
-| `fuente` | text | `manual` (las fuentes automáticas quedan en `lecturas`). |
+| `id` | bigint, PK autoincremental | |
+| `unidad_id` | bigint, FK → `unidades.id` | |
+| `km` | numeric(10,1) | |
+| `fuente` | `fuente_km` | Siempre `manual` en esta tabla (las fuentes automáticas quedan en `lecturas`); se usa el mismo tipo que `unidades.km_fuente`. |
 | `usuario_id` | uuid, FK → `usuarios.id` | |
 | `fecha` | timestamptz | |
 
 ### 2.3 Índices
 
-- `lecturas (dispositivo_id, marca_tiempo_recepcion)`: consultas de la última lectura por dispositivo y del histórico (RF04).
+- `lecturas (dispositivo_id, marca_tiempo_recepcion)`: consultas de la última lectura por dispositivo (RF04).
+- `lecturas (unidad_id, marca_tiempo_recepcion)`: histórico de lecturas de una unidad (RF04, RF16).
 - `dispositivos (device_uid)` único: identificar el dispositivo emisor en cada mensaje MQTT.
 - `dispositivos (unidad_id)` único parcial (`WHERE unidad_id IS NOT NULL`): refuerza RN02.
 - `planes_mantenimiento (unidad_id, estado)`: la vista de la flota filtra y ordena por estado más crítico (RF14).
 - `planes_mantenimiento (unidad_id, tarea_id)` único: evita duplicar el plan de una tarea sobre la misma unidad.
 - `fallas (unidad_id, estado)`: contar fallas activas por unidad (RF14, RF15).
 - `alertas (estado, fecha_generada)`: listar alertas abiertas ordenadas por antigüedad (RF13).
+- `alertas (plan_id)`, `alertas (falla_id)`, `alertas (dispositivo_id)`, parciales (`WHERE ... IS NOT NULL`): buscar la alerta abierta de un plan, falla o dispositivo antes de generar otra.
 - `postergaciones (plan_id, cerrada)`: saber si un plan tiene una postergación abierta (RN06, RN07).
+- `planes_mantenimiento (id, unidad_id)`, `services (id, unidad_id)`, `fallas (id, unidad_id)` únicos: destino de las FK compuestas (ver 2.4).
+- `services (unidad_id, fecha)`, `kilometraje_historial (unidad_id, fecha)`, `alertas (unidad_id)`: historial y alertas por unidad (RF13, RF16).
+- `service_tareas (plan_id)`: services que cubrieron un plan (la PK ya indexa por `service_id`).
+- `planes_mantenimiento (tarea_id)`, y `usuario_id` en `services`, `postergaciones` y `kilometraje_historial`, `alertas (usuario_revisor_id)`: PostgreSQL no indexa las FK automáticamente; sin estos índices, borrar o actualizar una fila referenciada obliga a recorrer toda la tabla hija.
 
 ### 2.4 Decisiones de diseño
 
@@ -230,6 +265,14 @@ Registra cada carga manual de kilometraje, para trazabilidad y para el historial
 - **`service_tareas` en vez de una tarea por service.** Un mismo evento de taller normalmente cubre varias tareas a la vez (aceite de motor y filtros, por ejemplo), tal como surge de la entrevista al mecánico. Modelarlo como tabla de unión evita duplicar `services` por cada tarea realizada el mismo día.
 - **`lecturas.payload` en JSONB.** El formato exacto de cada lectura varía según el protocolo y el tipo de dato; usar una columna JSONB evita crear una tabla o columna por cada combinación de protocolo y parámetro, a costa de no poder indexar el contenido interno (aceptable: las consultas de mantenimiento se resuelven contra `planes_mantenimiento`, no contra `lecturas`).
 - **Kilometraje nunca disminuye (RN09).** No se modela con una restricción de base de datos (requeriría conocer el máximo histórico en cada insert); se resuelve en el módulo de ingesta, que compara contra `unidades.km_actual` antes de escribir y marca `lecturas.consistente = false` cuando corresponde.
+
+- **Referencias de `alertas` con una FK por tabla de origen.** Una alerta puede originarse en un plan de mantenimiento, en una falla o en un dispositivo. Un único campo genérico (`referencia_id`) que apunte a una tabla u otra según `tipo` no se puede declarar como clave foránea, por lo que la base no garantizaría que el registro referenciado exista. Por eso se usan tres FK opcionales (`plan_id`, `falla_id`, `dispositivo_id`) y una restricción `CHECK` que exige que haya exactamente una cargada y que coincida con `tipo`.
+- **`lecturas.unidad_id` además de `dispositivo_id`.** Un dispositivo puede desvincularse de una unidad y vincularse a otra (RF03, RN02). Si la lectura solo guardara el dispositivo, al moverlo todo su historial pasaría a atribuirse a la unidad nueva. Guardar la unidad al momento de la recepción conserva el historial correcto de cada unidad. El módulo de ingesta solo acepta lecturas de dispositivos vinculados (precondición de CU06), por lo que la columna nunca queda vacía.
+
+- **Claves primarias autoincrementales.** Se usa `bigint` autoincremental en todas las tablas: es más compacto que un `uuid` (8 bytes contra 16), mantiene los índices ordenados en tablas de alto volumen como `lecturas` y es legible al depurar. La exposición de ids correlativos en la API no es un riesgo en este sistema porque todos los endpoints requieren autenticación (RNF04). `usuarios` es la excepción: su PK debe coincidir con el `uuid` que asigna Supabase Auth.
+- **Tipos `ENUM` para valores cerrados.** Roles, estados, tipos y motivos tienen un conjunto de valores definido por los requerimientos. Un `ENUM` documenta esos valores en el propio esquema y rechaza cualquier otro. Agregar un valor nuevo es simple (`ALTER TYPE ... ADD VALUE`); quitarlo no, pero los valores de este dominio son estables. Se descartó modelarlos como tablas de catálogo porque no tienen atributos propios ni se administran desde la aplicación.
+- **`varchar(n)` para textos acotados.** En PostgreSQL `varchar(n)` y `text` se almacenan igual; `varchar(n)` se usa donde el largo máximo es una regla del dato (patente, email, código de falla), para que la base rechace valores inválidos.
+- **FK compuestas para que las referencias sean de la misma unidad.** `service_tareas` relaciona un service con un plan, y ambos pertenecen a una unidad; con FK simples, la base aceptaría que un service de una unidad cubra el plan de otra. Lo mismo pasa en `alertas` entre `unidad_id` y el plan o la falla que la originó. Para evitarlo, `planes_mantenimiento`, `services` y `fallas` declaran `(id, unidad_id)` como único, y las tablas que los referencian usan FK compuestas que incluyen `unidad_id`. Así la regla la garantiza la base y no depende del backend.
 
 ## 3. Listado de módulos
 
