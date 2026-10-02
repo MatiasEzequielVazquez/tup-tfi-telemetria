@@ -30,10 +30,10 @@ El login en sí lo maneja el cliente directo contra Supabase Auth (RF01); el bac
 
 | Método | Ruta | RF/RN | Rol | Descripción |
 |---|---|---|---|---|
-| GET | `/me` | RF01 | cualquiera autenticado | Devuelve el usuario actual: id, email, nombre, rol. |
+| GET | `/me` | RF01 | cualquiera autenticado | Devuelve el usuario actual: email, nombre, rol. |
 | GET | `/usuarios` | RF17 | admin | Lista de usuarios. |
-| POST | `/usuarios` | RF17, RN11 | admin | Alta de usuario (requiere que ya exista en Supabase Auth). Body: `{ id, email, nombre, rol }`. |
-| PATCH | `/usuarios/:id` | RF17 | admin | Modifica nombre o rol. |
+| POST | `/usuarios` | RF17, RN11 | admin | Alta de usuario (requiere que ya exista en Supabase Auth). Body: `{ email, nombre, rol }`. |
+| PATCH | `/usuarios/:email` | RF17 | admin | Modifica nombre o rol. |
 
 ---
 
@@ -43,13 +43,13 @@ El login en sí lo maneja el cliente directo contra Supabase Auth (RF01); el bac
 |---|---|---|---|---|
 | GET | `/unidades` | RF02 | admin, mantenimiento | Lista de unidades (ver también §7 para la vista de flota con filtros). |
 | POST | `/unidades` | RF02 | admin | Alta. Body: `{ patente, marca, modelo, anio, tenencia, titular, protocolo }`. |
-| GET | `/unidades/:id` | RF02 | admin, mantenimiento | Detalle básico de una unidad. |
-| PATCH | `/unidades/:id` | RF02 | admin | Modificación de datos de la unidad. |
-| DELETE | `/unidades/:id` | RF02 | admin | Baja. |
+| GET | `/unidades/:patente` | RF02 | admin, mantenimiento | Detalle básico de una unidad. |
+| PATCH | `/unidades/:patente` | RF02 | admin | Modificación de datos de la unidad. |
+| DELETE | `/unidades/:patente` | RF02 | admin | Baja lógica (`activa = false`); la unidad conserva su historial. |
 | GET | `/dispositivos` | RF03 | admin | Lista de dispositivos con su unidad vinculada (si tiene). |
 | POST | `/dispositivos` | RF03 | admin | Alta. Body: `{ device_uid }`. |
-| PATCH | `/dispositivos/:id/vincular` | RF03, RN02 | admin | Vincula el dispositivo a una unidad. Body: `{ unidad_id }`. Rechaza (409) si la unidad ya tiene dispositivo activo o el dispositivo ya está vinculado. |
-| PATCH | `/dispositivos/:id/desvincular` | RF03, RN02 | admin | Desvincula el dispositivo de su unidad actual. |
+| PATCH | `/dispositivos/:device_uid/vincular` | RF03, RN02 | admin | Vincula el dispositivo a una unidad. Body: `{ patente }`. Rechaza (409) si la unidad ya tiene dispositivo activo o el dispositivo ya está vinculado. |
+| PATCH | `/dispositivos/:device_uid/desvincular` | RF03, RN02 | admin | Desvincula el dispositivo de su unidad actual. |
 
 ---
 
@@ -58,10 +58,10 @@ El login en sí lo maneja el cliente directo contra Supabase Auth (RF01); el bac
 | Método | Ruta | RF/RN | Rol | Descripción |
 |---|---|---|---|---|
 | GET | `/tareas-catalogo` | RF07 | admin, mantenimiento | Catálogo de tipos de tarea con sus intervalos por defecto. |
-| POST | `/tareas-catalogo` | RF07 | admin | Alta de un nuevo tipo de tarea. Body: `{ nombre, intervalo_km_default, umbral_aviso_km_default }`. |
-| GET | `/unidades/:id/planes` | RF07, RF08 | admin, mantenimiento | Planes de mantenimiento de la unidad, con su estado actual (al_dia/proxima/vencida/postergada). |
-| POST | `/unidades/:id/planes` | RF07 | admin | Asigna una tarea del catálogo a la unidad. Body: `{ tarea_id, intervalo_km, umbral_aviso_km }`. |
-| PATCH | `/planes/:id` | RF07 | admin | Edita intervalo o umbral de un plan existente. |
+| POST | `/tareas-catalogo` | RF07 | admin | Alta de un nuevo tipo de tarea. Body: `{ codigo, nombre, intervalo_km_default, umbral_aviso_km_default }`. |
+| GET | `/unidades/:patente/planes` | RF07, RF08 | admin, mantenimiento | Planes de mantenimiento de la unidad, con su estado actual (al_dia/proxima/vencida/postergada). |
+| POST | `/unidades/:patente/planes` | RF07 | admin | Asigna una tarea del catálogo a la unidad. Body: `{ codigo_tarea, intervalo_km, umbral_aviso_km }`. |
+| PATCH | `/unidades/:patente/planes/:codigo_tarea` | RF07 | admin | Edita intervalo o umbral de un plan existente. |
 
 El recálculo de `estado` (RN04, RN05) ocurre internamente al procesar una lectura de kilometraje (M3, no expuesto como endpoint HTTP — llega por MQTT) o al registrar un service o una postergación (§4). No hay endpoint para forzarlo manualmente.
 
@@ -71,10 +71,10 @@ El recálculo de `estado` (RN04, RN05) ocurre internamente al procesar una lectu
 
 | Método | Ruta | RF/RN | Rol | Descripción |
 |---|---|---|---|---|
-| GET | `/unidades/:id/services` | RF16 | admin, mantenimiento | Historial de services de la unidad. |
-| POST | `/unidades/:id/services` | RF09, RN06 | admin, mantenimiento | Registra un service. Body: `{ fecha, km, observaciones, plan_ids: [...] }`. Reinicia `km_ultimo_service` de cada plan cubierto y cierra sus postergaciones abiertas. |
-| GET | `/unidades/:id/postergaciones` | RF16 | admin, mantenimiento | Historial de postergaciones de la unidad. |
-| POST | `/planes/:id/postergaciones` | RF10, RN07 | admin, mantenimiento | Posterga una tarea. Body: `{ motivo, motivo_descripcion?, km_limite_nuevo }`. Rechaza (400) si `km_limite_nuevo` ≤ km actual de la unidad. |
+| GET | `/unidades/:patente/services` | RF16 | admin, mantenimiento | Historial de services de la unidad. |
+| POST | `/unidades/:patente/services` | RF09, RN06 | admin, mantenimiento | Registra un service. Body: `{ fecha, km, observaciones, tareas: [codigo_tarea, ...] }`. Reinicia `km_ultimo_service` de cada plan cubierto y cierra sus postergaciones abiertas. |
+| GET | `/unidades/:patente/postergaciones` | RF16 | admin, mantenimiento | Historial de postergaciones de la unidad. |
+| POST | `/unidades/:patente/planes/:codigo_tarea/postergaciones` | RF10, RN07 | admin, mantenimiento | Posterga una tarea. Body: `{ motivo, motivo_descripcion?, km_limite_nuevo }`. Rechaza (400) si `km_limite_nuevo` ≤ km actual de la unidad. |
 
 ---
 
@@ -84,7 +84,7 @@ Las fallas se generan internamente a partir de las lecturas MQTT (RN12), no se c
 
 | Método | Ruta | RF/RN | Rol | Descripción |
 |---|---|---|---|---|
-| GET | `/unidades/:id/fallas` | RF11 | admin, mantenimiento | Fallas de la unidad, con filtro opcional `?estado=activo\|inactivo`. |
+| GET | `/unidades/:patente/fallas` | RF11 | admin, mantenimiento | Fallas de la unidad, con filtro opcional `?estado=activo\|inactivo`. |
 
 ---
 
@@ -92,8 +92,8 @@ Las fallas se generan internamente a partir de las lecturas MQTT (RN12), no se c
 
 | Método | Ruta | RF/RN | Rol | Descripción |
 |---|---|---|---|---|
-| GET | `/alertas` | RF13 | admin, mantenimiento | Alertas, filtrables por `?estado=abierta\|revisada`, `?tipo=...`, `?unidad_id=...`. |
-| PATCH | `/alertas/:id/revisar` | RF13 | admin, mantenimiento | Marca la alerta como revisada; registra `usuario_revisor_id` y `fecha_revisada`. |
+| GET | `/alertas` | RF13 | admin, mantenimiento | Alertas, filtrables por `?estado=abierta\|revisada`, `?tipo=...`, `?patente=...`. |
+| PATCH | `/alertas/revisar` | RF13 | admin, mantenimiento | Marca una alerta como revisada (registra `fecha_revisada`). Body: `{ origen: plan\|falla\|dispositivo, ...clave }` con la clave de la alerta según su origen. |
 
 Las alertas se generan internamente (M4, M6, M8 disparan su creación); no hay endpoint de alta manual.
 
@@ -104,7 +104,7 @@ Las alertas se generan internamente (M4, M6, M8 disparan su creación); no hay e
 | Método | Ruta | RF/RN | Rol | Descripción |
 |---|---|---|---|---|
 | GET | `/unidades?tenencia=&estado=` | RF14 | admin, mantenimiento | Vista de flota: patente, tenencia, km, estado más crítico, cantidad de fallas activas, estado del dispositivo. Filtros por tenencia y estado. |
-| GET | `/unidades/:id/detalle` | RF15 | admin, mantenimiento | Vista consolidada: datos de la unidad + planes + fallas activas + estado del dispositivo, en una sola respuesta (para no encadenar varios GET desde el frontend). |
+| GET | `/unidades/:patente/detalle` | RF15 | admin, mantenimiento | Vista consolidada: datos de la unidad + planes + fallas activas + estado del dispositivo, en una sola respuesta (para no encadenar varios GET desde el frontend). |
 
 ---
 
@@ -112,7 +112,7 @@ Las alertas se generan internamente (M4, M6, M8 disparan su creación); no hay e
 
 | Método | Ruta | RF/RN | Rol | Descripción |
 |---|---|---|---|---|
-| POST | `/unidades/:id/kilometraje` | RF06, RN08, RN09 | admin, mantenimiento | Carga manual de km. Body: `{ km, fecha? }`. Actualiza `km_actual` solo si `km` ≥ al actual (si no, responde 409 y no lo aplica); dispara el recálculo de planes igual que una lectura MQTT. |
+| POST | `/unidades/:patente/kilometraje` | RF06, RN08, RN09 | admin, mantenimiento | Carga manual de km. Body: `{ km, fecha? }`. Actualiza `km_actual` solo si `km` ≥ al actual (si no, responde 409 y no lo aplica); dispara el recálculo de planes igual que una lectura MQTT. |
 
 ---
 

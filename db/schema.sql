@@ -1,7 +1,10 @@
 -- Sistema de Telemetría Vehicular para el Mantenimiento Preventivo de Flotas Mixtas
 -- Esquema de base de datos (PostgreSQL / Supabase)
 -- Ver docs/entregas/02-arquitectura-modulos.md para el detalle y la justificación de cada tabla.
-
+--
+-- Cada tabla se identifica por sus propios datos (claves naturales): una unidad por su
+-- patente, un dispositivo por su identificador de hardware, un plan por la unidad y la
+-- tarea, etc. Las tablas que dependen de otra llevan la clave de esa tabla dentro de su PK.
 
 -- =========================================================
 -- Tipos enumerados
@@ -11,22 +14,18 @@ create type tenencia_unidad     as enum ('propia', 'fletero');
 create type protocolo_vehiculo  as enum ('J1939', 'J1979');
 create type fuente_km           as enum ('odometro', 'estimado', 'manual');
 create type estado_dispositivo  as enum ('activo', 'inactivo', 'sin_reportar');
-create type tipo_lectura        as enum ('km', 'horas_motor', 'dtc', 'heartbeat');
+create type tipo_lectura        as enum ('km', 'horas_motor');
 create type estado_plan         as enum ('al_dia', 'proxima', 'vencida', 'postergada');
 create type motivo_postergacion as enum ('falta_espacio', 'salida_urgente', 'otro');
-create type estado_falla        as enum ('activo', 'inactivo');
-create type tipo_alerta         as enum ('tarea_proxima', 'tarea_vencida', 'falla_nueva', 'dispositivo_sin_reportar');
-create type estado_alerta       as enum ('abierta', 'revisada');
+create type tipo_alerta_plan    as enum ('tarea_proxima', 'tarea_vencida');
 
 -- =========================================================
 -- usuarios
--- En Supabase, los usuarios de autenticación viven en auth.users.
--- Esta tabla extiende esa identidad con el rol de la aplicación (RN11),
--- por eso su PK es el mismo uuid de auth.users.
+-- Se identifican por su email, el mismo con el que inician sesión en Supabase Auth.
+-- El backend obtiene el email del token de sesión y busca el rol en esta tabla (RN11).
 -- =========================================================
 create table usuarios (
-    id          uuid primary key references auth.users(id) on delete cascade,
-    email       varchar(100) not null unique,
+    email       varchar(100) primary key,
     nombre      varchar(100),
     rol         rol_usuario not null,
     created_at  timestamptz not null default now()
@@ -36,8 +35,7 @@ create table usuarios (
 -- unidades
 -- =========================================================
 create table unidades (
-    id          bigint generated always as identity primary key,
-    patente     varchar(10) not null unique,
+    patente     varchar(10) primary key,
     marca       varchar(50) not null,
     modelo      varchar(50),
     anio        smallint,
@@ -46,232 +44,193 @@ create table unidades (
     protocolo   protocolo_vehiculo not null,
     km_actual   numeric(10,1) not null default 0,
     km_fuente   fuente_km not null default 'manual',
+    -- Baja lógica (RF02): una unidad dada de baja conserva todo su historial (RNF11).
+    activa      boolean not null default true,
     created_at  timestamptz not null default now()
 );
 
 -- =========================================================
 -- dispositivos
+-- device_uid es el identificador que el firmware envía en cada mensaje MQTT.
+-- patente es única: una unidad tiene a lo sumo un dispositivo vinculado, y un
+-- dispositivo a lo sumo una unidad (RN02). Es NULL mientras no está vinculado.
 -- =========================================================
 create table dispositivos (
-    id                   bigint generated always as identity primary key,
-    device_uid           varchar(50) not null unique,
-    unidad_id            bigint references unidades(id) on delete set null,
+    device_uid           varchar(50) primary key,
+    patente              varchar(10) unique references unidades (patente) on update cascade,
     estado               estado_dispositivo not null default 'inactivo',
     ultima_comunicacion  timestamptz,
     created_at           timestamptz not null default now()
 );
 
--- Refuerza RN02: un dispositivo vinculado a lo sumo a una unidad, y una unidad
--- con a lo sumo un dispositivo (unicidad parcial sobre unidad_id).
-create unique index dispositivos_unidad_id_unico
-    on dispositivos (unidad_id)
-    where unidad_id is not null;
-
 -- =========================================================
 -- lecturas
+-- Una lectura queda identificada por el dispositivo que la envió, el instante en que la
+-- tomó y qué se midió. Un mensaje MQTT trae a lo sumo una lectura de cada tipo; si llega
+-- duplicado (reintento de QoS 1), la PK lo rechaza.
+-- patente guarda la unidad a la que estaba vinculado el dispositivo en ese momento, para
+-- que el historial no cambie si el dispositivo pasa a otra unidad (RF03, RN02).
+-- Los códigos de falla del mensaje no se guardan acá sino en fallas.
 -- =========================================================
 create table lecturas (
-    id                          bigint generated always as identity primary key,
-    dispositivo_id              bigint not null references dispositivos(id) on delete cascade,
-    -- Unidad a la que estaba vinculado el dispositivo al recibir la lectura.
-    -- Se guarda aparte porque un dispositivo puede desvincularse y pasar a otra
-    -- unidad (RF03, RN02): sin esta columna el historial se atribuiría a la unidad nueva.
-    unidad_id                   bigint not null references unidades(id) on delete cascade,
-    tipo                        tipo_lectura not null,
-    payload                     jsonb not null,
+    device_uid                  varchar(50) not null references dispositivos (device_uid) on update cascade,
     marca_tiempo_dispositivo    timestamptz not null,
+    tipo                        tipo_lectura not null,
+    patente                     varchar(10) not null references unidades (patente) on update cascade,
+    valor                       numeric(12,1) not null,
+    origen                      jsonb not null,
     marca_tiempo_recepcion      timestamptz not null default now(),
-    consistente                 boolean not null default true
+    consistente                 boolean not null default true,
+    primary key (device_uid, marca_tiempo_dispositivo, tipo)
 );
-
-create index lecturas_dispositivo_recepcion_idx
-    on lecturas (dispositivo_id, marca_tiempo_recepcion);
-
-create index lecturas_unidad_recepcion_idx
-    on lecturas (unidad_id, marca_tiempo_recepcion);
 
 -- =========================================================
 -- tareas_catalogo
 -- Intervalos por defecto relevados en el caso de estudio (RN03).
 -- =========================================================
 create table tareas_catalogo (
-    id                          bigint generated always as identity primary key,
-    nombre                      varchar(100) not null unique,
+    codigo                      varchar(20) primary key,
+    nombre                      varchar(100) not null,
     intervalo_km_default        int not null check (intervalo_km_default > 0),
     umbral_aviso_km_default     int not null default 4000 check (umbral_aviso_km_default > 0)
 );
 
-insert into tareas_catalogo (nombre, intervalo_km_default, umbral_aviso_km_default) values
-    ('Cambio de aceite de motor', 40000, 4000),
-    ('Filtro secador de aire de frenos', 100000, 4000),
-    ('Aceite de caja y diferencial', 150000, 4000);
+insert into tareas_catalogo (codigo, nombre, intervalo_km_default, umbral_aviso_km_default) values
+    ('ACEITE_MOTOR',  'Cambio de aceite de motor',         40000, 4000),
+    ('SECADOR_AIRE',  'Filtro secador de aire de frenos', 100000, 4000),
+    ('ACEITE_CAJA',   'Aceite de caja y diferencial',     150000, 4000);
 
 -- =========================================================
 -- planes_mantenimiento
--- Instancia cada tarea sobre una unidad y concentra su estado (RF07, RF08).
+-- Una tarea del catálogo aplicada a una unidad; concentra su estado (RF07, RF08).
 -- =========================================================
 create table planes_mantenimiento (
-    id                  bigint generated always as identity primary key,
-    unidad_id           bigint not null references unidades(id) on delete cascade,
-    tarea_id            bigint not null references tareas_catalogo(id),
+    patente             varchar(10) not null references unidades (patente) on update cascade,
+    codigo_tarea        varchar(20) not null references tareas_catalogo (codigo) on update cascade,
     intervalo_km        int not null check (intervalo_km > 0),
     umbral_aviso_km     int not null check (umbral_aviso_km > 0),
     km_ultimo_service   numeric(10,1) not null default 0,
     estado              estado_plan not null default 'al_dia',
     created_at          timestamptz not null default now(),
-    unique (unidad_id, tarea_id),
-    -- Destino de las FK compuestas (plan_id, unidad_id) de service_tareas y alertas.
-    constraint planes_id_unidad_uk unique (id, unidad_id)
+    primary key (patente, codigo_tarea)
 );
-
-create index planes_unidad_estado_idx
-    on planes_mantenimiento (unidad_id, estado);
-
-create index planes_tarea_idx
-    on planes_mantenimiento (tarea_id);
 
 -- =========================================================
 -- services
+-- Un service por unidad y por día: cuando el camión entra al taller se hace todo lo
+-- necesario y sale. Las tareas realizadas quedan en service_tareas.
 -- =========================================================
 create table services (
-    id              bigint generated always as identity primary key,
-    unidad_id       bigint not null references unidades(id) on delete cascade,
+    patente         varchar(10) not null references unidades (patente) on update cascade,
     fecha           date not null default current_date,
     km              numeric(10,1) not null,
     observaciones   text,
-    usuario_id      uuid not null references usuarios(id),
+    email_usuario   varchar(100) not null references usuarios (email) on update cascade,
     created_at      timestamptz not null default now(),
-    -- Destino de la FK compuesta (service_id, unidad_id) de service_tareas.
-    constraint services_id_unidad_uk unique (id, unidad_id)
+    primary key (patente, fecha)
 );
-
-create index services_unidad_fecha_idx
-    on services (unidad_id, fecha);
-
-create index services_usuario_idx
-    on services (usuario_id);
 
 -- =========================================================
 -- service_tareas
--- Un service puede cubrir varias tareas del plan de mantenimiento (RF09, RN06).
+-- Tareas del plan que cubrió cada service (RF09, RN06). La patente es la misma para el
+-- service y para el plan porque forma parte de ambas claves: un service de una unidad
+-- no puede cubrir el plan de otra.
 -- =========================================================
 create table service_tareas (
-    service_id  bigint not null,
-    plan_id     bigint not null,
-    -- Unidad del service y del plan: las dos FK compuestas obligan a que sea la misma,
-    -- así un service de una unidad no puede cubrir el plan de otra.
-    unidad_id   bigint not null,
-    primary key (service_id, plan_id),
-    constraint service_tareas_service_fk
-        foreign key (service_id, unidad_id) references services (id, unidad_id) on delete cascade,
-    constraint service_tareas_plan_fk
-        foreign key (plan_id, unidad_id) references planes_mantenimiento (id, unidad_id) on delete cascade
+    patente         varchar(10) not null,
+    fecha           date not null,
+    codigo_tarea    varchar(20) not null,
+    primary key (patente, fecha, codigo_tarea),
+    foreign key (patente, fecha)
+        references services (patente, fecha) on update cascade on delete cascade,
+    foreign key (patente, codigo_tarea)
+        references planes_mantenimiento (patente, codigo_tarea) on update cascade
 );
-
-create index service_tareas_plan_idx
-    on service_tareas (plan_id);
 
 -- =========================================================
 -- postergaciones
 -- =========================================================
 create table postergaciones (
-    id                  bigint generated always as identity primary key,
-    plan_id             bigint not null references planes_mantenimiento(id) on delete cascade,
+    patente             varchar(10) not null,
+    codigo_tarea        varchar(20) not null,
+    fecha               timestamptz not null default now(),
     motivo              motivo_postergacion not null,
     motivo_descripcion  varchar(255),
     km_limite_nuevo     int not null,
-    usuario_id          uuid not null references usuarios(id),
-    fecha               timestamptz not null default now(),
+    email_usuario       varchar(100) not null references usuarios (email) on update cascade,
     cerrada             boolean not null default false,
+    primary key (patente, codigo_tarea, fecha),
+    foreign key (patente, codigo_tarea)
+        references planes_mantenimiento (patente, codigo_tarea) on update cascade,
     -- RN07: si el motivo es "otro", la descripción es obligatoria.
-    constraint postergaciones_descripcion_si_otro
-        check (motivo <> 'otro' or motivo_descripcion is not null)
+    check (motivo <> 'otro' or motivo_descripcion is not null)
 );
-
-create index postergaciones_plan_abiertas_idx
-    on postergaciones (plan_id, cerrada);
-
-create index postergaciones_usuario_idx
-    on postergaciones (usuario_id);
 
 -- =========================================================
 -- fallas (DTC)
+-- Un mismo código puede aparecer, cerrarse y volver a aparecer: cada aparición es una fila.
+-- Su estado (activa / inactiva) se deduce de fecha_cierre, no se guarda aparte.
 -- =========================================================
 create table fallas (
-    id                  bigint generated always as identity primary key,
-    unidad_id           bigint not null references unidades(id) on delete cascade,
+    patente             varchar(10) not null references unidades (patente) on update cascade,
     codigo              varchar(30) not null,
-    estado              estado_falla not null default 'activo',
     fecha_aparicion     timestamptz not null default now(),
+    -- La falla está activa mientras fecha_cierre sea NULL (RN12).
     fecha_cierre        timestamptz,
-    -- Destino de la FK compuesta (falla_id, unidad_id) de alertas.
-    constraint fallas_id_unidad_uk unique (id, unidad_id)
+    primary key (patente, codigo, fecha_aparicion)
 );
 
-create index fallas_unidad_estado_idx
-    on fallas (unidad_id, estado);
+-- =========================================================
+-- alertas (RF12, RF13)
+-- Cada origen de alerta tiene su propia tabla, identificada por la clave de lo que la
+-- originó. Una alerta está abierta mientras fecha_revisada sea NULL.
+-- La vista "alertas" (al final) las une para listarlas juntas en el dashboard.
+-- =========================================================
 
--- =========================================================
--- alertas
--- =========================================================
-create table alertas (
-    id                      bigint generated always as identity primary key,
-    unidad_id               bigint not null references unidades(id) on delete cascade,
-    tipo                    tipo_alerta not null,
-    -- Qué originó la alerta: una FK real por cada tabla posible, en lugar de un
-    -- único "referencia_id" genérico (que no puede declararse como FK).
-    plan_id                 bigint,
-    falla_id                bigint,
-    dispositivo_id          bigint references dispositivos(id) on delete cascade,
-    estado                  estado_alerta not null default 'abierta',
-    usuario_revisor_id      uuid references usuarios(id),
-    fecha_generada          timestamptz not null default now(),
-    fecha_revisada          timestamptz,
-    -- El plan o la falla referenciados tienen que ser de la misma unidad que la alerta.
-    -- Si plan_id o falla_id es NULL, la FK compuesta no se verifica (MATCH SIMPLE).
-    -- dispositivo_id no se ata a la unidad: el dispositivo puede cambiar de unidad después.
-    constraint alertas_plan_fk
-        foreign key (plan_id, unidad_id) references planes_mantenimiento (id, unidad_id) on delete cascade,
-    constraint alertas_falla_fk
-        foreign key (falla_id, unidad_id) references fallas (id, unidad_id) on delete cascade,
-    -- Exactamente una referencia cargada, y la que corresponde al tipo.
-    constraint alertas_referencia_segun_tipo check (
-        (tipo in ('tarea_proxima', 'tarea_vencida')
-            and plan_id is not null and falla_id is null and dispositivo_id is null)
-     or (tipo = 'falla_nueva'
-            and falla_id is not null and plan_id is null and dispositivo_id is null)
-     or (tipo = 'dispositivo_sin_reportar'
-            and dispositivo_id is not null and plan_id is null and falla_id is null)
-    )
+-- Tarea próxima o vencida. Un plan puede generar varias alertas a lo largo del tiempo.
+create table alertas_plan (
+    patente             varchar(10) not null,
+    codigo_tarea        varchar(20) not null,
+    tipo                tipo_alerta_plan not null,
+    fecha_generada      timestamptz not null default now(),
+    fecha_revisada      timestamptz,
+    primary key (patente, codigo_tarea, tipo, fecha_generada),
+    foreign key (patente, codigo_tarea)
+        references planes_mantenimiento (patente, codigo_tarea) on update cascade
 );
 
-create index alertas_estado_fecha_idx
-    on alertas (estado, fecha_generada);
+-- Falla nueva: una alerta por cada aparición de un código (RN12).
+create table alertas_falla (
+    patente             varchar(10) not null,
+    codigo              varchar(30) not null,
+    fecha_aparicion     timestamptz not null,
+    fecha_generada      timestamptz not null default now(),
+    fecha_revisada      timestamptz,
+    primary key (patente, codigo, fecha_aparicion),
+    foreign key (patente, codigo, fecha_aparicion)
+        references fallas (patente, codigo, fecha_aparicion) on update cascade
+);
 
-create index alertas_plan_idx        on alertas (plan_id)        where plan_id is not null;
-create index alertas_falla_idx       on alertas (falla_id)       where falla_id is not null;
-create index alertas_dispositivo_idx on alertas (dispositivo_id) where dispositivo_id is not null;
-create index alertas_unidad_idx      on alertas (unidad_id);
-create index alertas_revisor_idx     on alertas (usuario_revisor_id) where usuario_revisor_id is not null;
+-- Dispositivo sin reportar (RN10).
+create table alertas_dispositivo (
+    device_uid          varchar(50) not null references dispositivos (device_uid) on update cascade,
+    fecha_generada      timestamptz not null default now(),
+    fecha_revisada      timestamptz,
+    primary key (device_uid, fecha_generada)
+);
 
 -- =========================================================
 -- kilometraje_historial
 -- Cargas manuales de kilometraje (RF06, RF16, RNF11).
 -- =========================================================
 create table kilometraje_historial (
-    id          bigint generated always as identity primary key,
-    unidad_id   bigint not null references unidades(id) on delete cascade,
-    km          numeric(10,1) not null,
-    fuente      fuente_km not null default 'manual',
-    usuario_id  uuid not null references usuarios(id),
-    fecha       timestamptz not null default now()
+    patente         varchar(10) not null references unidades (patente) on update cascade,
+    fecha           timestamptz not null default now(),
+    km              numeric(10,1) not null,
+    fuente          fuente_km not null default 'manual',
+    email_usuario   varchar(100) not null references usuarios (email) on update cascade,
+    primary key (patente, fecha)
 );
-
-create index km_historial_unidad_fecha_idx
-    on kilometraje_historial (unidad_id, fecha);
-
-create index km_historial_usuario_idx
-    on kilometraje_historial (usuario_id);
 
 -- =========================================================
 -- Row Level Security
@@ -294,5 +253,22 @@ alter table services enable row level security;
 alter table service_tareas enable row level security;
 alter table postergaciones enable row level security;
 alter table fallas enable row level security;
-alter table alertas enable row level security;
+alter table alertas_plan enable row level security;
+alter table alertas_falla enable row level security;
+alter table alertas_dispositivo enable row level security;
 alter table kilometraje_historial enable row level security;
+
+-- =========================================================
+-- Vista: todas las alertas juntas (RF13)
+-- security_invoker hace que la vista respete el RLS de las tablas de origen.
+-- =========================================================
+create view alertas with (security_invoker = true) as
+    select patente, tipo::text as tipo, codigo_tarea as referencia, fecha_generada, fecha_revisada
+      from alertas_plan
+    union all
+    select patente, 'falla_nueva', codigo, fecha_generada, fecha_revisada
+      from alertas_falla
+    union all
+    select d.patente, 'dispositivo_sin_reportar', a.device_uid, a.fecha_generada, a.fecha_revisada
+      from alertas_dispositivo a
+      join dispositivos d on d.device_uid = a.device_uid;
