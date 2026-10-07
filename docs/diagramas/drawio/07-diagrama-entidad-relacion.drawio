@@ -1,1 +1,964 @@
-<mxfile host="app.diagrams.net"><diagram name="DER" id="der"><mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2020" pageHeight="1080" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="title" value="DER — Sistema de Telemetría Vehicular (PostgreSQL / Supabase)" style="text;html=1;fontSize=18;fontStyle=1;align=left;verticalAlign=middle;fontFamily=Helvetica;" vertex="1" parent="1"><mxGeometry x="690" y="-40" width="620" height="30" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="40" y="60" width="290" height="100" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_h" value="alertas_dispositivo" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_c0" value="&lt;u&gt;device_uid&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_t0" value="VARCHAR(50)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_k1" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_c1" value="&lt;u&gt;fecha_generada&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_t1" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_k2" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_c2" value="fecha_revisada" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_t2" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_dispositivo_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_alertas_dispositivo"><mxGeometry x="44" y="28" width="1" height="72" as="geometry"/></mxCell><mxCell id="t_dispositivos" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="450" y="60" width="290" height="144" as="geometry"/></mxCell><mxCell id="t_dispositivos_h" value="dispositivos" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_dispositivos_k0" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_c0" value="&lt;u&gt;device_uid&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_t0" value="VARCHAR(50)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_k1" value="FK, UQ" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_c1" value="patente" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_t1" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_k2" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_c2" value="estado" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_t2" value="ESTADO_DISPOSITIVO" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_c3" value="ultima_comunicacion" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_t3" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_k4" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_c4" value="created_at" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_t4" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_dispositivos_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_dispositivos"><mxGeometry x="44" y="28" width="1" height="116" as="geometry"/></mxCell><mxCell id="t_lecturas" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="860" y="60" width="290" height="210" as="geometry"/></mxCell><mxCell id="t_lecturas_h" value="lecturas" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_lecturas_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_c0" value="&lt;u&gt;device_uid&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_t0" value="VARCHAR(50)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_k1" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_c1" value="&lt;u&gt;marca_tiempo_dispositivo&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_t1" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_k2" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_c2" value="&lt;u&gt;tipo&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_t2" value="TIPO_LECTURA" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_k3" value="FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_c3" value="patente" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_t3" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_k4" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_c4" value="valor" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_t4" value="NUMERIC(12,1)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_k5" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry y="138" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_c5" value="origen" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="138" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_t5" value="JSONB" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="138" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_k6" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry y="160" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_c6" value="marca_tiempo_recepcion" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="160" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_t6" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="160" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_k7" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry y="182" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_c7" value="consistente" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="182" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_t7" value="BOOLEAN" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="182" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_lecturas_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_lecturas"><mxGeometry x="44" y="28" width="1" height="182" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="1270" y="60" width="290" height="122" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_h" value="tareas_catalogo" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_k0" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_c0" value="&lt;u&gt;codigo&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_t0" value="VARCHAR(20)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_k1" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_c1" value="nombre" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_t1" value="VARCHAR(100)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_k2" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_c2" value="intervalo_km_default" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_t2" value="INT" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_c3" value="umbral_aviso_km_default" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_t3" value="INT" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_tareas_catalogo_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_tareas_catalogo"><mxGeometry x="44" y="28" width="1" height="94" as="geometry"/></mxCell><mxCell id="t_alertas_falla" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="40" y="360" width="290" height="144" as="geometry"/></mxCell><mxCell id="t_alertas_falla_h" value="alertas_falla" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_alertas_falla_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_k1" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_c1" value="&lt;u&gt;codigo&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_t1" value="VARCHAR(30)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_k2" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_c2" value="&lt;u&gt;fecha_aparicion&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_t2" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_c3" value="fecha_generada" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_t3" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_k4" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_c4" value="fecha_revisada" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_t4" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_falla_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_alertas_falla"><mxGeometry x="44" y="28" width="1" height="116" as="geometry"/></mxCell><mxCell id="t_fallas" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="450" y="360" width="290" height="122" as="geometry"/></mxCell><mxCell id="t_fallas_h" value="fallas" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_fallas_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_k1" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_c1" value="&lt;u&gt;codigo&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_t1" value="VARCHAR(30)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_k2" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_c2" value="&lt;u&gt;fecha_aparicion&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_t2" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_c3" value="fecha_cierre" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_t3" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_fallas_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_fallas"><mxGeometry x="44" y="28" width="1" height="94" as="geometry"/></mxCell><mxCell id="t_unidades" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="860" y="360" width="290" height="276" as="geometry"/></mxCell><mxCell id="t_unidades_h" value="unidades" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_unidades_k0" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k1" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c1" value="marca" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t1" value="VARCHAR(50)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k2" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c2" value="modelo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t2" value="VARCHAR(50)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c3" value="anio" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t3" value="SMALLINT" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k4" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c4" value="tenencia" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t4" value="TENENCIA_UNIDAD" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k5" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="138" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c5" value="titular" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="138" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t5" value="VARCHAR(100)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="138" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k6" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="160" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c6" value="protocolo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="160" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t6" value="PROTOCOLO_VEHICULO" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="160" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k7" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="182" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c7" value="km_actual" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="182" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t7" value="NUMERIC(10,1)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="182" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k8" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="204" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c8" value="km_fuente" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="204" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t8" value="FUENTE_KM" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="204" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k9" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="226" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c9" value="activa" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="226" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t9" value="BOOLEAN" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="226" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_k10" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry y="248" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_c10" value="created_at" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="248" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_t10" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="248" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_unidades_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_unidades"><mxGeometry x="44" y="28" width="1" height="248" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="1270" y="360" width="290" height="188" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_h" value="planes_mantenimiento" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_k1" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_c1" value="&lt;u&gt;codigo_tarea&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_t1" value="VARCHAR(20)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_k2" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_c2" value="intervalo_km" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_t2" value="INT" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_c3" value="umbral_aviso_km" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_t3" value="INT" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_k4" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_c4" value="km_ultimo_service" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_t4" value="NUMERIC(10,1)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_k5" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry y="138" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_c5" value="estado" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="138" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_t5" value="ESTADO_PLAN" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="138" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_k6" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry y="160" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_c6" value="created_at" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="160" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_t6" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="160" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_planes_mantenimiento_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_planes_mantenimiento"><mxGeometry x="44" y="28" width="1" height="160" as="geometry"/></mxCell><mxCell id="t_alertas_plan" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="1680" y="360" width="290" height="144" as="geometry"/></mxCell><mxCell id="t_alertas_plan_h" value="alertas_plan" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_alertas_plan_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_k1" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_c1" value="&lt;u&gt;codigo_tarea&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_t1" value="VARCHAR(20)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_k2" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_c2" value="&lt;u&gt;tipo&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_t2" value="TIPO_ALERTA_PLAN" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_k3" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_c3" value="&lt;u&gt;fecha_generada&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_t3" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_k4" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_c4" value="fecha_revisada" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_t4" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_alertas_plan_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_alertas_plan"><mxGeometry x="44" y="28" width="1" height="116" as="geometry"/></mxCell><mxCell id="t_usuarios" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="40" y="700" width="290" height="122" as="geometry"/></mxCell><mxCell id="t_usuarios_h" value="usuarios" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_usuarios_k0" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_c0" value="&lt;u&gt;email&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_t0" value="VARCHAR(100)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_k1" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_c1" value="nombre" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_t1" value="VARCHAR(100)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_k2" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_c2" value="rol" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_t2" value="ROL_USUARIO" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_c3" value="created_at" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_t3" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_usuarios_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_usuarios"><mxGeometry x="44" y="28" width="1" height="94" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="450" y="700" width="290" height="144" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_h" value="kilometraje_historial" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_k1" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_c1" value="&lt;u&gt;fecha&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_t1" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_k2" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_c2" value="km" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_t2" value="NUMERIC(10,1)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_c3" value="fuente" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_t3" value="FUENTE_KM" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_k4" value="FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_c4" value="email_usuario" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_t4" value="VARCHAR(100)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_kilometraje_historial_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_kilometraje_historial"><mxGeometry x="44" y="28" width="1" height="116" as="geometry"/></mxCell><mxCell id="t_services" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="860" y="700" width="290" height="166" as="geometry"/></mxCell><mxCell id="t_services_h" value="services" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_services_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_services_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_services_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_services_k1" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_services_c1" value="&lt;u&gt;fecha&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_services_t1" value="DATE" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_services_k2" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_services_c2" value="km" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_services_t2" value="NUMERIC(10,1)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_services_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_services_c3" value="observaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_services_t3" value="TEXT" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_services_k4" value="FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_services_c4" value="email_usuario" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_services_t4" value="VARCHAR(100)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_services_k5" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry y="138" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_services_c5" value="created_at" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="138" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_services_t5" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_services"><mxGeometry x="44" y="138" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_services_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_services"><mxGeometry x="44" y="28" width="1" height="138" as="geometry"/></mxCell><mxCell id="t_service_tareas" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="1270" y="700" width="290" height="100" as="geometry"/></mxCell><mxCell id="t_service_tareas_h" value="service_tareas" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_service_tareas_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_k1" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_c1" value="&lt;u&gt;fecha&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_t1" value="DATE" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_k2" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_c2" value="&lt;u&gt;codigo_tarea&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_t2" value="VARCHAR(20)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_service_tareas"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_service_tareas_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_service_tareas"><mxGeometry x="44" y="28" width="1" height="72" as="geometry"/></mxCell><mxCell id="t_postergaciones" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="1680" y="700" width="290" height="210" as="geometry"/></mxCell><mxCell id="t_postergaciones_h" value="postergaciones" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="t_postergaciones_k0" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry y="28" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_c0" value="&lt;u&gt;patente&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="28" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_t0" value="VARCHAR(10)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="28" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_k1" value="PK, FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry y="50" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_c1" value="&lt;u&gt;codigo_tarea&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="50" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_t1" value="VARCHAR(20)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="50" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_k2" value="PK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry y="72" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_c2" value="&lt;u&gt;fecha&lt;/u&gt;" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="72" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_t2" value="TIMESTAMPTZ" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="72" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_k3" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry y="94" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_c3" value="motivo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="94" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_t3" value="MOTIVO_POSTERGACION" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="94" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_k4" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry y="116" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_c4" value="motivo_descripcion" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="116" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_t4" value="VARCHAR(255)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="116" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_k5" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry y="138" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_c5" value="km_limite_nuevo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="138" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_t5" value="INT" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="138" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_k6" value="FK" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry y="160" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_c6" value="email_usuario" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="160" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_t6" value="VARCHAR(100)" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="160" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_k7" value="" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry y="182" width="44" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_c7" value="cerrada" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="182" width="238" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_t7" value="BOOLEAN" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="182" width="246" height="22" as="geometry"/></mxCell><mxCell id="t_postergaciones_vl" value="" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1" parent="t_postergaciones"><mxGeometry x="44" y="28" width="1" height="182" as="geometry"/></mxCell><mxCell id="enum" value="" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;dashed=1;container=1;collapsible=0;recursiveResize=0;" vertex="1" parent="1"><mxGeometry x="1680" y="60" width="290" height="268" as="geometry"/></mxCell><mxCell id="enum_h" value="Tipos ENUM" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;" vertex="1" parent="enum"><mxGeometry width="290" height="28" as="geometry"/></mxCell><mxCell id="enum_b" value="&lt;b&gt;ROL_USUARIO&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;admin | mantenimiento&lt;br&gt;&lt;b&gt;TENENCIA_UNIDAD&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;propia | fletero&lt;br&gt;&lt;b&gt;PROTOCOLO_VEHICULO&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;J1939 | J1979&lt;br&gt;&lt;b&gt;FUENTE_KM&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;odometro | estimado | manual&lt;br&gt;&lt;b&gt;ESTADO_DISPOSITIVO&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;activo | inactivo | sin_reportar&lt;br&gt;&lt;b&gt;TIPO_LECTURA&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;km | horas_motor&lt;br&gt;&lt;b&gt;ESTADO_PLAN&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;al_dia | proxima | vencida | postergada&lt;br&gt;&lt;b&gt;MOTIVO_POSTERGACION&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;falta_espacio | salida_urgente | otro&lt;br&gt;&lt;b&gt;TIPO_ALERTA_PLAN&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;tarea_proxima | tarea_vencida" style="text;html=1;whiteSpace=wrap;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;" vertex="1" parent="enum"><mxGeometry y="28" width="290" height="240" as="geometry"/></mxCell><mxCell id="r1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.5556;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.3810;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_dispositivos" target="t_lecturas"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.0000;exitY=0.3472;exitDx=0;exitDy=0;entryX=1.0000;entryY=0.5000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_dispositivos" target="t_alertas_dispositivo"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;strokeWidth=1.2;startArrow=ERzeroToOne;endArrow=ERzeroToOne;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.1379;exitY=0.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=1.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_unidades" target="t_dispositivos"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="900" y="320"/><mxPoint x="595" y="320"/></Array></mxGeometry></mxCell><mxCell id="r4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.5000;exitY=0.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=1.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_unidades" target="t_lecturas"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.0000;exitY=0.2174;exitDx=0;exitDy=0;entryX=1.0000;entryY=0.4918;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_unidades" target="t_fallas"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToOne;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.0000;exitY=0.4918;exitDx=0;exitDy=0;entryX=1.0000;entryY=0.4167;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_fallas" target="t_alertas_falla"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.2174;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.3191;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_unidades" target="t_planes_mantenimiento"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_tareas_catalogo" target="t_planes_mantenimiento"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.3191;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.4167;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_planes_mantenimiento" target="t_alertas_plan"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.0000;exitY=0.8333;exitDx=0;exitDy=0;entryX=1.0000;entryY=0.4861;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_unidades" target="t_kilometraje_historial"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="800" y="590"/><mxPoint x="800" y="770"/></Array></mxGeometry></mxCell><mxCell id="r11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_unidades" target="t_services"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_planes_mantenimiento" target="t_service_tareas"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERoneToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.3012;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.5000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_services" target="t_service_tareas"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.8966;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_planes_mantenimiento" target="t_postergaciones"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1530" y="670"/><mxPoint x="1825" y="670"/></Array></mxGeometry></mxCell><mxCell id="r15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.4918;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.4167;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_usuarios" target="t_kilometraje_historial"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="r16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.7241;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.3448;entryY=1.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_usuarios" target="t_services"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="250" y="980"/><mxPoint x="960" y="980"/></Array></mxGeometry></mxCell><mxCell id="r17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.5517;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=1.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" edge="1" parent="1" source="t_usuarios" target="t_postergaciones"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="200" y="1010"/><mxPoint x="1825" y="1010"/></Array></mxGeometry></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile host="app.diagrams.net">
+  <diagram name="DER" id="der">
+    <mxGraphModel dx="1939" dy="1999" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2240" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=18;fontStyle=1;align=left;verticalAlign=middle;fontFamily=Helvetica;" value="DER — Sistema de Telemetría Vehicular (PostgreSQL / Supabase)" vertex="1">
+          <mxGeometry height="30" width="620" x="690" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="100" width="290" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_h" parent="t_alertas_dispositivo" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="alertas_dispositivo" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_k0" parent="t_alertas_dispositivo" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_c0" parent="t_alertas_dispositivo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;device_uid&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_t0" parent="t_alertas_dispositivo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(50)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_k1" parent="t_alertas_dispositivo" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_c1" parent="t_alertas_dispositivo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;fecha_generada&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_t1" parent="t_alertas_dispositivo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_k2" parent="t_alertas_dispositivo" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_c2" parent="t_alertas_dispositivo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="fecha_revisada" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_t2" parent="t_alertas_dispositivo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_dispositivo_vl" parent="t_alertas_dispositivo" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="72" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="122" width="290" x="450" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_h" parent="t_dispositivos" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="dispositivos" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_k0" parent="t_dispositivos" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_c0" parent="t_dispositivos" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;device_uid&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_t0" parent="t_dispositivos" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(50)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_k1" parent="t_dispositivos" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_c1" parent="t_dispositivos" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="estado" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_t1" parent="t_dispositivos" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="ESTADO_DISPOSITIVO" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_k2" parent="t_dispositivos" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_c2" parent="t_dispositivos" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="ultima_comunicacion" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_t2" parent="t_dispositivos" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_k3" parent="t_dispositivos" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_c3" parent="t_dispositivos" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="created_at" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_t3" parent="t_dispositivos" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_dispositivos_vl" parent="t_dispositivos" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="94" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="210" width="290" x="860" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_h" parent="t_lecturas" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="lecturas" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_k0" parent="t_lecturas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_c0" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;device_uid&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_t0" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(50)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_k1" parent="t_lecturas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_c1" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;marca_tiempo_dispositivo&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_t1" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_k2" parent="t_lecturas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_c2" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;tipo&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_t2" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIPO_LECTURA" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_k3" parent="t_lecturas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="FK" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_c3" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="vinculacion_desde" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_t3" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_k4" parent="t_lecturas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_c4" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="valor" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_t4" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="NUMERIC(12,1)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_k5" parent="t_lecturas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_c5" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="origen" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_t5" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="JSONB" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_k6" parent="t_lecturas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_c6" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="marca_tiempo_recepcion" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_t6" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_k7" parent="t_lecturas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_c7" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="consistente" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_t7" parent="t_lecturas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="BOOLEAN" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lecturas_vl" parent="t_lecturas" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="182" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="122" width="290" x="1270" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_h" parent="t_tareas_catalogo" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="tareas_catalogo" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_k0" parent="t_tareas_catalogo" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_c0" parent="t_tareas_catalogo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;codigo&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_t0" parent="t_tareas_catalogo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(20)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_k1" parent="t_tareas_catalogo" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_c1" parent="t_tareas_catalogo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="nombre" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_t1" parent="t_tareas_catalogo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(100)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_k2" parent="t_tareas_catalogo" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_c2" parent="t_tareas_catalogo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="intervalo_km_default" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_t2" parent="t_tareas_catalogo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="INT" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_k3" parent="t_tareas_catalogo" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_c3" parent="t_tareas_catalogo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="umbral_aviso_km_default" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_t3" parent="t_tareas_catalogo" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="INT" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tareas_catalogo_vl" parent="t_tareas_catalogo" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="94" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="144" width="290" x="40" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_h" parent="t_alertas_falla" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="alertas_falla" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_k0" parent="t_alertas_falla" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_c0" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_t0" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_k1" parent="t_alertas_falla" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_c1" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;codigo&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_t1" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(30)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_k2" parent="t_alertas_falla" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_c2" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;fecha_aparicion&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_t2" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_k3" parent="t_alertas_falla" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_c3" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="fecha_generada" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_t3" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_k4" parent="t_alertas_falla" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_c4" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="fecha_revisada" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_t4" parent="t_alertas_falla" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_falla_vl" parent="t_alertas_falla" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="116" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="122" width="290" x="450" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_h" parent="t_fallas" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="fallas" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_k0" parent="t_fallas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_c0" parent="t_fallas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_t0" parent="t_fallas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_k1" parent="t_fallas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_c1" parent="t_fallas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;codigo&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_t1" parent="t_fallas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(30)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_k2" parent="t_fallas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_c2" parent="t_fallas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;fecha_aparicion&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_t2" parent="t_fallas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_k3" parent="t_fallas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_c3" parent="t_fallas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="fecha_cierre" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_t3" parent="t_fallas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fallas_vl" parent="t_fallas" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="94" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="276" width="290" x="860" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_h" parent="t_unidades" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="unidades" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k0" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c0" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t0" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k1" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c1" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="marca" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t1" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(50)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k2" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c2" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="modelo" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t2" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(50)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k3" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c3" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="anio" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t3" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="SMALLINT" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k4" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c4" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="tenencia" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t4" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TENENCIA_UNIDAD" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k5" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c5" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="titular" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t5" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(100)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k6" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c6" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="protocolo" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t6" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="PROTOCOLO_VEHICULO" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k7" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c7" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="km_actual" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t7" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="NUMERIC(10,1)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k8" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="204" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c8" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="km_fuente" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="204" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t8" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="FUENTE_KM" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="204" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k9" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="226" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c9" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="activa" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="226" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t9" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="BOOLEAN" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="226" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_k10" parent="t_unidades" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="248" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_c10" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="created_at" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="248" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_t10" parent="t_unidades" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="248" as="geometry" />
+        </mxCell>
+        <mxCell id="t_unidades_vl" parent="t_unidades" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="248" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="188" width="290" x="1270" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_h" parent="t_planes_mantenimiento" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="planes_mantenimiento" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_k0" parent="t_planes_mantenimiento" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_c0" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_t0" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_k1" parent="t_planes_mantenimiento" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_c1" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;codigo_tarea&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_t1" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(20)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_k2" parent="t_planes_mantenimiento" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_c2" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="intervalo_km" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_t2" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="INT" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_k3" parent="t_planes_mantenimiento" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_c3" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="umbral_aviso_km" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_t3" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="INT" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_k4" parent="t_planes_mantenimiento" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_c4" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="km_ultimo_service" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_t4" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="NUMERIC(10,1)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_k5" parent="t_planes_mantenimiento" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_c5" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="estado" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_t5" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="ESTADO_PLAN" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_k6" parent="t_planes_mantenimiento" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_c6" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="created_at" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_t6" parent="t_planes_mantenimiento" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_planes_mantenimiento_vl" parent="t_planes_mantenimiento" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="160" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="144" width="290" x="1680" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_h" parent="t_alertas_plan" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="alertas_plan" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_k0" parent="t_alertas_plan" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_c0" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_t0" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_k1" parent="t_alertas_plan" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_c1" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;codigo_tarea&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_t1" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(20)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_k2" parent="t_alertas_plan" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_c2" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;tipo&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_t2" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIPO_ALERTA_PLAN" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_k3" parent="t_alertas_plan" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_c3" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;fecha_generada&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_t3" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_k4" parent="t_alertas_plan" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_c4" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="fecha_revisada" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_t4" parent="t_alertas_plan" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_alertas_plan_vl" parent="t_alertas_plan" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="116" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="122" width="290" x="40" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_h" parent="t_usuarios" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="usuarios" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_k0" parent="t_usuarios" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_c0" parent="t_usuarios" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;email&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_t0" parent="t_usuarios" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(100)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_k1" parent="t_usuarios" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_c1" parent="t_usuarios" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="nombre" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_t1" parent="t_usuarios" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(100)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_k2" parent="t_usuarios" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_c2" parent="t_usuarios" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="rol" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_t2" parent="t_usuarios" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="ROL_USUARIO" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_k3" parent="t_usuarios" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_c3" parent="t_usuarios" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="created_at" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_t3" parent="t_usuarios" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_usuarios_vl" parent="t_usuarios" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="94" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="144" width="290" x="450" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_h" parent="t_kilometraje_historial" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="kilometraje_historial" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_k0" parent="t_kilometraje_historial" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_c0" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_t0" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_k1" parent="t_kilometraje_historial" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_c1" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;fecha&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_t1" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_k2" parent="t_kilometraje_historial" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_c2" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="km" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_t2" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="NUMERIC(10,1)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_k3" parent="t_kilometraje_historial" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_c3" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="fuente" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_t3" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="FUENTE_KM" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_k4" parent="t_kilometraje_historial" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="FK" vertex="1">
+          <mxGeometry height="22" width="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_c4" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="email_usuario" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_t4" parent="t_kilometraje_historial" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(100)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_kilometraje_historial_vl" parent="t_kilometraje_historial" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="116" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="166" width="290" x="860" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_h" parent="t_services" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="services" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_k0" parent="t_services" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_c0" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_t0" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_k1" parent="t_services" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_c1" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;fecha&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_t1" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="DATE" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_k2" parent="t_services" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_c2" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="km" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_t2" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="NUMERIC(10,1)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_k3" parent="t_services" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_c3" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="observaciones" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_t3" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TEXT" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_k4" parent="t_services" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="FK" vertex="1">
+          <mxGeometry height="22" width="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_c4" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="email_usuario" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_t4" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(100)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_k5" parent="t_services" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_c5" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="created_at" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_t5" parent="t_services" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_services_vl" parent="t_services" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="138" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="100" width="290" x="1270" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_h" parent="t_service_tareas" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="service_tareas" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_k0" parent="t_service_tareas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_c0" parent="t_service_tareas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_t0" parent="t_service_tareas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_k1" parent="t_service_tareas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_c1" parent="t_service_tareas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;fecha&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_t1" parent="t_service_tareas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="DATE" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_k2" parent="t_service_tareas" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_c2" parent="t_service_tareas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;codigo_tarea&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_t2" parent="t_service_tareas" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(20)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_service_tareas_vl" parent="t_service_tareas" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="72" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="210" width="290" x="1680" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_h" parent="t_postergaciones" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="postergaciones" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_k0" parent="t_postergaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_c0" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;patente&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_t0" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_k1" parent="t_postergaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_c1" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;codigo_tarea&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_t1" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(20)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_k2" parent="t_postergaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_c2" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="&lt;u&gt;fecha&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_t2" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_k3" parent="t_postergaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_c3" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="motivo" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_t3" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="MOTIVO_POSTERGACION" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_k4" parent="t_postergaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_c4" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="motivo_descripcion" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_t4" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(255)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_k5" parent="t_postergaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_c5" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="km_limite_nuevo" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_t5" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="INT" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_k6" parent="t_postergaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="FK" vertex="1">
+          <mxGeometry height="22" width="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_c6" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="email_usuario" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_t6" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="VARCHAR(100)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_k7" parent="t_postergaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;fontColor=#000000;" value="" vertex="1">
+          <mxGeometry height="22" width="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_c7" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=4;fontColor=#000000;" value="cerrada" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_t7" parent="t_postergaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=8;fontColor=#000000;" value="BOOLEAN" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="t_postergaciones_vl" parent="t_postergaciones" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="182" width="1" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="enum" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;dashed=1;container=1;collapsible=0;recursiveResize=0;" value="" vertex="1">
+          <mxGeometry height="268" width="290" x="1680" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="enum_h" parent="enum" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;" value="Tipos ENUM" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="enum_b" parent="enum" style="text;html=1;whiteSpace=wrap;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;" value="&lt;b&gt;ROL_USUARIO&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;admin | mantenimiento&lt;br&gt;&lt;b&gt;TENENCIA_UNIDAD&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;propia | fletero&lt;br&gt;&lt;b&gt;PROTOCOLO_VEHICULO&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;J1939 | J1979&lt;br&gt;&lt;b&gt;FUENTE_KM&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;odometro | estimado | manual&lt;br&gt;&lt;b&gt;ESTADO_DISPOSITIVO&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;activo | inactivo | sin_reportar&lt;br&gt;&lt;b&gt;TIPO_LECTURA&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;km | horas_motor&lt;br&gt;&lt;b&gt;ESTADO_PLAN&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;al_dia | proxima | vencida | postergada&lt;br&gt;&lt;b&gt;MOTIVO_POSTERGACION&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;falta_espacio | salida_urgente | otro&lt;br&gt;&lt;b&gt;TIPO_ALERTA_PLAN&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;tarea_proxima | tarea_vencida" vertex="1">
+          <mxGeometry height="240" width="290" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" edge="1" parent="1" source="t_dispositivos_k0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_alertas_dispositivo_t0" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" edge="1" parent="1" source="t_unidades" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.0000;exitY=0.2174;exitDx=0;exitDy=0;entryX=1.0000;entryY=0.4918;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_fallas" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" edge="1" parent="1" source="t_fallas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToOne;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.0000;exitY=0.4918;exitDx=0;exitDy=0;entryX=1.0000;entryY=0.4167;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_alertas_falla" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r7" edge="1" parent="1" source="t_unidades" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.2174;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.3191;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_planes_mantenimiento" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r8" edge="1" parent="1" source="t_tareas_catalogo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_planes_mantenimiento" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r9" edge="1" parent="1" source="t_planes_mantenimiento" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.3191;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.4167;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_alertas_plan" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r10" edge="1" parent="1" source="t_unidades" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.0000;exitY=0.8333;exitDx=0;exitDy=0;entryX=1.0000;entryY=0.4861;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_kilometraje_historial" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="590" />
+              <mxPoint x="800" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r11" edge="1" parent="1" source="t_unidades" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_services" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r13" edge="1" parent="1" source="t_services" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERoneToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.3012;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.5000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_service_tareas" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r14" edge="1" parent="1" source="t_planes_mantenimiento" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.8966;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_postergaciones" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1530" y="670" />
+              <mxPoint x="1825" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r15" edge="1" parent="1" source="t_usuarios" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=1.0000;exitY=0.4918;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.4167;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_kilometraje_historial" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r16" edge="1" parent="1" source="t_usuarios" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.7241;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.3448;entryY=1.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_services" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="980" />
+              <mxPoint x="960" y="980" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r17" edge="1" parent="1" source="t_usuarios" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;strokeWidth=1.2;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;startSize=14;endSize=14;exitX=0.5517;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=1.0000;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;" target="t_postergaciones" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="1010" />
+              <mxPoint x="1825" y="1010" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t_vinculaciones" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#000000;container=1;collapsible=0;recursiveResize=0;" vertex="1">
+          <mxGeometry height="144" width="290" x="450" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_h" parent="t_vinculaciones" style="text;html=1;fillColor=none;strokeColor=#000000;fontStyle=1;fontSize=13;fontFamily=Helvetica;align=center;verticalAlign=middle;spacingTop=4;" value="vinculaciones" vertex="1">
+          <mxGeometry height="28" width="290" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_k0" parent="t_vinculaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;spacingTop=2;" value="PK, FK" vertex="1">
+          <mxGeometry height="22" width="44" x="1" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_c0" parent="t_vinculaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=2;spacingTop=2;" value="&lt;u&gt;device_uid&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_t0" parent="t_vinculaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=2;spacingTop=2;" value="VARCHAR(50)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_k1" parent="t_vinculaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;spacingTop=2;" value="FK" vertex="1">
+          <mxGeometry height="22" width="44" x="1" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_c1" parent="t_vinculaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=2;spacingTop=2;" value="patente" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_t1" parent="t_vinculaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=2;spacingTop=2;" value="VARCHAR(10)" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_k2" parent="t_vinculaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;spacingTop=2;" value="PK" vertex="1">
+          <mxGeometry height="22" width="44" x="1" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_c2" parent="t_vinculaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=2;spacingTop=2;" value="&lt;u&gt;desde&lt;/u&gt;" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_t2" parent="t_vinculaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=2;spacingTop=2;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_k3" parent="t_vinculaciones" style="text;html=1;fontSize=10;fontStyle=1;fontFamily=Helvetica;align=center;verticalAlign=middle;spacingTop=2;" vertex="1">
+          <mxGeometry height="22" width="44" x="1" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_c3" parent="t_vinculaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;spacingLeft=2;spacingTop=2;" value="hasta" vertex="1">
+          <mxGeometry height="22" width="238" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_t3" parent="t_vinculaciones" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=right;verticalAlign=middle;spacingRight=2;spacingTop=2;" value="TIMESTAMPTZ" vertex="1">
+          <mxGeometry height="22" width="246" x="44" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="t_vinculaciones_vl" parent="t_vinculaciones" style="rounded=0;html=1;fillColor=#000000;strokeColor=none;" vertex="1">
+          <mxGeometry height="111" width="1" x="44" y="33" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_new" edge="1" parent="1" source="t_dispositivos" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startFill=0;endFill=0;startSize=14;endSize=14;jumpStyle=arc;jumpSize=8;startArrow=ERmandOne;endArrow=ERzeroToMany;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;" target="t_vinculaciones">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_new" edge="1" parent="1" source="t_unidades" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startFill=0;endFill=0;startSize=14;endSize=14;jumpStyle=arc;jumpSize=8;startArrow=ERmandOne;endArrow=ERzeroToMany;exitX=0.1379;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.442;entryDx=0;entryDy=0;entryPerimeter=0;" target="t_vinculaciones">
+          <mxGeometry relative="1" x="0.1277" as="geometry" />
+        </mxCell>
+        <mxCell id="r5_new" edge="1" parent="1" source="t_vinculaciones" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startFill=0;endFill=0;startSize=14;endSize=14;jumpStyle=arc;jumpSize=8;startArrow=ERmandOne;endArrow=ERzeroToMany;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="t_lecturas_k1">
+          <mxGeometry relative="1" x="-0.2812" as="geometry" />
+        </mxCell>
+        <mxCell id="r12_new" edge="1" parent="1" source="t_service_tareas_t2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.2;startFill=0;endFill=0;startSize=14;endSize=14;jumpStyle=arc;jumpSize=8;startArrow=ERzeroToMany;endArrow=ERmandOne;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" target="t_tareas_catalogo_t1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1610" y="783" />
+              <mxPoint x="1610" y="115.5" />
+            </Array>
+            <mxPoint x="1599.9999999999995" y="750" as="sourcePoint" />
+            <mxPoint x="1600" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -7,6 +7,12 @@
 -- tarea, etc. Las tablas que dependen de otra llevan la clave de esa tabla dentro de su PK.
 
 -- =========================================================
+-- Extensiones
+-- =========================================================
+-- Permite garantizar que no existan vinculaciones temporales superpuestas.
+create extension if not exists btree_gist;
+
+-- =========================================================
 -- Tipos enumerados
 -- =========================================================
 create type rol_usuario         as enum ('admin', 'mantenimiento');
@@ -52,36 +58,62 @@ create table unidades (
 -- =========================================================
 -- dispositivos
 -- device_uid es el identificador que el firmware envía en cada mensaje MQTT.
--- patente es única: una unidad tiene a lo sumo un dispositivo vinculado, y un
--- dispositivo a lo sumo una unidad (RN02). Es NULL mientras no está vinculado.
+-- La relación con una unidad no se guarda acá porque un dispositivo puede pasar de una
+-- unidad a otra a lo largo del tiempo (RF03, RN02). Ese historial se modela en
+-- vinculaciones.
 -- =========================================================
 create table dispositivos (
     device_uid           varchar(50) primary key,
-    patente              varchar(10) unique references unidades (patente) on update cascade,
     estado               estado_dispositivo not null default 'inactivo',
     ultima_comunicacion  timestamptz,
     created_at           timestamptz not null default now()
 );
 
 -- =========================================================
+-- vinculaciones
+-- Historial de instalación de dispositivos en unidades (RF03, RN02).
+-- La PK natural es (device_uid, desde): un dispositivo puede tener varias vinculaciones
+-- históricas, pero nunca dos simultáneas. Tampoco una unidad puede tener dos dispositivos
+-- simultáneos. El rango [desde, hasta) hace que un cambio pueda ocurrir exactamente cuando
+-- termina la vinculación anterior.
+-- =========================================================
+create table vinculaciones (
+    device_uid  varchar(50) not null references dispositivos (device_uid) on update cascade,
+    patente     varchar(10) not null references unidades (patente) on update cascade,
+    desde       timestamptz not null,
+    hasta       timestamptz,
+    primary key (device_uid, desde),
+    check (hasta is null or hasta > desde),
+    exclude using gist (
+        device_uid with =,
+        tstzrange(desde, coalesce(hasta, 'infinity'::timestamptz), '[)') with &&
+    ),
+    exclude using gist (
+        patente with =,
+        tstzrange(desde, coalesce(hasta, 'infinity'::timestamptz), '[)') with &&
+    )
+);
+
+-- =========================================================
 -- lecturas
 -- Una lectura queda identificada por el dispositivo que la envió, el instante en que la
--- tomó y qué se midió. Un mensaje MQTT trae a lo sumo una lectura de cada tipo; si llega
--- duplicado (reintento de QoS 1), la PK lo rechaza.
--- patente guarda la unidad a la que estaba vinculado el dispositivo en ese momento, para
--- que el historial no cambie si el dispositivo pasa a otra unidad (RF03, RN02).
+-- tomó y qué se midió. Además guarda la vinculación vigente al momento de la lectura,
+-- mediante (device_uid, vinculacion_desde), para conservar el historial aun si el
+-- dispositivo luego se instala en otra unidad.
 -- Los códigos de falla del mensaje no se guardan acá sino en fallas.
 -- =========================================================
 create table lecturas (
-    device_uid                  varchar(50) not null references dispositivos (device_uid) on update cascade,
+    device_uid                  varchar(50) not null,
     marca_tiempo_dispositivo    timestamptz not null,
     tipo                        tipo_lectura not null,
-    patente                     varchar(10) not null references unidades (patente) on update cascade,
+    vinculacion_desde           timestamptz not null,
     valor                       numeric(12,1) not null,
     origen                      jsonb not null,
     marca_tiempo_recepcion      timestamptz not null default now(),
     consistente                 boolean not null default true,
-    primary key (device_uid, marca_tiempo_dispositivo, tipo)
+    primary key (device_uid, marca_tiempo_dispositivo, tipo),
+    foreign key (device_uid, vinculacion_desde)
+        references vinculaciones (device_uid, desde) on update cascade
 );
 
 -- =========================================================
@@ -132,19 +164,19 @@ create table services (
 
 -- =========================================================
 -- service_tareas
--- Tareas del plan que cubrió cada service (RF09, RN06). La patente es la misma para el
--- service y para el plan porque forma parte de ambas claves: un service de una unidad
--- no puede cubrir el plan de otra.
+-- Tareas del catálogo que cubrió cada service (RF09, RN06). La pertenencia a un service
+-- ya determina la unidad; no se referencia directamente a planes_mantenimiento porque
+-- eso crearía un ciclo unidades -> planes -> service_tareas -> services -> unidades.
+-- La regla de negocio verifica que la tarea esté planificada para esa unidad antes de
+-- registrar el service.
 -- =========================================================
 create table service_tareas (
     patente         varchar(10) not null,
     fecha           date not null,
-    codigo_tarea    varchar(20) not null,
+    codigo_tarea    varchar(20) not null references tareas_catalogo (codigo) on update cascade,
     primary key (patente, fecha, codigo_tarea),
     foreign key (patente, fecha)
-        references services (patente, fecha) on update cascade on delete cascade,
-    foreign key (patente, codigo_tarea)
-        references planes_mantenimiento (patente, codigo_tarea) on update cascade
+        references services (patente, fecha) on update cascade on delete cascade
 );
 
 -- =========================================================
@@ -269,6 +301,9 @@ create view alertas with (security_invoker = true) as
     select patente, 'falla_nueva', codigo, fecha_generada, fecha_revisada
       from alertas_falla
     union all
-    select d.patente, 'dispositivo_sin_reportar', a.device_uid, a.fecha_generada, a.fecha_revisada
+    select v.patente, 'dispositivo_sin_reportar', a.device_uid, a.fecha_generada, a.fecha_revisada
       from alertas_dispositivo a
-      join dispositivos d on d.device_uid = a.device_uid;
+      join vinculaciones v
+        on v.device_uid = a.device_uid
+       and a.fecha_generada >= v.desde
+       and (v.hasta is null or a.fecha_generada < v.hasta);

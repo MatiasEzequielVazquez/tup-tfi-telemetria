@@ -25,6 +25,7 @@ Este documento presenta el esquema de base de datos y el listado de módulos a d
       - [`usuarios`](#usuarios)
       - [`unidades`](#unidades)
       - [`dispositivos`](#dispositivos)
+      - [`vinculaciones`](#vinculaciones)
       - [`parametros` (catálogo, opcional para reportes)](#parametros-catálogo-opcional-para-reportes)
       - [`lecturas`](#lecturas)
       - [`tareas_catalogo`](#tareas_catalogo)
@@ -59,7 +60,7 @@ Se descarta un motor documental porque el dominio central del sistema —unidade
 ### 2.2 Tablas
 
 **Convenciones.**
-- **Claves naturales:** cada tabla se identifica por sus propios datos y no por un número generado. Una unidad se identifica por su patente, un dispositivo por el identificador que envía su firmware, una tarea del catálogo por un código y un usuario por su email. Las tablas que dependen de otra llevan la clave de esa tabla dentro de su propia PK: un plan de mantenimiento es `(patente, codigo_tarea)`, un service es `(patente, fecha)`, etc. Ver 2.4.
+- **Claves naturales:** cada tabla se identifica por sus propios datos y no por un número generado. Una unidad se identifica por su patente, un dispositivo por el identificador que envía su firmware, una tarea del catálogo por un código y un usuario por su email. Las entidades históricas agregan los datos necesarios para identificar cada hecho: una vinculación es `(device_uid, desde)`, un plan es `(patente, codigo_tarea)` y un service es `(patente, fecha)`. Ver 2.4.
 - **Textos:** `varchar(n)` cuando el dato tiene un largo máximo razonable (patente, email, códigos) y `text` solo para campos libres (`observaciones`).
 - **Valores cerrados:** las columnas con un conjunto fijo de valores (rol, estados, tipos, motivos) usan tipos `ENUM` de PostgreSQL:
 
@@ -103,10 +104,24 @@ Se descarta un motor documental porque el dominio central del sistema —unidade
 | Columna | Tipo | Notas |
 |---|---|---|
 | `device_uid` | varchar(50), PK | Identificador que envía el firmware en cada mensaje (RF03). |
-| `patente` | varchar(10), FK → `unidades`, única, nullable | Unidad a la que está vinculado. Es única para que una unidad tenga a lo sumo un dispositivo y un dispositivo a lo sumo una unidad (RN02). `NULL` mientras no está vinculado. |
 | `estado` | `estado_dispositivo` | `activo` \| `inactivo` \| `sin_reportar` (RF03, RN10). |
 | `ultima_comunicacion` | timestamptz | Actualizada en cada mensaje MQTT válido; la usa el temporizador de CU14. |
 | `created_at` | timestamptz | |
+
+La relación dispositivo–unidad no se guarda como atributo actual: se registra en `vinculaciones` para conservar el historial de cambios.
+
+#### `vinculaciones`
+
+Historial de qué dispositivo estuvo instalado en qué unidad y durante qué intervalo (RF03, RN02). PK: `(device_uid, desde)`.
+
+| Columna | Tipo | Notas |
+|---|---|---|
+| `device_uid` | varchar(50), PK, FK → `dispositivos` | Dispositivo instalado. |
+| `patente` | varchar(10), FK → `unidades` | Unidad a la que se vinculó. |
+| `desde` | timestamptz, PK | Inicio de la vinculación. |
+| `hasta` | timestamptz, nullable | Fin de la vinculación; `NULL` significa vigente. |
+
+Se usan restricciones `EXCLUDE` sobre rangos de tiempo para impedir que un dispositivo tenga dos unidades simultáneas ni que una unidad tenga dos dispositivos simultáneos. El rango es `[desde, hasta)`, por lo que una vinculación puede terminar exactamente cuando comienza la siguiente.
 
 #### `parametros` (catálogo, opcional para reportes)
 
@@ -114,14 +129,14 @@ No se modela como tabla separada en esta versión: el tipo de lectura (`km`, `ho
 
 #### `lecturas`
 
-PK: `(device_uid, marca_tiempo_dispositivo, tipo)`. Una lectura queda identificada por el dispositivo que la envió, el instante en que la tomó y qué midió. Si un mensaje llega duplicado (reintento de MQTT con QoS 1), la PK lo rechaza.
+PK: `(device_uid, marca_tiempo_dispositivo, tipo)`. Una lectura queda identificada por el dispositivo que la envió, el instante en que la tomó y qué midió. Además referencia la vinculación vigente al momento de la lectura mediante `(device_uid, vinculacion_desde)`. Si un mensaje llega duplicado (reintento de MQTT con QoS 1), la PK lo rechaza.
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `device_uid` | varchar(50), PK, FK → `dispositivos` | RF04. |
+| `device_uid` | varchar(50), PK | Identifica el dispositivo a través de la FK compuesta a `vinculaciones`. RF04. |
 | `marca_tiempo_dispositivo` | timestamptz, PK | Timestamp original del dispositivo (RNF02). |
 | `tipo` | `tipo_lectura`, PK | `km` \| `horas_motor`. |
-| `patente` | varchar(10), FK → `unidades` | Unidad a la que estaba vinculado el dispositivo al momento de la lectura. Ver 2.4. |
+| `vinculacion_desde` | timestamptz, FK junto con `device_uid` → `vinculaciones` | Identifica la vinculación histórica vigente al momento de la lectura; permite obtener la unidad sin duplicar `patente`. |
 | `valor` | numeric(12,1) | Valor medido. |
 | `origen` | jsonb | Parámetro de origen según el protocolo: `{ "pgn": ..., "spn": ... }` o `{ "pid": ... }`. |
 | `marca_tiempo_recepcion` | timestamptz | RF04. |
@@ -169,15 +184,15 @@ PK: `(patente, fecha)`. Se registra un service por unidad y por día: según el 
 
 #### `service_tareas`
 
-Tareas del plan que cubrió cada service (RF09, RN06). PK: `(patente, fecha, codigo_tarea)`.
+Tareas del catálogo que cubrió cada service (RF09, RN06). PK: `(patente, fecha, codigo_tarea)`.
 
 | Columna | Tipo | Notas |
 |---|---|---|
-| `patente` | varchar(10), PK, FK | Forma parte de las dos FK. |
+| `patente` | varchar(10), PK, FK | FK junto con `fecha` → `services`; la unidad queda determinada por el service. |
 | `fecha` | date, PK, FK | FK `(patente, fecha)` → `services`. |
-| `codigo_tarea` | varchar(20), PK, FK | FK `(patente, codigo_tarea)` → `planes_mantenimiento`. |
+| `codigo_tarea` | varchar(20), PK, FK → `tareas_catalogo` | Tarea realizada en el service. |
 
-Como la `patente` es la misma columna en las dos FK, el service y el plan siempre son de la misma unidad.
+No se referencia directamente `planes_mantenimiento`: hacerlo conectaría `service_tareas` con el plan y volvería a formar el ciclo `unidades → planes_mantenimiento → service_tareas → services → unidades`. La regla de negocio verifica que la tarea esté planificada para la unidad antes de registrar el service.
 
 #### `postergaciones`
 
@@ -235,7 +250,7 @@ Las alertas (RF12) se separan según lo que las origina, porque cada origen tien
 | `fecha_generada` | timestamptz, PK | |
 | `fecha_revisada` | timestamptz, nullable | |
 
-**Vista prevista `alertas`.** Une las tres tablas (`patente`, `tipo`, `referencia`, `fecha_generada`, `fecha_revisada`) para que el dashboard las liste juntas sin tener que consultar cada una por separado.
+**Vista `alertas`.** Une las tres tablas (`patente`, `tipo`, `referencia`, `fecha_generada`, `fecha_revisada`) para que el dashboard las liste juntas sin tener que consultar cada una por separado. En las alertas de dispositivo, la patente se obtiene de la vinculación vigente en `fecha_generada`.
 
 #### `kilometraje_historial`
 
@@ -251,21 +266,21 @@ Registra cada carga manual de kilometraje, para trazabilidad y para el historial
 
 ### 2.3 Índices
 
-No se definen índices adicionales. PostgreSQL crea un índice por cada clave primaria y por la restricción `UNIQUE` de `dispositivos.patente`. Como la PK de la mayoría de las tablas empieza por `patente`, esos índices ya cubren las consultas por unidad (sus planes, services, fallas, alertas y cargas de kilometraje). La excepción es `lecturas`, cuya PK empieza por `device_uid`: la consulta del historial de lecturas de una unidad no tiene índice propio, lo cual no es un problema con el volumen previsto (22 unidades). Si en el desarrollo aparece una consulta lenta, se agregará el índice puntual para esa consulta.
+No se definen índices manuales para las consultas del dominio. PostgreSQL crea un índice por cada clave primaria y las restricciones `EXCLUDE` de `vinculaciones` crean los índices GiST necesarios para controlar solapamientos temporales. La PK de `lecturas` empieza por `device_uid`; la consulta del historial de lecturas de una unidad se resuelve a través de `vinculaciones` y no requiere otro índice con el volumen previsto (22 unidades). Si en el desarrollo aparece una consulta lenta, se agregará el índice puntual para esa consulta.
 
 ### 2.4 Decisiones de diseño
 
 - **Claves naturales en lugar de ids generados.** Ningún dato del dominio necesita un número artificial para identificarse: la patente identifica a la unidad, el `device_uid` al dispositivo, el email al usuario, y el resto de las entidades depende de alguna de ellas (un plan es una tarea en una unidad; un service, una unidad en una fecha). Usar estas claves hace que las relaciones se lean en el propio dato (`service_tareas` dice qué tarea de qué unidad se hizo en qué fecha) y que varias reglas las garantice la PK: no se puede asignar dos veces la misma tarea a una unidad, ni registrar dos veces la misma lectura. Las FK usan `ON UPDATE CASCADE`, así que corregir una patente o un email se propaga a todas las tablas que lo referencian.
-- **La unidad forma parte de la clave de sus tablas dependientes.** `planes_mantenimiento`, `services`, `fallas`, `postergaciones`, `alertas_plan` y `alertas_falla` incluyen `patente` en su PK. Por eso, cuando una tabla relaciona dos de ellas (`service_tareas` con un service y un plan), las dos FK comparten la misma columna `patente`, y la base no permite relacionar registros de unidades distintas.
+- **La unidad forma parte de la clave de sus tablas dependientes.** `planes_mantenimiento`, `services`, `fallas`, `postergaciones`, `alertas_plan` y `alertas_falla` incluyen `patente` en su PK. En `service_tareas`, la unidad queda determinada por la FK al service y la tarea se referencia al catálogo; así se evita agregar una segunda relación directa con `planes_mantenimiento` y no se forma un ciclo entre las entidades.
 - **`usuarios` identificado por email.** Supabase Auth asigna a cada usuario un `uuid` interno, pero ese número no representa nada del dominio. El backend obtiene el email del token de sesión y busca el rol del usuario en esta tabla, que es la que referencian las demás (quién registró un service, una postergación, etc.).
 - **Una tabla de alertas por origen.** Una alerta puede originarse en un plan, en una falla o en un dispositivo, y cada uno se identifica con una clave distinta. En una única tabla habría que tener columnas de referencia que quedan vacías según el tipo, y una columna que puede estar vacía no puede formar parte de la PK. Separarlas en `alertas_plan`, `alertas_falla` y `alertas_dispositivo` deja cada alerta identificada por la clave de lo que la originó, sin columnas vacías y con FK siempre completas. La vista `alertas` las une para consultarlas juntas.
 - **Estados que se deducen de una fecha no se guardan aparte.** Una falla está activa mientras no tiene `fecha_cierre`, y una alerta está abierta mientras no tiene `fecha_revisada`. Guardar además un campo `estado` permitiría que se contradigan (por ejemplo, una falla inactiva sin fecha de cierre). `planes_mantenimiento.estado` sí se guarda, porque se calcula a partir del kilometraje y las postergaciones (ver más abajo).
 - **Baja lógica de unidades.** Dar de baja una unidad (RF02) marca `activa = false` en vez de borrarla, y las FK no permiten borrar una unidad que tiene historial. Así se conservan sus services, postergaciones y cargas de kilometraje (RNF11). El único borrado en cascada es el de `service_tareas` al borrar un service, porque esas filas no existen sin el service.
 - **Un service por unidad y por día.** Según el caso de estudio, cuando un camión entra al taller se hace todo lo necesario y sale. Por eso la PK de `services` es `(patente, fecha)`, y las distintas tareas de esa visita se registran en `service_tareas`.
-- **`lecturas.patente` además de `device_uid`.** Un dispositivo puede desvincularse de una unidad y vincularse a otra (RF03, RN02). Si la lectura solo guardara el dispositivo, al moverlo todo su historial pasaría a atribuirse a la unidad nueva. Guardar la patente al momento de la recepción conserva el historial correcto. El módulo de ingesta solo acepta lecturas de dispositivos vinculados (precondición de CU06), por lo que la columna nunca queda vacía.
+- **Historial temporal de vinculaciones.** Un dispositivo puede desvincularse de una unidad y vincularse a otra (RF03, RN02). `vinculaciones` registra cada intervalo de instalación y sus restricciones `EXCLUDE` impiden dos vinculaciones simultáneas del mismo dispositivo o de la misma unidad. `lecturas` guarda la referencia a la vinculación vigente mediante `(device_uid, vinculacion_desde)`, por lo que el historial sigue asociado a la unidad correcta aunque el dispositivo luego se instale en otra. El módulo de ingesta resuelve la vinculación correspondiente al timestamp de la lectura antes de persistirla.
 - **Modelo agnóstico de protocolo.** Ninguna tabla depende de si la unidad usa J1939 o J1979: `unidades.protocolo` registra cuál usa cada una y el detalle del parámetro de origen (PGN/SPN o PID) queda en `lecturas.origen`. Esto sostiene RNF08 (portabilidad) y RNF09 (aislar la interpretación del protocolo en el módulo de ingesta, sin que un cambio de firmware afecte al resto del sistema).
 - **`planes_mantenimiento` como entidad central del estado de mantenimiento.** En vez de recalcular el estado de cada tarea en cada consulta a partir de todo el historial de services, cada plan guarda `km_ultimo_service` y `estado`, que se actualizan al procesar una lectura de kilometraje (CU06) o al registrar un service (CU09) o una postergación (CU10). Esto resuelve directamente RF08 y las reglas RN04 a RN07.
-- **`service_tareas` en vez de una tarea por service.** Un mismo evento de taller normalmente cubre varias tareas a la vez (aceite de motor y filtros, por ejemplo), tal como surge de la entrevista al mecánico. Modelarlo como tabla de unión evita duplicar `services` por cada tarea realizada el mismo día.
+- **`service_tareas` en vez de una tarea por service.** Un mismo evento de taller normalmente cubre varias tareas a la vez (aceite de motor y filtros, por ejemplo), tal como surge de la entrevista al mecánico. Modelarlo como tabla de unión evita duplicar `services` por cada tarea realizada el mismo día. La tabla referencia al catálogo de tareas; la validación de que esa tarea corresponde al plan de la unidad se realiza en la operación de registro del service, evitando una relación circular en el DER.
 - **Kilometraje nunca disminuye (RN09).** No se modela con una restricción de base de datos (requeriría conocer el máximo histórico en cada insert); se resuelve en el módulo de ingesta, que compara contra `unidades.km_actual` antes de escribir y marca `lecturas.consistente = false` cuando corresponde.
 - **Tipos `ENUM` para valores cerrados.** Roles, estados, tipos y motivos tienen un conjunto de valores definido por los requerimientos. Un `ENUM` documenta esos valores en el propio esquema y rechaza cualquier otro. Agregar un valor nuevo es simple (`ALTER TYPE ... ADD VALUE`); quitarlo no, pero los valores de este dominio son estables. Se descartó modelarlos como tablas de catálogo porque no tienen atributos propios ni se administran desde la aplicación.
 - **`varchar(n)` para textos acotados.** En PostgreSQL `varchar(n)` y `text` se almacenan igual; `varchar(n)` se usa donde el largo máximo es una regla del dato (patente, email, códigos), para que la base rechace valores inválidos.
@@ -275,8 +290,8 @@ No se definen índices adicionales. PostgreSQL crea un índice por cada clave pr
 | # | Módulo | Responsabilidad | RF / RN que cubre |
 |---|---|---|---|
 | M1 | Autenticación y autorización | Login con Supabase Auth; verificación de rol (`admin` \| `mantenimiento`) en cada operación. | RF01, RF17, RN11, RNF04 |
-| M2 | Gestión de unidades y dispositivos | Alta, baja y modificación de unidades y dispositivos; vinculación dispositivo–unidad. | RF02, RF03, RN01, RN02 |
-| M3 | Ingesta MQTT | Suscripción al broker, validación de mensajes, interpretación del payload según protocolo, persistencia en `lecturas` (y de los códigos de falla en `fallas`), actualización de `unidades.km_actual` y `dispositivos.ultima_comunicacion`. | RF04, RF05, RNF01, RNF02, RNF03, RNF07, RNF08, RNF09, RN08, RN09 |
+| M2 | Gestión de unidades y dispositivos | Alta, baja y modificación de unidades y dispositivos; alta, cierre y consulta del historial de vinculaciones dispositivo–unidad. | RF02, RF03, RN01, RN02 |
+| M3 | Ingesta MQTT | Suscripción al broker, validación de mensajes, resolución de la vinculación vigente según el timestamp del dispositivo, interpretación del payload según protocolo, persistencia en `lecturas` (y de los códigos de falla en `fallas`), actualización de `unidades.km_actual` y `dispositivos.ultima_comunicacion`. | RF04, RF05, RNF01, RNF02, RNF03, RNF07, RNF08, RNF09, RN08, RN09 |
 | M4 | Motor de mantenimiento | Gestión del catálogo de tareas y de los planes por unidad; recalcula el estado de cada plan ante cada lectura de kilometraje relevante. | RF07, RF08, RN03, RN04, RN05 |
 | M5 | Services y postergaciones | Registro de services (con sus tareas cubiertas) y de postergaciones; reinicia el conteo del plan y cierra postergaciones abiertas. | RF09, RF10, RF16, RN06, RN07, RNF11 |
 | M6 | Gestión de fallas (DTC) | Alta y cierre de códigos de falla informados por cada unidad. | RF11, RN12 |
@@ -321,8 +336,8 @@ Para una unidad con protocolo `J1979`, el campo `origen` usa `{ "pid": "010C" }`
 |---|---|---|
 | RF01, RF17, RN11 | `usuarios` | M1 |
 | RF02, RN01 | `unidades` | M2 |
-| RF03, RN02 | `dispositivos` | M2 |
-| RF04, RF05, RNF01–03, RNF07–09, RN08, RN09 | `lecturas`, `unidades.km_actual` | M3 |
+| RF03, RN02 | `dispositivos`, `vinculaciones` | M2 |
+| RF04, RF05, RNF01–03, RNF07–09, RN08, RN09 | `lecturas`, `vinculaciones`, `unidades.km_actual` | M3 |
 | RF06 | `kilometraje_historial` | M9 |
 | RF07, RN03 | `tareas_catalogo`, `planes_mantenimiento` | M4 |
 | RF08, RN04, RN05 | `planes_mantenimiento.estado` | M4 |
