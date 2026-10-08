@@ -1,0 +1,729 @@
+openapi: 3.0.3
+info:
+  title: Sistema de Telemetría Vehicular - API REST
+  version: 0.2.0
+  description: |
+    Contrato de la API entre el backend y el dashboard. Deriva de `docs/prototipo-backend.md` y de `db/schema.sql`.
+
+    **Autenticación.** El login lo hace el frontend directo contra Supabase Auth (RF01); no hay endpoint de login.
+    Cada request lleva `Authorization: Bearer <JWT de Supabase>`. El backend resuelve el rol en `usuarios.rol` (RN11).
+
+    **Mock.** `mock/server.js` implementa este contrato. Ahí el token se interpreta como rol:
+    `Bearer admin` o `Bearer mantenimiento`; cualquier otro valor se trata como admin.
+
+    **Convenciones.**
+    - Fechas: ISO 8601 en UTC (`timestamptz`). `services.fecha` es solo fecha (`YYYY-MM-DD`).
+    - Claves naturales: la patente, el `device_uid`, el email y el `codigo_tarea` van en la ruta. Usar `encodeURIComponent`.
+    - Listados paginados (`/unidades`, `/alertas`, `services`, `postergaciones`): `?page=&page_size=` (por defecto 1 y 20, máximo 100). Respuesta `{ data, page, page_size, total }`.
+    - Listados chicos (usuarios, dispositivos, catálogo, planes, fallas): `{ data }` sin paginar.
+    - Errores: `{ error: { code, message } }` con HTTP 400 (validación), 401, 403, 404, 409 (regla de negocio).
+    - Los textos de `message` están pensados para mostrarse al usuario.
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Mock local (`node mock/server.js`) o backend en desarrollo
+security:
+  - bearerAuth: []
+tags:
+  - { name: Sesión y usuarios, description: M1 }
+  - { name: Unidades, description: M2 y M9 }
+  - { name: Dispositivos, description: M2 }
+  - { name: Mantenimiento, description: M4 }
+  - { name: Services y postergaciones, description: M5 }
+  - { name: Fallas, description: M6 }
+  - { name: Alertas, description: M7 }
+  - { name: Kilometraje, description: M9 }
+
+paths:
+  /me:
+    get:
+      tags: [Sesión y usuarios]
+      summary: Usuario actual (RF01)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Me' } } } }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+
+  /usuarios:
+    get:
+      tags: [Sesión y usuarios]
+      summary: Lista de usuarios (admin, RF17)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/Usuario' } } } } } } }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+    post:
+      tags: [Sesión y usuarios]
+      summary: Alta de usuario (admin, RF17, RN11)
+      description: El usuario ya debe existir en Supabase Auth.
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/UsuarioInput' }, example: { email: ana.perez@flota.example, nombre: Ana Pérez, rol: mantenimiento } } }
+      responses:
+        '201': { description: Creado, content: { application/json: { schema: { $ref: '#/components/schemas/Usuario' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /usuarios/{email}:
+    parameters:
+      - { name: email, in: path, required: true, schema: { type: string } }
+    patch:
+      tags: [Sesión y usuarios]
+      summary: Modifica nombre o rol (admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { nombre: { type: string }, rol: { $ref: '#/components/schemas/Rol' } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Usuario' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /unidades:
+    get:
+      tags: [Unidades]
+      summary: Vista de flota (RF14)
+      description: |
+        Una fila por unidad con su estado resumido. `estado_mantenimiento` es el más crítico entre sus planes
+        (vencida > proxima > postergada > al_dia) y es `null` si la unidad no tiene planes.
+        Por defecto lista solo unidades activas; con `activa=false`, las dadas de baja.
+      parameters:
+        - { name: tenencia, in: query, schema: { $ref: '#/components/schemas/Tenencia' } }
+        - name: estado
+          in: query
+          description: Filtra por estado de mantenimiento o por situación (fallas, dispositivo).
+          schema: { type: string, enum: [al_dia, proxima, vencida, postergada, con_fallas, sin_reportar, sin_dispositivo] }
+        - { name: activa, in: query, schema: { type: boolean, default: true } }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagina'
+                  - type: object
+                    properties: { data: { type: array, items: { $ref: '#/components/schemas/UnidadResumen' } } }
+              example:
+                data:
+                  - patente: AP414XV
+                    marca: Scania
+                    modelo: P 360
+                    anio: 2017
+                    tenencia: propia
+                    titular: null
+                    protocolo: J1939
+                    km_actual: 537033
+                    km_fuente: odometro
+                    activa: true
+                    estado_mantenimiento: al_dia
+                    fallas_activas: 0
+                    dispositivo: { device_uid: esp32-B4D43E, estado: activo, ultima_comunicacion: '2026-10-07T14:46:00Z' }
+                page: 1
+                page_size: 20
+                total: 21
+    post:
+      tags: [Unidades]
+      summary: Alta de unidad (admin, RF02)
+      description: Nace con `km_actual = 0`, `km_fuente = manual` y sin planes ni dispositivo.
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/UnidadInput' }, example: { patente: AB123CD, marca: Scania, modelo: R 450, anio: 2021, tenencia: fletero, titular: Hugo Benítez, protocolo: J1939 } } }
+      responses:
+        '201': { description: Creada, content: { application/json: { schema: { $ref: '#/components/schemas/Unidad' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /unidades/{patente}:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+    get:
+      tags: [Unidades]
+      summary: Datos básicos de una unidad
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Unidad' } } } }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+    patch:
+      tags: [Unidades]
+      summary: Modifica datos de la unidad (admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/UnidadEdicion' } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Unidad' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+    delete:
+      tags: [Unidades]
+      summary: Baja lógica (admin)
+      description: Marca `activa = false` y conserva el historial. Responde 409 si la unidad tiene un dispositivo vinculado.
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Unidad' } } } }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /unidades/{patente}/detalle:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+    get:
+      tags: [Unidades]
+      summary: Detalle consolidado de la unidad (RF15)
+      description: Unidad, dispositivo vigente, planes con su estado y fallas activas en una sola respuesta.
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/DetalleUnidad' } } } }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /dispositivos:
+    get:
+      tags: [Dispositivos]
+      summary: Lista de dispositivos con su unidad vinculada (admin, RF03)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/Dispositivo' } } } } } } }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+    post:
+      tags: [Dispositivos]
+      summary: Alta de dispositivo (admin)
+      description: Nace con `estado = inactivo` y sin vincular.
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [device_uid], properties: { device_uid: { type: string, example: esp32-0F3A21 } } } } }
+      responses:
+        '201': { description: Creado, content: { application/json: { schema: { $ref: '#/components/schemas/Dispositivo' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /dispositivos/{device_uid}/vincular:
+    parameters:
+      - { $ref: '#/components/parameters/DeviceUid' }
+    patch:
+      tags: [Dispositivos]
+      summary: Vincula el dispositivo a una unidad (admin, RN02)
+      description: 409 si el dispositivo ya está vinculado o si la unidad ya tiene un dispositivo.
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [patente], properties: { patente: { type: string } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Dispositivo' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /dispositivos/{device_uid}/desvincular:
+    parameters:
+      - { $ref: '#/components/parameters/DeviceUid' }
+    patch:
+      tags: [Dispositivos]
+      summary: Desvincula el dispositivo de su unidad actual (admin)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Dispositivo' } } } }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /tareas-catalogo:
+    get:
+      tags: [Mantenimiento]
+      summary: Catálogo de tareas con sus intervalos por defecto (RF07, RN03)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/TareaCatalogo' } } } } } } }
+    post:
+      tags: [Mantenimiento]
+      summary: Alta de un tipo de tarea (admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/TareaCatalogo' }, example: { codigo: FILTRO_AIRE, nombre: Filtro de aire, intervalo_km_default: 80000, umbral_aviso_km_default: 4000 } } }
+      responses:
+        '201': { description: Creada, content: { application/json: { schema: { $ref: '#/components/schemas/TareaCatalogo' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /unidades/{patente}/planes:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+    get:
+      tags: [Mantenimiento]
+      summary: Planes de la unidad con su estado actual (RF07, RF08)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/Plan' } } } } } } }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+    post:
+      tags: [Mantenimiento]
+      summary: Asigna una tarea del catálogo a la unidad (admin)
+      description: |
+        `intervalo_km` y `umbral_aviso_km` toman el valor del catálogo si se omiten.
+        `km_ultimo_service` es opcional; si se omite, el mock asume el km actual (decisión abierta).
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/PlanInput' }, example: { codigo_tarea: ACEITE_MOTOR, intervalo_km: 60000, umbral_aviso_km: 4000 } } }
+      responses:
+        '201': { description: Creado, content: { application/json: { schema: { $ref: '#/components/schemas/Plan' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /unidades/{patente}/planes/{codigo_tarea}:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+      - { $ref: '#/components/parameters/CodigoTarea' }
+    patch:
+      tags: [Mantenimiento]
+      summary: Edita intervalo o umbral de un plan (admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { intervalo_km: { type: integer, minimum: 1 }, umbral_aviso_km: { type: integer, minimum: 1 } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Plan' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '403': { $ref: '#/components/responses/SinPermiso' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /unidades/{patente}/services:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+    get:
+      tags: [Services y postergaciones]
+      summary: Historial de services (RF16)
+      description: Más recientes primero. Filtra por período con `desde` y `hasta` (inclusivos).
+      parameters:
+        - { $ref: '#/components/parameters/Desde' }
+        - { $ref: '#/components/parameters/Hasta' }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagina'
+                  - type: object
+                    properties: { data: { type: array, items: { $ref: '#/components/schemas/Service' } } }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+    post:
+      tags: [Services y postergaciones]
+      summary: Registra un service (RF09, RN06)
+      description: |
+        Reinicia `km_ultimo_service` de cada plan cubierto y cierra sus postergaciones abiertas.
+        Si `km` supera el km actual de la unidad, lo actualiza. Un service por unidad y por día (409).
+        400 si no hay tareas, si alguna no está en el plan de la unidad o si la fecha es futura.
+        El usuario que lo registra sale del token.
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ServiceInput' }, example: { fecha: '2026-10-07', km: 412300, observaciones: Sin novedades, tareas: [ACEITE_MOTOR, SECADOR_AIRE] } } }
+      responses:
+        '201': { description: Creado, content: { application/json: { schema: { $ref: '#/components/schemas/Service' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+  /unidades/{patente}/postergaciones:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+    get:
+      tags: [Services y postergaciones]
+      summary: Historial de postergaciones (RF16)
+      parameters:
+        - { $ref: '#/components/parameters/Desde' }
+        - { $ref: '#/components/parameters/Hasta' }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagina'
+                  - type: object
+                    properties: { data: { type: array, items: { $ref: '#/components/schemas/Postergacion' } } }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /unidades/{patente}/planes/{codigo_tarea}/postergaciones:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+      - { $ref: '#/components/parameters/CodigoTarea' }
+    post:
+      tags: [Services y postergaciones]
+      summary: Posterga una tarea (RF10, RN07)
+      description: 400 si `km_limite_nuevo` es menor o igual al km actual, o si el motivo es `otro` sin descripción.
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/PostergacionInput' }, example: { motivo: otro, motivo_descripcion: Esperando repuesto, km_limite_nuevo: 416000 } } }
+      responses:
+        '201': { description: Creada, content: { application/json: { schema: { $ref: '#/components/schemas/Postergacion' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /unidades/{patente}/fallas:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+    get:
+      tags: [Fallas]
+      summary: Fallas de la unidad (RF11)
+      parameters:
+        - { name: estado, in: query, schema: { type: string, enum: [activo, inactivo] } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/Falla' } } } } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /alertas:
+    get:
+      tags: [Alertas]
+      summary: Alertas de todos los orígenes (RF13)
+      description: Ordenadas de la más antigua a la más reciente. Sin filtro de `estado` devuelve abiertas y revisadas.
+      parameters:
+        - { name: estado, in: query, schema: { type: string, enum: [abierta, revisada] } }
+        - { name: tipo, in: query, schema: { $ref: '#/components/schemas/TipoAlerta' } }
+        - { name: patente, in: query, schema: { type: string } }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/PageSize' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagina'
+                  - type: object
+                    properties: { data: { type: array, items: { $ref: '#/components/schemas/Alerta' } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+
+  /alertas/revisar:
+    patch:
+      tags: [Alertas]
+      summary: Marca una alerta como revisada (RF13)
+      description: |
+        El body es `{ origen, ...clave }`, donde `clave` es exactamente el objeto `clave` de la alerta listada.
+        Es idempotente: revisar una alerta ya revisada devuelve 200 sin cambiar la fecha.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - { $ref: '#/components/schemas/RevisarPlan' }
+                - { $ref: '#/components/schemas/RevisarFalla' }
+                - { $ref: '#/components/schemas/RevisarDispositivo' }
+            examples:
+              plan: { value: { origen: plan, patente: AB123CD, codigo_tarea: ACEITE_MOTOR, tipo: tarea_vencida, fecha_generada: '2026-10-05T09:00:00Z' } }
+              falla: { value: { origen: falla, patente: AB123CD, codigo: SPN-100-FMI-3, fecha_aparicion: '2026-10-05T10:00:00Z' } }
+              dispositivo: { value: { origen: dispositivo, device_uid: esp32-0F3A21, fecha_generada: '2026-10-03T12:00:00Z' } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Alerta' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /unidades/{patente}/kilometraje:
+    parameters:
+      - { $ref: '#/components/parameters/Patente' }
+    post:
+      tags: [Kilometraje]
+      summary: Carga manual de kilometraje (RF06, RN08, RN09)
+      description: |
+        Actualiza `km_actual` (fuente `manual`) y recalcula los planes. 409 si `km` es menor al actual.
+        `fecha` es opcional (por defecto, ahora).
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [km], properties: { km: { type: number, minimum: 0 }, fecha: { type: string, format: date-time } } }, example: { km: 415200 } } }
+      responses:
+        '201': { description: Creada, content: { application/json: { schema: { $ref: '#/components/schemas/CargaKm' } } } }
+        '400': { $ref: '#/components/responses/Validacion' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+        '409': { $ref: '#/components/responses/Conflicto' }
+
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT, description: Access token de Supabase Auth }
+
+  parameters:
+    Patente: { name: patente, in: path, required: true, schema: { type: string }, example: AB123CD }
+    DeviceUid: { name: device_uid, in: path, required: true, schema: { type: string }, example: esp32-0F3A21 }
+    CodigoTarea: { name: codigo_tarea, in: path, required: true, schema: { type: string }, example: ACEITE_MOTOR }
+    Page: { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+    PageSize: { name: page_size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+    Desde: { name: desde, in: query, description: Fecha inicial inclusiva (YYYY-MM-DD), schema: { type: string, format: date } }
+    Hasta: { name: hasta, in: query, description: Fecha final inclusiva (YYYY-MM-DD), schema: { type: string, format: date } }
+
+  responses:
+    NoAutenticado: { description: Token ausente o inválido, content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { error: { code: no_autenticado, message: Token inválido. } } } } }
+    SinPermiso: { description: Rol insuficiente (RN11), content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { error: { code: sin_permiso, message: Esta operación requiere rol admin (RN11). } } } } }
+    NoEncontrado: { description: No existe, content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { error: { code: no_encontrado, message: No existe la unidad AB123CD. } } } } }
+    Validacion: { description: Datos inválidos, content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { error: { code: validacion, message: 'Faltan campos obligatorios: km.' } } } } }
+    Conflicto: { description: Conflicto con una regla de negocio, content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { error: { code: conflicto, message: 'El kilometraje no puede disminuir (RN09): el actual es 415000.' } } } } }
+
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties: { code: { type: string }, message: { type: string } }
+    Pagina:
+      type: object
+      required: [data, page, page_size, total]
+      properties:
+        data: { type: array, items: {} }
+        page: { type: integer }
+        page_size: { type: integer }
+        total: { type: integer }
+
+    Rol: { type: string, enum: [admin, mantenimiento] }
+    Tenencia: { type: string, enum: [propia, fletero] }
+    Protocolo: { type: string, enum: [J1939, J1979] }
+    FuenteKm: { type: string, enum: [odometro, estimado, manual] }
+    EstadoDispositivo: { type: string, enum: [activo, inactivo, sin_reportar] }
+    EstadoPlan: { type: string, enum: [al_dia, proxima, vencida, postergada] }
+    MotivoPostergacion: { type: string, enum: [falta_espacio, salida_urgente, otro] }
+    TipoAlerta: { type: string, enum: [tarea_proxima, tarea_vencida, falla_nueva, dispositivo_sin_reportar] }
+
+    Me:
+      type: object
+      properties: { email: { type: string }, nombre: { type: string, nullable: true }, rol: { $ref: '#/components/schemas/Rol' } }
+    Usuario:
+      type: object
+      properties:
+        email: { type: string }
+        nombre: { type: string, nullable: true }
+        rol: { $ref: '#/components/schemas/Rol' }
+        created_at: { type: string, format: date-time }
+    UsuarioInput:
+      type: object
+      required: [email, rol]
+      properties: { email: { type: string }, nombre: { type: string }, rol: { $ref: '#/components/schemas/Rol' } }
+
+    Unidad:
+      type: object
+      properties:
+        patente: { type: string }
+        marca: { type: string }
+        modelo: { type: string, nullable: true }
+        anio: { type: integer, nullable: true }
+        tenencia: { $ref: '#/components/schemas/Tenencia' }
+        titular: { type: string, nullable: true, description: Dueño de la unidad si es de un fletero }
+        protocolo: { $ref: '#/components/schemas/Protocolo' }
+        km_actual: { type: number }
+        km_fuente: { $ref: '#/components/schemas/FuenteKm' }
+        activa: { type: boolean }
+        created_at: { type: string, format: date-time }
+    UnidadInput:
+      type: object
+      required: [patente, marca, tenencia, protocolo]
+      properties:
+        patente: { type: string }
+        marca: { type: string }
+        modelo: { type: string }
+        anio: { type: integer }
+        tenencia: { $ref: '#/components/schemas/Tenencia' }
+        titular: { type: string }
+        protocolo: { $ref: '#/components/schemas/Protocolo' }
+    UnidadEdicion:
+      type: object
+      properties:
+        marca: { type: string }
+        modelo: { type: string }
+        anio: { type: integer }
+        tenencia: { $ref: '#/components/schemas/Tenencia' }
+        titular: { type: string }
+        protocolo: { $ref: '#/components/schemas/Protocolo' }
+    DispositivoResumen:
+      type: object
+      nullable: true
+      description: Dispositivo vigente; `null` si la unidad no tiene ninguno.
+      properties:
+        device_uid: { type: string }
+        estado: { $ref: '#/components/schemas/EstadoDispositivo' }
+        ultima_comunicacion: { type: string, format: date-time, nullable: true }
+    UnidadResumen:
+      type: object
+      properties:
+        patente: { type: string }
+        marca: { type: string }
+        modelo: { type: string, nullable: true }
+        anio: { type: integer, nullable: true }
+        tenencia: { $ref: '#/components/schemas/Tenencia' }
+        titular: { type: string, nullable: true }
+        protocolo: { $ref: '#/components/schemas/Protocolo' }
+        km_actual: { type: number }
+        km_fuente: { $ref: '#/components/schemas/FuenteKm' }
+        activa: { type: boolean }
+        estado_mantenimiento: { type: string, enum: [al_dia, proxima, vencida, postergada, null], nullable: true, description: El más crítico entre sus planes; null si no tiene planes }
+        fallas_activas: { type: integer }
+        dispositivo: { $ref: '#/components/schemas/DispositivoResumen' }
+    DetalleUnidad:
+      type: object
+      properties:
+        unidad: { $ref: '#/components/schemas/Unidad' }
+        dispositivo:
+          type: object
+          nullable: true
+          description: Dispositivo vigente; null si la unidad no tiene ninguno.
+          properties:
+            device_uid: { type: string }
+            estado: { $ref: '#/components/schemas/EstadoDispositivo' }
+            ultima_comunicacion: { type: string, format: date-time, nullable: true }
+            desde: { type: string, format: date-time, description: Inicio de la vinculación vigente }
+        planes: { type: array, items: { $ref: '#/components/schemas/Plan' } }
+        fallas_activas: { type: array, items: { $ref: '#/components/schemas/Falla' } }
+
+    Dispositivo:
+      type: object
+      properties:
+        device_uid: { type: string }
+        estado: { $ref: '#/components/schemas/EstadoDispositivo' }
+        ultima_comunicacion: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
+        vinculacion_actual:
+          type: object
+          nullable: true
+          properties: { patente: { type: string }, desde: { type: string, format: date-time } }
+
+    TareaCatalogo:
+      type: object
+      required: [codigo, nombre, intervalo_km_default]
+      properties:
+        codigo: { type: string, example: ACEITE_MOTOR }
+        nombre: { type: string }
+        intervalo_km_default: { type: integer }
+        umbral_aviso_km_default: { type: integer, default: 4000 }
+    PostergacionVigente:
+      type: object
+      nullable: true
+      properties:
+        fecha: { type: string, format: date-time }
+        motivo: { $ref: '#/components/schemas/MotivoPostergacion' }
+        motivo_descripcion: { type: string, nullable: true }
+        km_limite_nuevo: { type: integer }
+        email_usuario: { type: string }
+    Plan:
+      type: object
+      properties:
+        codigo_tarea: { type: string }
+        nombre: { type: string }
+        intervalo_km: { type: integer }
+        umbral_aviso_km: { type: integer }
+        km_ultimo_service: { type: number }
+        km_limite: { type: number, description: Km en el que vence (último service + intervalo, o el nuevo límite si está postergada) }
+        km_restantes: { type: number, description: km_limite - km actual de la unidad; negativo si ya se pasó }
+        estado: { $ref: '#/components/schemas/EstadoPlan' }
+        postergacion_vigente: { $ref: '#/components/schemas/PostergacionVigente' }
+    PlanInput:
+      type: object
+      required: [codigo_tarea]
+      properties:
+        codigo_tarea: { type: string }
+        intervalo_km: { type: integer, minimum: 1 }
+        umbral_aviso_km: { type: integer, minimum: 1 }
+        km_ultimo_service: { type: number, minimum: 0 }
+
+    Service:
+      type: object
+      properties:
+        patente: { type: string }
+        fecha: { type: string, format: date }
+        km: { type: number }
+        observaciones: { type: string, nullable: true }
+        email_usuario: { type: string }
+        usuario_nombre: { type: string, nullable: true }
+        tareas:
+          type: array
+          items: { type: object, properties: { codigo_tarea: { type: string }, nombre: { type: string } } }
+    ServiceInput:
+      type: object
+      required: [km, tareas]
+      properties:
+        fecha: { type: string, format: date, description: Por defecto, hoy }
+        km: { type: number, minimum: 0 }
+        observaciones: { type: string }
+        tareas: { type: array, minItems: 1, items: { type: string }, description: Códigos de tarea del plan de la unidad }
+
+    Postergacion:
+      type: object
+      properties:
+        patente: { type: string }
+        codigo_tarea: { type: string }
+        tarea_nombre: { type: string }
+        fecha: { type: string, format: date-time }
+        motivo: { $ref: '#/components/schemas/MotivoPostergacion' }
+        motivo_descripcion: { type: string, nullable: true }
+        km_limite_nuevo: { type: integer }
+        email_usuario: { type: string }
+        usuario_nombre: { type: string, nullable: true }
+        cerrada: { type: boolean, description: true cuando un service posterior la cerró (RN06) }
+    PostergacionInput:
+      type: object
+      required: [motivo, km_limite_nuevo]
+      properties:
+        motivo: { $ref: '#/components/schemas/MotivoPostergacion' }
+        motivo_descripcion: { type: string, description: Obligatoria si motivo = otro }
+        km_limite_nuevo: { type: integer }
+
+    Falla:
+      type: object
+      properties:
+        codigo: { type: string, example: SPN-100-FMI-3 }
+        fecha_aparicion: { type: string, format: date-time }
+        fecha_cierre: { type: string, format: date-time, nullable: true }
+        estado: { type: string, enum: [activo, inactivo], description: activo mientras fecha_cierre sea null }
+
+    Alerta:
+      type: object
+      properties:
+        origen: { type: string, enum: [plan, falla, dispositivo] }
+        tipo: { $ref: '#/components/schemas/TipoAlerta' }
+        patente: { type: string, nullable: true }
+        referencia: { type: string, description: Código de tarea, código de falla o device_uid según el origen }
+        referencia_nombre: { type: string, nullable: true, description: Nombre de la tarea (solo origen plan) }
+        fecha_generada: { type: string, format: date-time }
+        fecha_revisada: { type: string, format: date-time, nullable: true }
+        estado: { type: string, enum: [abierta, revisada] }
+        clave:
+          type: object
+          description: Identifica la alerta. Se reenvía tal cual, junto con `origen`, en PATCH /alertas/revisar.
+          additionalProperties: true
+    RevisarPlan:
+      type: object
+      required: [origen, patente, codigo_tarea, tipo, fecha_generada]
+      properties:
+        origen: { type: string, enum: [plan] }
+        patente: { type: string }
+        codigo_tarea: { type: string }
+        tipo: { type: string, enum: [tarea_proxima, tarea_vencida] }
+        fecha_generada: { type: string, format: date-time }
+    RevisarFalla:
+      type: object
+      required: [origen, patente, codigo, fecha_aparicion]
+      properties:
+        origen: { type: string, enum: [falla] }
+        patente: { type: string }
+        codigo: { type: string }
+        fecha_aparicion: { type: string, format: date-time }
+    RevisarDispositivo:
+      type: object
+      required: [origen, device_uid, fecha_generada]
+      properties:
+        origen: { type: string, enum: [dispositivo] }
+        device_uid: { type: string }
+        fecha_generada: { type: string, format: date-time }
+
+    CargaKm:
+      type: object
+      properties:
+        patente: { type: string }
+        fecha: { type: string, format: date-time }
+        km: { type: number }
+        fuente: { type: string, enum: [manual] }
+        email_usuario: { type: string }
