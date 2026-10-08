@@ -1,0 +1,2691 @@
+{
+  "usuarios": [
+    {
+      "email": "laura.gomez@flota.example",
+      "nombre": "Laura Gómez",
+      "rol": "admin",
+      "created_at": "2025-11-21T15:00:00Z"
+    },
+    {
+      "email": "carlos.ibarra@flota.example",
+      "nombre": "Carlos Ibarra",
+      "rol": "mantenimiento",
+      "created_at": "2025-12-11T15:00:00Z"
+    },
+    {
+      "email": "marcela.sosa@flota.example",
+      "nombre": "Marcela Sosa",
+      "rol": "mantenimiento",
+      "created_at": "2026-03-11T15:00:00Z"
+    },
+    {
+      "email": "pablo.rinaldi@flota.example",
+      "nombre": "Pablo Rinaldi",
+      "rol": "admin",
+      "created_at": "2026-07-09T15:00:00Z"
+    }
+  ],
+  "unidades": [
+    {
+      "patente": "AP414XV",
+      "marca": "Scania",
+      "modelo": "P 360",
+      "anio": 2017,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1939",
+      "km_actual": 537033,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2026-03-09T15:00:00Z"
+    },
+    {
+      "patente": "CJ411PJ",
+      "marca": "Mercedes-Benz",
+      "modelo": "Atego 1726",
+      "anio": 2015,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1939",
+      "km_actual": 756964,
+      "km_fuente": "manual",
+      "activa": false,
+      "created_at": "2026-01-19T15:00:00Z"
+    },
+    {
+      "patente": "DT895MF",
+      "marca": "Ford",
+      "modelo": "Cargo 1722",
+      "anio": 2017,
+      "tenencia": "fletero",
+      "titular": "Alberto Luna",
+      "protocolo": "J1979",
+      "km_actual": 578964,
+      "km_fuente": "estimado",
+      "activa": true,
+      "created_at": "2025-12-25T15:00:00Z"
+    },
+    {
+      "patente": "GR482NY",
+      "marca": "Volvo",
+      "modelo": "VM 270",
+      "anio": 2014,
+      "tenencia": "fletero",
+      "titular": "Ramón Cabrera",
+      "protocolo": "J1939",
+      "km_actual": 622692,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2026-02-05T15:00:00Z"
+    },
+    {
+      "patente": "HC176VH",
+      "marca": "Mercedes-Benz",
+      "modelo": "Atego 1726",
+      "anio": 2023,
+      "tenencia": "fletero",
+      "titular": "Ángel Rojas",
+      "protocolo": "J1939",
+      "km_actual": 153047,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2025-12-05T15:00:00Z"
+    },
+    {
+      "patente": "KW849BP",
+      "marca": "Mercedes-Benz",
+      "modelo": "Atego 1726",
+      "anio": 2017,
+      "tenencia": "fletero",
+      "titular": "Oscar Villalba",
+      "protocolo": "J1939",
+      "km_actual": 643025,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2026-02-12T15:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "marca": "Iveco",
+      "modelo": "Tector 170E22",
+      "anio": 2012,
+      "tenencia": "fletero",
+      "titular": "Mario Ledesma",
+      "protocolo": "J1979",
+      "km_actual": 852128,
+      "km_fuente": "manual",
+      "activa": true,
+      "created_at": "2026-02-04T15:00:00Z"
+    },
+    {
+      "patente": "MH654VV",
+      "marca": "Mercedes-Benz",
+      "modelo": "Actros 2041",
+      "anio": 2023,
+      "tenencia": "fletero",
+      "titular": "Raúl Domínguez",
+      "protocolo": "J1939",
+      "km_actual": 189098,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2026-02-04T15:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "marca": "Scania",
+      "modelo": "G 410",
+      "anio": 2019,
+      "tenencia": "fletero",
+      "titular": "Eduardo Peralta",
+      "protocolo": "J1939",
+      "km_actual": 504766,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2025-10-04T15:00:00Z"
+    },
+    {
+      "patente": "NF213TY",
+      "marca": "Volvo",
+      "modelo": "FM 380",
+      "anio": 2022,
+      "tenencia": "fletero",
+      "titular": "Rubén Sandoval",
+      "protocolo": "J1939",
+      "km_actual": 293129,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2025-11-27T15:00:00Z"
+    },
+    {
+      "patente": "NP773EG",
+      "marca": "Scania",
+      "modelo": "P 360",
+      "anio": 2025,
+      "tenencia": "fletero",
+      "titular": "Walter Acosta",
+      "protocolo": "J1939",
+      "km_actual": 12002,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2026-01-12T15:00:00Z"
+    },
+    {
+      "patente": "PP311EX",
+      "marca": "Volvo",
+      "modelo": "FH 460",
+      "anio": 2018,
+      "tenencia": "fletero",
+      "titular": "Héctor Medina",
+      "protocolo": "J1939",
+      "km_actual": 472848,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2026-02-16T15:00:00Z"
+    },
+    {
+      "patente": "PR739GY",
+      "marca": "Iveco",
+      "modelo": "Stralis 440",
+      "anio": 2014,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1979",
+      "km_actual": 767659,
+      "km_fuente": "estimado",
+      "activa": true,
+      "created_at": "2025-09-02T15:00:00Z"
+    },
+    {
+      "patente": "PT235CX",
+      "marca": "Volkswagen",
+      "modelo": "Constellation 24.280",
+      "anio": 2015,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1979",
+      "km_actual": 525182,
+      "km_fuente": "estimado",
+      "activa": true,
+      "created_at": "2025-10-31T15:00:00Z"
+    },
+    {
+      "patente": "PV587GJ",
+      "marca": "Mercedes-Benz",
+      "modelo": "Actros 2646",
+      "anio": 2015,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1939",
+      "km_actual": 595526,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2025-09-27T15:00:00Z"
+    },
+    {
+      "patente": "RL848FC",
+      "marca": "Volvo",
+      "modelo": "FM 380",
+      "anio": 2017,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1939",
+      "km_actual": 531110,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2026-02-06T15:00:00Z"
+    },
+    {
+      "patente": "RU206LB",
+      "marca": "Mercedes-Benz",
+      "modelo": "Actros 2646",
+      "anio": 2016,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1939",
+      "km_actual": 607270,
+      "km_fuente": "manual",
+      "activa": true,
+      "created_at": "2025-11-22T15:00:00Z"
+    },
+    {
+      "patente": "SU726BP",
+      "marca": "Ford",
+      "modelo": "Cargo 1722",
+      "anio": 2009,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1979",
+      "km_actual": 950000,
+      "km_fuente": "estimado",
+      "activa": true,
+      "created_at": "2026-02-19T15:00:00Z"
+    },
+    {
+      "patente": "UR137BK",
+      "marca": "Iveco",
+      "modelo": "Tector 170E22",
+      "anio": 2012,
+      "tenencia": "fletero",
+      "titular": "Hugo Benítez",
+      "protocolo": "J1979",
+      "km_actual": 950000,
+      "km_fuente": "estimado",
+      "activa": true,
+      "created_at": "2025-10-16T15:00:00Z"
+    },
+    {
+      "patente": "XD891JD",
+      "marca": "Mercedes-Benz",
+      "modelo": "Actros 2041",
+      "anio": 2015,
+      "tenencia": "fletero",
+      "titular": "Néstor Quiroga",
+      "protocolo": "J1939",
+      "km_actual": 818574,
+      "km_fuente": "manual",
+      "activa": true,
+      "created_at": "2026-01-18T15:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "marca": "Ford",
+      "modelo": "Cargo 1722",
+      "anio": 2011,
+      "tenencia": "fletero",
+      "titular": "Jorge Almada",
+      "protocolo": "J1979",
+      "km_actual": 704560,
+      "km_fuente": "estimado",
+      "activa": true,
+      "created_at": "2025-10-12T15:00:00Z"
+    },
+    {
+      "patente": "YM731LJ",
+      "marca": "Mercedes-Benz",
+      "modelo": "Actros 2646",
+      "anio": 2022,
+      "tenencia": "propia",
+      "titular": null,
+      "protocolo": "J1939",
+      "km_actual": 269495,
+      "km_fuente": "odometro",
+      "activa": true,
+      "created_at": "2026-02-28T15:00:00Z"
+    }
+  ],
+  "dispositivos": [
+    {
+      "device_uid": "esp32-1AA63D",
+      "estado": "sin_reportar",
+      "ultima_comunicacion": "2026-10-02T12:00:00Z",
+      "created_at": "2025-12-30T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-1B777B",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:05:00Z",
+      "created_at": "2026-01-26T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-322273",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:14:00Z",
+      "created_at": "2026-03-21T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-3AA7EC",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:21:00Z",
+      "created_at": "2026-04-18T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-426805",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:48:00Z",
+      "created_at": "2026-03-16T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-5A9C05",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:03:00Z",
+      "created_at": "2025-09-28T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-5C960D",
+      "estado": "inactivo",
+      "ultima_comunicacion": "2026-06-09T15:00:00Z",
+      "created_at": "2025-05-25T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-602783",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:45:00Z",
+      "created_at": "2026-07-02T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-7CC57C",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T13:47:00Z",
+      "created_at": "2025-12-16T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-7DD59E",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:13:00Z",
+      "created_at": "2026-06-08T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-8D9A53",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T13:53:00Z",
+      "created_at": "2025-11-19T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-908E5F",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:09:00Z",
+      "created_at": "2026-06-18T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-90EAA9",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:41:00Z",
+      "created_at": "2026-06-25T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-933911",
+      "estado": "sin_reportar",
+      "ultima_comunicacion": "2026-10-06T09:00:00Z",
+      "created_at": "2025-09-12T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-B4D43E",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:46:00Z",
+      "created_at": "2026-05-23T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-BF6B2C",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:30:00Z",
+      "created_at": "2025-12-27T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-C7DC50",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:05:00Z",
+      "created_at": "2025-12-01T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-D1DA8C",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T14:21:00Z",
+      "created_at": "2026-06-30T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-DB9B02",
+      "estado": "activo",
+      "ultima_comunicacion": "2026-10-07T13:50:00Z",
+      "created_at": "2025-12-21T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-E8C5BE",
+      "estado": "inactivo",
+      "ultima_comunicacion": null,
+      "created_at": "2026-09-27T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-F1BAC3",
+      "estado": "inactivo",
+      "ultima_comunicacion": null,
+      "created_at": "2026-09-17T15:00:00Z"
+    }
+  ],
+  "vinculaciones": [
+    {
+      "device_uid": "esp32-602783",
+      "patente": "RL848FC",
+      "desde": "2026-07-03T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-1B777B",
+      "patente": "UR137BK",
+      "desde": "2026-01-27T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-5C960D",
+      "patente": "MH654VV",
+      "desde": "2025-05-25T15:00:00Z",
+      "hasta": "2026-06-09T15:00:00Z"
+    },
+    {
+      "device_uid": "esp32-7DD59E",
+      "patente": "MH654VV",
+      "desde": "2026-06-09T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-8D9A53",
+      "patente": "KW849BP",
+      "desde": "2025-11-20T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-C7DC50",
+      "patente": "YH604TT",
+      "desde": "2025-12-02T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-933911",
+      "patente": "GR482NY",
+      "desde": "2025-09-13T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-7CC57C",
+      "patente": "YM731LJ",
+      "desde": "2025-12-17T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-BF6B2C",
+      "patente": "MJ539WD",
+      "desde": "2025-12-28T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-322273",
+      "patente": "DT895MF",
+      "desde": "2026-03-22T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-908E5F",
+      "patente": "NF213TY",
+      "desde": "2026-06-19T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-DB9B02",
+      "patente": "PV587GJ",
+      "desde": "2025-12-22T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-90EAA9",
+      "patente": "SU726BP",
+      "desde": "2026-06-26T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-1AA63D",
+      "patente": "HC176VH",
+      "desde": "2025-12-31T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-426805",
+      "patente": "PT235CX",
+      "desde": "2026-03-17T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-D1DA8C",
+      "patente": "PR739GY",
+      "desde": "2026-07-01T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-3AA7EC",
+      "patente": "PP311EX",
+      "desde": "2026-04-19T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-B4D43E",
+      "patente": "AP414XV",
+      "desde": "2026-05-24T15:00:00Z",
+      "hasta": null
+    },
+    {
+      "device_uid": "esp32-5A9C05",
+      "patente": "NP773EG",
+      "desde": "2025-09-29T15:00:00Z",
+      "hasta": null
+    }
+  ],
+  "tareas_catalogo": [
+    {
+      "codigo": "ACEITE_MOTOR",
+      "nombre": "Cambio de aceite de motor",
+      "intervalo_km_default": 40000,
+      "umbral_aviso_km_default": 4000
+    },
+    {
+      "codigo": "SECADOR_AIRE",
+      "nombre": "Filtro secador de aire de frenos",
+      "intervalo_km_default": 100000,
+      "umbral_aviso_km_default": 4000
+    },
+    {
+      "codigo": "ACEITE_CAJA",
+      "nombre": "Aceite de caja y diferencial",
+      "intervalo_km_default": 150000,
+      "umbral_aviso_km_default": 4000
+    }
+  ],
+  "planes_mantenimiento": [
+    {
+      "patente": "AP414XV",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 455190,
+      "estado": "al_dia",
+      "created_at": "2025-09-13T15:00:00Z"
+    },
+    {
+      "patente": "AP414XV",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 531039,
+      "estado": "al_dia",
+      "created_at": "2025-09-27T15:00:00Z"
+    },
+    {
+      "patente": "AP414XV",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 504881,
+      "estado": "al_dia",
+      "created_at": "2026-02-05T15:00:00Z"
+    },
+    {
+      "patente": "CJ411PJ",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 676139,
+      "estado": "al_dia",
+      "created_at": "2025-10-11T15:00:00Z"
+    },
+    {
+      "patente": "CJ411PJ",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 747026,
+      "estado": "al_dia",
+      "created_at": "2026-01-15T15:00:00Z"
+    },
+    {
+      "patente": "CJ411PJ",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 747026,
+      "estado": "al_dia",
+      "created_at": "2025-11-13T15:00:00Z"
+    },
+    {
+      "patente": "DT895MF",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 556607,
+      "estado": "al_dia",
+      "created_at": "2026-02-28T15:00:00Z"
+    },
+    {
+      "patente": "DT895MF",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 556607,
+      "estado": "al_dia",
+      "created_at": "2025-09-19T15:00:00Z"
+    },
+    {
+      "patente": "GR482NY",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 596298,
+      "estado": "al_dia",
+      "created_at": "2025-09-03T15:00:00Z"
+    },
+    {
+      "patente": "GR482NY",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 596298,
+      "estado": "al_dia",
+      "created_at": "2026-03-07T15:00:00Z"
+    },
+    {
+      "patente": "GR482NY",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 596298,
+      "estado": "al_dia",
+      "created_at": "2025-10-27T15:00:00Z"
+    },
+    {
+      "patente": "HC176VH",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 92955,
+      "estado": "al_dia",
+      "created_at": "2025-10-23T15:00:00Z"
+    },
+    {
+      "patente": "HC176VH",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 111281,
+      "estado": "vencida",
+      "created_at": "2025-09-04T15:00:00Z"
+    },
+    {
+      "patente": "HC176VH",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 111281,
+      "estado": "al_dia",
+      "created_at": "2026-01-02T15:00:00Z"
+    },
+    {
+      "patente": "KW849BP",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 491770,
+      "estado": "postergada",
+      "created_at": "2025-12-06T15:00:00Z"
+    },
+    {
+      "patente": "KW849BP",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 60000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 602609,
+      "estado": "al_dia",
+      "created_at": "2025-12-08T15:00:00Z"
+    },
+    {
+      "patente": "KW849BP",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 602609,
+      "estado": "al_dia",
+      "created_at": "2025-12-14T15:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 699328,
+      "estado": "postergada",
+      "created_at": "2026-02-02T15:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 815126,
+      "estado": "proxima",
+      "created_at": "2025-10-02T15:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 753884,
+      "estado": "proxima",
+      "created_at": "2025-09-28T15:00:00Z"
+    },
+    {
+      "patente": "MH654VV",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 170830,
+      "estado": "al_dia",
+      "created_at": "2026-01-01T15:00:00Z"
+    },
+    {
+      "patente": "MH654VV",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 170830,
+      "estado": "al_dia",
+      "created_at": "2025-11-16T15:00:00Z"
+    },
+    {
+      "patente": "MH654VV",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 111161,
+      "estado": "al_dia",
+      "created_at": "2025-10-01T15:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 417199,
+      "estado": "al_dia",
+      "created_at": "2025-10-03T15:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 496858,
+      "estado": "al_dia",
+      "created_at": "2025-12-30T15:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 407256,
+      "estado": "proxima",
+      "created_at": "2025-10-06T15:00:00Z"
+    },
+    {
+      "patente": "NF213TY",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 272962,
+      "estado": "al_dia",
+      "created_at": "2025-10-08T15:00:00Z"
+    },
+    {
+      "patente": "NF213TY",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 272962,
+      "estado": "al_dia",
+      "created_at": "2025-12-08T15:00:00Z"
+    },
+    {
+      "patente": "NF213TY",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 272962,
+      "estado": "al_dia",
+      "created_at": "2025-12-14T15:00:00Z"
+    },
+    {
+      "patente": "PP311EX",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 397658,
+      "estado": "al_dia",
+      "created_at": "2025-12-18T15:00:00Z"
+    },
+    {
+      "patente": "PP311EX",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 439932,
+      "estado": "al_dia",
+      "created_at": "2026-03-18T15:00:00Z"
+    },
+    {
+      "patente": "PP311EX",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 439932,
+      "estado": "al_dia",
+      "created_at": "2025-11-04T15:00:00Z"
+    },
+    {
+      "patente": "PR739GY",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 656529,
+      "estado": "al_dia",
+      "created_at": "2026-02-19T15:00:00Z"
+    },
+    {
+      "patente": "PR739GY",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 742969,
+      "estado": "al_dia",
+      "created_at": "2025-09-11T15:00:00Z"
+    },
+    {
+      "patente": "PR739GY",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 742969,
+      "estado": "al_dia",
+      "created_at": "2026-03-13T15:00:00Z"
+    },
+    {
+      "patente": "PT235CX",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 374265,
+      "estado": "vencida",
+      "created_at": "2025-09-03T15:00:00Z"
+    },
+    {
+      "patente": "PT235CX",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 519127,
+      "estado": "al_dia",
+      "created_at": "2025-10-26T15:00:00Z"
+    },
+    {
+      "patente": "PT235CX",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 519127,
+      "estado": "al_dia",
+      "created_at": "2025-12-10T15:00:00Z"
+    },
+    {
+      "patente": "PV587GJ",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 552090,
+      "estado": "al_dia",
+      "created_at": "2025-12-29T15:00:00Z"
+    },
+    {
+      "patente": "PV587GJ",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 60000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 549810,
+      "estado": "al_dia",
+      "created_at": "2025-12-04T15:00:00Z"
+    },
+    {
+      "patente": "PV587GJ",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 550872,
+      "estado": "al_dia",
+      "created_at": "2025-11-15T15:00:00Z"
+    },
+    {
+      "patente": "RL848FC",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 502758,
+      "estado": "al_dia",
+      "created_at": "2025-10-21T15:00:00Z"
+    },
+    {
+      "patente": "RL848FC",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 502758,
+      "estado": "al_dia",
+      "created_at": "2025-11-30T15:00:00Z"
+    },
+    {
+      "patente": "RL848FC",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 432604,
+      "estado": "proxima",
+      "created_at": "2026-01-21T15:00:00Z"
+    },
+    {
+      "patente": "RU206LB",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 460688,
+      "estado": "proxima",
+      "created_at": "2026-01-29T15:00:00Z"
+    },
+    {
+      "patente": "RU206LB",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 591277,
+      "estado": "al_dia",
+      "created_at": "2025-11-01T15:00:00Z"
+    },
+    {
+      "patente": "RU206LB",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 591277,
+      "estado": "al_dia",
+      "created_at": "2025-11-27T15:00:00Z"
+    },
+    {
+      "patente": "SU726BP",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 945999,
+      "estado": "al_dia",
+      "created_at": "2026-01-19T15:00:00Z"
+    },
+    {
+      "patente": "SU726BP",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 945999,
+      "estado": "al_dia",
+      "created_at": "2025-10-30T15:00:00Z"
+    },
+    {
+      "patente": "SU726BP",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 945999,
+      "estado": "al_dia",
+      "created_at": "2026-01-05T15:00:00Z"
+    },
+    {
+      "patente": "UR137BK",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 937493,
+      "estado": "al_dia",
+      "created_at": "2026-02-01T15:00:00Z"
+    },
+    {
+      "patente": "UR137BK",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 937493,
+      "estado": "al_dia",
+      "created_at": "2025-12-31T15:00:00Z"
+    },
+    {
+      "patente": "UR137BK",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 909901,
+      "estado": "al_dia",
+      "created_at": "2025-11-29T15:00:00Z"
+    },
+    {
+      "patente": "XD891JD",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 775174,
+      "estado": "al_dia",
+      "created_at": "2025-12-05T15:00:00Z"
+    },
+    {
+      "patente": "XD891JD",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 775174,
+      "estado": "postergada",
+      "created_at": "2026-01-05T15:00:00Z"
+    },
+    {
+      "patente": "XD891JD",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 721071,
+      "estado": "proxima",
+      "created_at": "2026-01-12T15:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 557151,
+      "estado": "proxima",
+      "created_at": "2025-10-17T15:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 659580,
+      "estado": "vencida",
+      "created_at": "2025-11-02T15:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 659580,
+      "estado": "al_dia",
+      "created_at": "2026-02-06T15:00:00Z"
+    },
+    {
+      "patente": "YM731LJ",
+      "codigo_tarea": "ACEITE_CAJA",
+      "intervalo_km": 150000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 115228,
+      "estado": "postergada",
+      "created_at": "2025-10-11T15:00:00Z"
+    },
+    {
+      "patente": "YM731LJ",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "intervalo_km": 40000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 231910,
+      "estado": "proxima",
+      "created_at": "2025-09-09T15:00:00Z"
+    },
+    {
+      "patente": "YM731LJ",
+      "codigo_tarea": "SECADOR_AIRE",
+      "intervalo_km": 100000,
+      "umbral_aviso_km": 4000,
+      "km_ultimo_service": 231910,
+      "estado": "al_dia",
+      "created_at": "2025-12-15T15:00:00Z"
+    }
+  ],
+  "services": [
+    {
+      "patente": "AP414XV",
+      "fecha": "2026-04-26",
+      "km": 455190,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-04-26T11:00:00Z"
+    },
+    {
+      "patente": "AP414XV",
+      "fecha": "2026-07-07",
+      "km": 491039,
+      "observaciones": "Pérdida leve en tapa de válvulas, controlar en el próximo service.",
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-07-07T11:00:00Z"
+    },
+    {
+      "patente": "AP414XV",
+      "fecha": "2026-08-04",
+      "km": 504881,
+      "observaciones": null,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-08-04T09:00:00Z"
+    },
+    {
+      "patente": "AP414XV",
+      "fecha": "2026-09-25",
+      "km": 531039,
+      "observaciones": null,
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-09-25T17:00:00Z"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-05-02",
+      "km": 676139,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-05-02T15:00:00Z"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-07-01",
+      "km": 707026,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-07-01T15:00:00Z"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-09-18",
+      "km": 747026,
+      "observaciones": null,
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-09-18T12:00:00Z"
+    },
+    {
+      "patente": "DT895MF",
+      "fecha": "2026-06-21",
+      "km": 516607,
+      "observaciones": null,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-06-21T15:00:00Z"
+    },
+    {
+      "patente": "DT895MF",
+      "fecha": "2026-08-29",
+      "km": 556607,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-08-29T13:00:00Z"
+    },
+    {
+      "patente": "GR482NY",
+      "fecha": "2026-06-08",
+      "km": 556298,
+      "observaciones": null,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-06-08T10:00:00Z"
+    },
+    {
+      "patente": "GR482NY",
+      "fecha": "2026-08-20",
+      "km": 596298,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-08-20T14:00:00Z"
+    },
+    {
+      "patente": "HC176VH",
+      "fecha": "2026-05-05",
+      "km": 71281,
+      "observaciones": null,
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-05-05T12:00:00Z"
+    },
+    {
+      "patente": "HC176VH",
+      "fecha": "2026-06-15",
+      "km": 92955,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-06-15T15:00:00Z"
+    },
+    {
+      "patente": "HC176VH",
+      "fecha": "2026-07-20",
+      "km": 111281,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-07-20T16:00:00Z"
+    },
+    {
+      "patente": "KW849BP",
+      "fecha": "2025-11-10",
+      "km": 491770,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2025-11-10T15:00:00Z"
+    },
+    {
+      "patente": "KW849BP",
+      "fecha": "2026-03-01",
+      "km": 542609,
+      "observaciones": null,
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-03-01T15:00:00Z"
+    },
+    {
+      "patente": "KW849BP",
+      "fecha": "2026-07-11",
+      "km": 602609,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-07-11T12:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2025-12-20",
+      "km": 699328,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2025-12-20T09:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-04-03",
+      "km": 753884,
+      "observaciones": null,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-04-03T11:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-05-13",
+      "km": 775126,
+      "observaciones": null,
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-05-13T13:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-07-29",
+      "km": 815126,
+      "observaciones": "Pérdida leve en tapa de válvulas, controlar en el próximo service.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-07-29T10:00:00Z"
+    },
+    {
+      "patente": "MH654VV",
+      "fecha": "2026-05-26",
+      "km": 111161,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-05-26T14:00:00Z"
+    },
+    {
+      "patente": "MH654VV",
+      "fecha": "2026-06-29",
+      "km": 130830,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-06-29T16:00:00Z"
+    },
+    {
+      "patente": "MH654VV",
+      "fecha": "2026-09-06",
+      "km": 170830,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-09-06T13:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "fecha": "2026-03-14",
+      "km": 407256,
+      "observaciones": "Pérdida leve en tapa de válvulas, controlar en el próximo service.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-03-14T14:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "fecha": "2026-04-04",
+      "km": 417199,
+      "observaciones": null,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-04-04T14:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "fecha": "2026-06-27",
+      "km": 456858,
+      "observaciones": null,
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-06-27T15:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "fecha": "2026-09-20",
+      "km": 496858,
+      "observaciones": "Pérdida leve en tapa de válvulas, controlar en el próximo service.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-09-20T10:00:00Z"
+    },
+    {
+      "patente": "NF213TY",
+      "fecha": "2026-06-22",
+      "km": 232962,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-06-22T10:00:00Z"
+    },
+    {
+      "patente": "NF213TY",
+      "fecha": "2026-09-01",
+      "km": 272962,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-09-01T09:00:00Z"
+    },
+    {
+      "patente": "PP311EX",
+      "fecha": "2026-05-28",
+      "km": 397658,
+      "observaciones": null,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-05-28T09:00:00Z"
+    },
+    {
+      "patente": "PP311EX",
+      "fecha": "2026-06-01",
+      "km": 399932,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-06-01T14:00:00Z"
+    },
+    {
+      "patente": "PP311EX",
+      "fecha": "2026-08-10",
+      "km": 439932,
+      "observaciones": "Pérdida leve en tapa de válvulas, controlar en el próximo service.",
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-08-10T12:00:00Z"
+    },
+    {
+      "patente": "PR739GY",
+      "fecha": "2026-02-25",
+      "km": 656529,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-02-25T12:00:00Z"
+    },
+    {
+      "patente": "PR739GY",
+      "fecha": "2026-05-30",
+      "km": 702969,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-05-30T15:00:00Z"
+    },
+    {
+      "patente": "PR739GY",
+      "fecha": "2026-08-18",
+      "km": 742969,
+      "observaciones": null,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-08-18T11:00:00Z"
+    },
+    {
+      "patente": "PT235CX",
+      "fecha": "2026-01-28",
+      "km": 374265,
+      "observaciones": "Pérdida leve en tapa de válvulas, controlar en el próximo service.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-01-28T13:00:00Z"
+    },
+    {
+      "patente": "PT235CX",
+      "fecha": "2026-07-22",
+      "km": 479127,
+      "observaciones": null,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-07-22T15:00:00Z"
+    },
+    {
+      "patente": "PT235CX",
+      "fecha": "2026-09-27",
+      "km": 519127,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-09-27T11:00:00Z"
+    },
+    {
+      "patente": "PV587GJ",
+      "fecha": "2026-02-18",
+      "km": 489810,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-02-18T15:00:00Z"
+    },
+    {
+      "patente": "PV587GJ",
+      "fecha": "2026-06-29",
+      "km": 549810,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-06-29T14:00:00Z"
+    },
+    {
+      "patente": "PV587GJ",
+      "fecha": "2026-07-02",
+      "km": 550872,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-07-02T14:00:00Z"
+    },
+    {
+      "patente": "PV587GJ",
+      "fecha": "2026-07-04",
+      "km": 552090,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-07-04T12:00:00Z"
+    },
+    {
+      "patente": "RL848FC",
+      "fecha": "2026-04-01",
+      "km": 432604,
+      "observaciones": null,
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-04-01T15:00:00Z"
+    },
+    {
+      "patente": "RL848FC",
+      "fecha": "2026-05-29",
+      "km": 462758,
+      "observaciones": "Pérdida leve en tapa de válvulas, controlar en el próximo service.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-05-29T17:00:00Z"
+    },
+    {
+      "patente": "RL848FC",
+      "fecha": "2026-08-14",
+      "km": 502758,
+      "observaciones": null,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-08-14T11:00:00Z"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-01-09",
+      "km": 460688,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-01-09T10:00:00Z"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-06-25",
+      "km": 551277,
+      "observaciones": null,
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-06-25T14:00:00Z"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-09-07",
+      "km": 591277,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-09-07T13:00:00Z"
+    },
+    {
+      "patente": "SU726BP",
+      "fecha": "2026-07-20",
+      "km": 905999,
+      "observaciones": null,
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-07-20T17:00:00Z"
+    },
+    {
+      "patente": "SU726BP",
+      "fecha": "2026-09-30",
+      "km": 945999,
+      "observaciones": null,
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-09-30T15:00:00Z"
+    },
+    {
+      "patente": "UR137BK",
+      "fecha": "2026-06-22",
+      "km": 897493,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-06-22T09:00:00Z"
+    },
+    {
+      "patente": "UR137BK",
+      "fecha": "2026-07-17",
+      "km": 909901,
+      "observaciones": "Se rotaron neumáticos del eje trasero.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2026-07-17T16:00:00Z"
+    },
+    {
+      "patente": "UR137BK",
+      "fecha": "2026-09-11",
+      "km": 937493,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-09-11T13:00:00Z"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-04-06",
+      "km": 721071,
+      "observaciones": null,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-04-06T17:00:00Z"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-05-02",
+      "km": 735174,
+      "observaciones": "Pérdida leve en tapa de válvulas, controlar en el próximo service.",
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-05-02T09:00:00Z"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-07-17",
+      "km": 775174,
+      "observaciones": null,
+      "email_usuario": "marcela.sosa@flota.example",
+      "created_at": "2026-07-17T09:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "fecha": "2025-12-08",
+      "km": 557151,
+      "observaciones": null,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2025-12-08T16:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "fecha": "2026-04-16",
+      "km": 619580,
+      "observaciones": null,
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-04-16T11:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "fecha": "2026-07-07",
+      "km": 659580,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-07-07T15:00:00Z"
+    },
+    {
+      "patente": "YM731LJ",
+      "fecha": "2025-10-29",
+      "km": 115228,
+      "observaciones": "Se cambió también el filtro de aire.",
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "created_at": "2025-10-29T10:00:00Z"
+    },
+    {
+      "patente": "YM731LJ",
+      "fecha": "2026-04-18",
+      "km": 191910,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "laura.gomez@flota.example",
+      "created_at": "2026-04-18T15:00:00Z"
+    },
+    {
+      "patente": "YM731LJ",
+      "fecha": "2026-07-15",
+      "km": 231910,
+      "observaciones": "Service completo sin novedades.",
+      "email_usuario": "carlos.ibarra@flota.example",
+      "created_at": "2026-07-15T09:00:00Z"
+    }
+  ],
+  "service_tareas": [
+    {
+      "patente": "AP414XV",
+      "fecha": "2026-04-26",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "AP414XV",
+      "fecha": "2026-07-07",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "AP414XV",
+      "fecha": "2026-08-04",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "AP414XV",
+      "fecha": "2026-09-25",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-05-02",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-07-01",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-09-18",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-09-18",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "DT895MF",
+      "fecha": "2026-06-21",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "DT895MF",
+      "fecha": "2026-08-29",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "DT895MF",
+      "fecha": "2026-08-29",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "GR482NY",
+      "fecha": "2026-06-08",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "GR482NY",
+      "fecha": "2026-08-20",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "GR482NY",
+      "fecha": "2026-08-20",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "GR482NY",
+      "fecha": "2026-08-20",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "HC176VH",
+      "fecha": "2026-05-05",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "HC176VH",
+      "fecha": "2026-06-15",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "HC176VH",
+      "fecha": "2026-07-20",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "HC176VH",
+      "fecha": "2026-07-20",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "KW849BP",
+      "fecha": "2025-11-10",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "KW849BP",
+      "fecha": "2026-03-01",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "KW849BP",
+      "fecha": "2026-07-11",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "KW849BP",
+      "fecha": "2026-07-11",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2025-12-20",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-04-03",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-05-13",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-07-29",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "MH654VV",
+      "fecha": "2026-05-26",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "MH654VV",
+      "fecha": "2026-06-29",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "MH654VV",
+      "fecha": "2026-09-06",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "MH654VV",
+      "fecha": "2026-09-06",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "MJ539WD",
+      "fecha": "2026-03-14",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "MJ539WD",
+      "fecha": "2026-04-04",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "MJ539WD",
+      "fecha": "2026-06-27",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "MJ539WD",
+      "fecha": "2026-09-20",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "NF213TY",
+      "fecha": "2026-06-22",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "NF213TY",
+      "fecha": "2026-09-01",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "NF213TY",
+      "fecha": "2026-09-01",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "NF213TY",
+      "fecha": "2026-09-01",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "PP311EX",
+      "fecha": "2026-05-28",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "PP311EX",
+      "fecha": "2026-06-01",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "PP311EX",
+      "fecha": "2026-08-10",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "PP311EX",
+      "fecha": "2026-08-10",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "PR739GY",
+      "fecha": "2026-02-25",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "PR739GY",
+      "fecha": "2026-05-30",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "PR739GY",
+      "fecha": "2026-08-18",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "PR739GY",
+      "fecha": "2026-08-18",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "PT235CX",
+      "fecha": "2026-01-28",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "PT235CX",
+      "fecha": "2026-07-22",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "PT235CX",
+      "fecha": "2026-09-27",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "PT235CX",
+      "fecha": "2026-09-27",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "PV587GJ",
+      "fecha": "2026-02-18",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "PV587GJ",
+      "fecha": "2026-06-29",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "PV587GJ",
+      "fecha": "2026-07-02",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "PV587GJ",
+      "fecha": "2026-07-04",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "RL848FC",
+      "fecha": "2026-04-01",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "RL848FC",
+      "fecha": "2026-05-29",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "RL848FC",
+      "fecha": "2026-08-14",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "RL848FC",
+      "fecha": "2026-08-14",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-01-09",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-06-25",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-09-07",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-09-07",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "SU726BP",
+      "fecha": "2026-07-20",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "SU726BP",
+      "fecha": "2026-09-30",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "SU726BP",
+      "fecha": "2026-09-30",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "SU726BP",
+      "fecha": "2026-09-30",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "UR137BK",
+      "fecha": "2026-06-22",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "UR137BK",
+      "fecha": "2026-07-17",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "UR137BK",
+      "fecha": "2026-09-11",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "UR137BK",
+      "fecha": "2026-09-11",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-04-06",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-05-02",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-07-17",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-07-17",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "YH604TT",
+      "fecha": "2025-12-08",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "YH604TT",
+      "fecha": "2026-04-16",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "YH604TT",
+      "fecha": "2026-07-07",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "YH604TT",
+      "fecha": "2026-07-07",
+      "codigo_tarea": "SECADOR_AIRE"
+    },
+    {
+      "patente": "YM731LJ",
+      "fecha": "2025-10-29",
+      "codigo_tarea": "ACEITE_CAJA"
+    },
+    {
+      "patente": "YM731LJ",
+      "fecha": "2026-04-18",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "YM731LJ",
+      "fecha": "2026-07-15",
+      "codigo_tarea": "ACEITE_MOTOR"
+    },
+    {
+      "patente": "YM731LJ",
+      "fecha": "2026-07-15",
+      "codigo_tarea": "SECADOR_AIRE"
+    }
+  ],
+  "postergaciones": [
+    {
+      "patente": "AP414XV",
+      "codigo_tarea": "SECADOR_AIRE",
+      "fecha": "2026-08-01T14:00:00Z",
+      "motivo": "falta_espacio",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 505825,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "AP414XV",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-09-22T14:00:00Z",
+      "motivo": "salida_urgente",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 532423,
+      "email_usuario": "laura.gomez@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "GR482NY",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-08-17T14:00:00Z",
+      "motivo": "otro",
+      "motivo_descripcion": "Esperando repuesto del proveedor",
+      "km_limite_nuevo": 597495,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "GR482NY",
+      "codigo_tarea": "SECADOR_AIRE",
+      "fecha": "2026-08-17T14:00:00Z",
+      "motivo": "salida_urgente",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 597768,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "HC176VH",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-07-17T14:00:00Z",
+      "motivo": "falta_espacio",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 112029,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "KW849BP",
+      "codigo_tarea": "ACEITE_CAJA",
+      "fecha": "2026-09-29T15:00:00Z",
+      "motivo": "salida_urgente",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 644600,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "cerrada": false
+    },
+    {
+      "patente": "KX324HU",
+      "codigo_tarea": "ACEITE_CAJA",
+      "fecha": "2026-10-02T09:00:00Z",
+      "motivo": "salida_urgente",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 855800,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": false
+    },
+    {
+      "patente": "MH654VV",
+      "codigo_tarea": "ACEITE_CAJA",
+      "fecha": "2026-09-03T14:00:00Z",
+      "motivo": "falta_espacio",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 171748,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo_tarea": "SECADOR_AIRE",
+      "fecha": "2026-03-11T14:00:00Z",
+      "motivo": "otro",
+      "motivo_descripcion": "Sin mecánico disponible esta semana",
+      "km_limite_nuevo": 407810,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo_tarea": "ACEITE_CAJA",
+      "fecha": "2026-04-01T14:00:00Z",
+      "motivo": "falta_espacio",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 418524,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "PP311EX",
+      "codigo_tarea": "ACEITE_CAJA",
+      "fecha": "2026-05-25T14:00:00Z",
+      "motivo": "otro",
+      "motivo_descripcion": "El cliente necesita la unidad hasta el viernes",
+      "km_limite_nuevo": 398548,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "PR739GY",
+      "codigo_tarea": "SECADOR_AIRE",
+      "fecha": "2026-08-15T14:00:00Z",
+      "motivo": "salida_urgente",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 744015,
+      "email_usuario": "laura.gomez@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "PV587GJ",
+      "codigo_tarea": "SECADOR_AIRE",
+      "fecha": "2026-06-29T14:00:00Z",
+      "motivo": "falta_espacio",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 551235,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "RL848FC",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-08-11T14:00:00Z",
+      "motivo": "salida_urgente",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 504211,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "RU206LB",
+      "codigo_tarea": "ACEITE_CAJA",
+      "fecha": "2026-01-06T14:00:00Z",
+      "motivo": "falta_espacio",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 461632,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "SU726BP",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-09-27T14:00:00Z",
+      "motivo": "otro",
+      "motivo_descripcion": "El cliente necesita la unidad hasta el viernes",
+      "km_limite_nuevo": 946935,
+      "email_usuario": "laura.gomez@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "XD891JD",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-07-14T14:00:00Z",
+      "motivo": "otro",
+      "motivo_descripcion": "Esperando repuesto del proveedor",
+      "km_limite_nuevo": 776654,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "XD891JD",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-10-02T09:00:00Z",
+      "motivo": "otro",
+      "motivo_descripcion": "El cliente necesita la unidad hasta el viernes",
+      "km_limite_nuevo": 821800,
+      "email_usuario": "pablo.rinaldi@flota.example",
+      "cerrada": false
+    },
+    {
+      "patente": "YH604TT",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-07-04T14:00:00Z",
+      "motivo": "otro",
+      "motivo_descripcion": "Esperando repuesto del proveedor",
+      "km_limite_nuevo": 660504,
+      "email_usuario": "carlos.ibarra@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "YH604TT",
+      "codigo_tarea": "SECADOR_AIRE",
+      "fecha": "2026-07-04T14:00:00Z",
+      "motivo": "salida_urgente",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 660137,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "YM731LJ",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "fecha": "2026-07-12T14:00:00Z",
+      "motivo": "otro",
+      "motivo_descripcion": "Sin mecánico disponible esta semana",
+      "km_limite_nuevo": 233081,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": true
+    },
+    {
+      "patente": "YM731LJ",
+      "codigo_tarea": "ACEITE_CAJA",
+      "fecha": "2026-10-04T11:00:00Z",
+      "motivo": "falta_espacio",
+      "motivo_descripcion": null,
+      "km_limite_nuevo": 273100,
+      "email_usuario": "marcela.sosa@flota.example",
+      "cerrada": false
+    }
+  ],
+  "fallas": [
+    {
+      "patente": "AP414XV",
+      "codigo": "SPN-190-FMI-2",
+      "fecha_aparicion": "2026-09-02T15:00:00Z",
+      "fecha_cierre": "2026-09-05T15:00:00Z"
+    },
+    {
+      "patente": "KW849BP",
+      "codigo": "SPN-190-FMI-2",
+      "fecha_aparicion": "2026-08-01T15:00:00Z",
+      "fecha_cierre": "2026-08-08T15:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo": "SPN-100-FMI-3",
+      "fecha_aparicion": "2026-10-05T10:00:00Z",
+      "fecha_cierre": null
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo": "SPN-157-FMI-1",
+      "fecha_aparicion": "2026-10-06T08:00:00Z",
+      "fecha_cierre": null
+    },
+    {
+      "patente": "NF213TY",
+      "codigo": "SPN-190-FMI-2",
+      "fecha_aparicion": "2026-08-05T15:00:00Z",
+      "fecha_cierre": "2026-08-13T15:00:00Z"
+    },
+    {
+      "patente": "PR739GY",
+      "codigo": "P0128",
+      "fecha_aparicion": "2026-09-21T07:00:00Z",
+      "fecha_cierre": null
+    },
+    {
+      "patente": "RL848FC",
+      "codigo": "SPN-157-FMI-1",
+      "fecha_aparicion": "2026-09-11T15:00:00Z",
+      "fecha_cierre": "2026-09-19T15:00:00Z"
+    },
+    {
+      "patente": "SU726BP",
+      "codigo": "P0171",
+      "fecha_aparicion": "2026-09-28T10:00:00Z",
+      "fecha_cierre": null
+    },
+    {
+      "patente": "UR137BK",
+      "codigo": "P0420",
+      "fecha_aparicion": "2026-07-29T15:00:00Z",
+      "fecha_cierre": "2026-08-01T15:00:00Z"
+    },
+    {
+      "patente": "UR137BK",
+      "codigo": "P0420",
+      "fecha_aparicion": "2026-10-06T07:00:00Z",
+      "fecha_cierre": null
+    },
+    {
+      "patente": "YH604TT",
+      "codigo": "P0420",
+      "fecha_aparicion": "2026-10-06T14:00:00Z",
+      "fecha_cierre": null
+    }
+  ],
+  "alertas_plan": [
+    {
+      "patente": "KX324HU",
+      "codigo_tarea": "SECADOR_AIRE",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-09-27T06:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "KW849BP",
+      "codigo_tarea": "ACEITE_CAJA",
+      "tipo": "tarea_vencida",
+      "fecha_generada": "2026-09-28T15:00:00Z",
+      "fecha_revisada": "2026-09-29T15:00:00Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo_tarea": "SECADOR_AIRE",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-09-28T15:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "PT235CX",
+      "codigo_tarea": "ACEITE_CAJA",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-09-28T15:00:00Z",
+      "fecha_revisada": "2026-09-28T17:00:00Z"
+    },
+    {
+      "patente": "XD891JD",
+      "codigo_tarea": "SECADOR_AIRE",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-09-29T15:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "HC176VH",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-09-29T15:00:00Z",
+      "fecha_revisada": "2026-09-29T17:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-09-30T15:00:00Z",
+      "fecha_revisada": "2026-09-30T17:00:00Z"
+    },
+    {
+      "patente": "YH604TT",
+      "codigo_tarea": "ACEITE_CAJA",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-09-30T15:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "XD891JD",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "tipo": "tarea_vencida",
+      "fecha_generada": "2026-10-01T09:00:00Z",
+      "fecha_revisada": "2026-10-02T09:00:00Z"
+    },
+    {
+      "patente": "KX324HU",
+      "codigo_tarea": "ACEITE_CAJA",
+      "tipo": "tarea_vencida",
+      "fecha_generada": "2026-10-01T09:00:00Z",
+      "fecha_revisada": "2026-10-02T09:00:00Z"
+    },
+    {
+      "patente": "RL848FC",
+      "codigo_tarea": "SECADOR_AIRE",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-10-02T10:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "KX324HU",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-10-02T14:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "YM731LJ",
+      "codigo_tarea": "ACEITE_CAJA",
+      "tipo": "tarea_vencida",
+      "fecha_generada": "2026-10-03T11:00:00Z",
+      "fecha_revisada": "2026-10-04T11:00:00Z"
+    },
+    {
+      "patente": "YM731LJ",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-10-04T10:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "YH604TT",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "tipo": "tarea_vencida",
+      "fecha_generada": "2026-10-05T09:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "HC176VH",
+      "codigo_tarea": "ACEITE_MOTOR",
+      "tipo": "tarea_vencida",
+      "fecha_generada": "2026-10-05T15:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "PT235CX",
+      "codigo_tarea": "ACEITE_CAJA",
+      "tipo": "tarea_vencida",
+      "fecha_generada": "2026-10-06T11:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "RU206LB",
+      "codigo_tarea": "ACEITE_CAJA",
+      "tipo": "tarea_proxima",
+      "fecha_generada": "2026-10-06T12:00:00Z",
+      "fecha_revisada": null
+    }
+  ],
+  "alertas_falla": [
+    {
+      "patente": "AP414XV",
+      "codigo": "SPN-190-FMI-2",
+      "fecha_aparicion": "2026-09-02T15:00:00Z",
+      "fecha_generada": "2026-09-02T15:00:02Z",
+      "fecha_revisada": "2026-09-03T01:00:02Z"
+    },
+    {
+      "patente": "KW849BP",
+      "codigo": "SPN-190-FMI-2",
+      "fecha_aparicion": "2026-08-01T15:00:00Z",
+      "fecha_generada": "2026-08-01T15:00:02Z",
+      "fecha_revisada": "2026-08-01T22:00:02Z"
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo": "SPN-100-FMI-3",
+      "fecha_aparicion": "2026-10-05T10:00:00Z",
+      "fecha_generada": "2026-10-05T10:00:02Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "MJ539WD",
+      "codigo": "SPN-157-FMI-1",
+      "fecha_aparicion": "2026-10-06T08:00:00Z",
+      "fecha_generada": "2026-10-06T08:00:02Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "NF213TY",
+      "codigo": "SPN-190-FMI-2",
+      "fecha_aparicion": "2026-08-05T15:00:00Z",
+      "fecha_generada": "2026-08-05T15:00:02Z",
+      "fecha_revisada": "2026-08-05T20:00:02Z"
+    },
+    {
+      "patente": "PR739GY",
+      "codigo": "P0128",
+      "fecha_aparicion": "2026-09-21T07:00:00Z",
+      "fecha_generada": "2026-09-21T07:00:02Z",
+      "fecha_revisada": "2026-09-22T03:00:02Z"
+    },
+    {
+      "patente": "RL848FC",
+      "codigo": "SPN-157-FMI-1",
+      "fecha_aparicion": "2026-09-11T15:00:00Z",
+      "fecha_generada": "2026-09-11T15:00:02Z",
+      "fecha_revisada": "2026-09-12T02:00:02Z"
+    },
+    {
+      "patente": "SU726BP",
+      "codigo": "P0171",
+      "fecha_aparicion": "2026-09-28T10:00:00Z",
+      "fecha_generada": "2026-09-28T10:00:02Z",
+      "fecha_revisada": "2026-09-28T15:00:02Z"
+    },
+    {
+      "patente": "UR137BK",
+      "codigo": "P0420",
+      "fecha_aparicion": "2026-07-29T15:00:00Z",
+      "fecha_generada": "2026-07-29T15:00:02Z",
+      "fecha_revisada": "2026-07-29T22:00:02Z"
+    },
+    {
+      "patente": "UR137BK",
+      "codigo": "P0420",
+      "fecha_aparicion": "2026-10-06T07:00:00Z",
+      "fecha_generada": "2026-10-06T07:00:02Z",
+      "fecha_revisada": null
+    },
+    {
+      "patente": "YH604TT",
+      "codigo": "P0420",
+      "fecha_aparicion": "2026-10-06T14:00:00Z",
+      "fecha_generada": "2026-10-06T14:00:02Z",
+      "fecha_revisada": null
+    }
+  ],
+  "alertas_dispositivo": [
+    {
+      "device_uid": "esp32-933911",
+      "fecha_generada": "2026-10-07T09:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "device_uid": "esp32-1AA63D",
+      "fecha_generada": "2026-10-03T12:00:00Z",
+      "fecha_revisada": null
+    },
+    {
+      "device_uid": "esp32-322273",
+      "fecha_generada": "2026-08-28T15:00:00Z",
+      "fecha_revisada": "2026-08-29T15:00:00Z"
+    }
+  ],
+  "kilometraje_historial": [
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-06-15T15:00:00Z",
+      "km": 745678,
+      "fuente": "manual",
+      "email_usuario": "laura.gomez@flota.example"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-06-23T13:00:00Z",
+      "km": 749276,
+      "fuente": "manual",
+      "email_usuario": "carlos.ibarra@flota.example"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-07-01T09:00:00Z",
+      "km": 753172,
+      "fuente": "manual",
+      "email_usuario": "pablo.rinaldi@flota.example"
+    },
+    {
+      "patente": "CJ411PJ",
+      "fecha": "2026-07-09T11:00:00Z",
+      "km": 756964,
+      "fuente": "manual",
+      "email_usuario": "laura.gomez@flota.example"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-09-10T10:00:00Z",
+      "km": 840511,
+      "fuente": "manual",
+      "email_usuario": "carlos.ibarra@flota.example"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-09-18T09:00:00Z",
+      "km": 844534,
+      "fuente": "manual",
+      "email_usuario": "marcela.sosa@flota.example"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-09-26T14:00:00Z",
+      "km": 848144,
+      "fuente": "manual",
+      "email_usuario": "carlos.ibarra@flota.example"
+    },
+    {
+      "patente": "KX324HU",
+      "fecha": "2026-10-04T13:00:00Z",
+      "km": 852128,
+      "fuente": "manual",
+      "email_usuario": "laura.gomez@flota.example"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-09-10T09:00:00Z",
+      "km": 595133,
+      "fuente": "manual",
+      "email_usuario": "pablo.rinaldi@flota.example"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-09-18T10:00:00Z",
+      "km": 599159,
+      "fuente": "manual",
+      "email_usuario": "laura.gomez@flota.example"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-09-26T14:00:00Z",
+      "km": 603271,
+      "fuente": "manual",
+      "email_usuario": "carlos.ibarra@flota.example"
+    },
+    {
+      "patente": "RU206LB",
+      "fecha": "2026-10-04T09:00:00Z",
+      "km": 607270,
+      "fuente": "manual",
+      "email_usuario": "carlos.ibarra@flota.example"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-09-10T09:00:00Z",
+      "km": 806590,
+      "fuente": "manual",
+      "email_usuario": "carlos.ibarra@flota.example"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-09-18T14:00:00Z",
+      "km": 810756,
+      "fuente": "manual",
+      "email_usuario": "laura.gomez@flota.example"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-09-26T11:00:00Z",
+      "km": 814713,
+      "fuente": "manual",
+      "email_usuario": "pablo.rinaldi@flota.example"
+    },
+    {
+      "patente": "XD891JD",
+      "fecha": "2026-10-04T15:00:00Z",
+      "km": 818574,
+      "fuente": "manual",
+      "email_usuario": "carlos.ibarra@flota.example"
+    }
+  ]
+}

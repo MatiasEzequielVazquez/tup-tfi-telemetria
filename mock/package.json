@@ -1,0 +1,13 @@
+{
+  "name": "tfi-mock-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "API mock del backend del TFI para desarrollar el frontend sin backend",
+  "scripts": {
+    "start": "node server.js",
+    "generate": "node generate.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
