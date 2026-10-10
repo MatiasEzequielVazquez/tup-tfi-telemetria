@@ -1,0 +1,149 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "react",
+    "typescript",
+    "oxc",
+    "import"
+  ],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ],
+    "import/no-cycle": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/api/**",
+        "src/config/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/features/**",
+                  "**/shared/**",
+                  "**/routes/**"
+                ],
+                "message": "api y config son la capa más baja: no dependen de shared, features ni routes."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/shared/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/features/**",
+                  "**/routes/**"
+                ],
+                "message": "shared no depende de features ni de routes: lo específico entra por props."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/features/fleet/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/session",
+                  "**/session/**",
+                  "**/features/session",
+                  "**/features/session/**",
+                  "**/alerts",
+                  "**/alerts/**",
+                  "**/features/alerts",
+                  "**/features/alerts/**",
+                  "**/routes/**"
+                ],
+                "message": "Una feature no importa a otra ni a routes. Si hace falta compartir algo, subirlo a shared o componer en routes/AppRouter."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/features/session/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/fleet",
+                  "**/fleet/**",
+                  "**/features/fleet",
+                  "**/features/fleet/**",
+                  "**/alerts",
+                  "**/alerts/**",
+                  "**/features/alerts",
+                  "**/features/alerts/**",
+                  "**/routes/**"
+                ],
+                "message": "Una feature no importa a otra ni a routes. Si hace falta compartir algo, subirlo a shared o componer en routes/AppRouter."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/features/alerts/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/fleet",
+                  "**/fleet/**",
+                  "**/features/fleet",
+                  "**/features/fleet/**",
+                  "**/session",
+                  "**/session/**",
+                  "**/features/session",
+                  "**/features/session/**",
+                  "**/routes/**"
+                ],
+                "message": "Una feature no importa a otra ni a routes. Si hace falta compartir algo, subirlo a shared o componer en routes/AppRouter."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

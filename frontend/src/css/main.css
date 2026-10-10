@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/*
+ * Estilos globales mínimos: la presentación de los componentes se resuelve con clases de
+ * Tailwind. Acá solo viven los colores de diseño (con su variante oscura, que sigue la
+ * preferencia del sistema) y el estilo de foco.
+ */
+
+:root {
+  --page: #f6f7f9;
+  --surface: #ffffff;
+  --fg: #1c2430;
+  --muted: #5b6676;
+  --line: #d5dae1;
+  --accent: #1f5fbf;
+  --on-accent: #ffffff;
+
+  --ok-bg: #e3f4e8;
+  --ok-fg: #14532d;
+  --warn-bg: #fdf1c9;
+  --warn-fg: #6b4b00;
+  --danger-bg: #fde4e4;
+  --danger-fg: #8a1c1c;
+  --postponed-bg: #ffe8d1;
+  --postponed-fg: #7a3a00;
+  --neutral-bg: #e9ecf0;
+  --neutral-fg: #3b4554;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #12161c;
+    --surface: #1b212a;
+    --fg: #e8ecf1;
+    --muted: #a3adbb;
+    --line: #333c49;
+    --accent: #8ab4f8;
+    --on-accent: #0b1220;
+
+    --ok-bg: #173a24;
+    --ok-fg: #b7efc9;
+    --warn-bg: #43360a;
+    --warn-fg: #ffe9a3;
+    --danger-bg: #4a1c1c;
+    --danger-fg: #ffc9c9;
+    --postponed-bg: #4a2a0c;
+    --postponed-fg: #ffd9b3;
+    --neutral-bg: #2a323e;
+    --neutral-fg: #cdd5e0;
+  }
+}
+
+/* Expone los colores como utilidades (bg-surface, text-muted, border-line, bg-ok-bg…). */
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+
+  --color-ok-bg: var(--ok-bg);
+  --color-ok-fg: var(--ok-fg);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-fg: var(--warn-fg);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-fg: var(--danger-fg);
+  --color-postponed-bg: var(--postponed-bg);
+  --color-postponed-fg: var(--postponed-fg);
+  --color-neutral-bg: var(--neutral-bg);
+  --color-neutral-fg: var(--neutral-fg);
+}
+
+@layer base {
+  body {
+    background-color: var(--page);
+    color: var(--fg);
+  }
+
+  /* Foco visible y consistente en todos los elementos interactivos. */
+  :focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
