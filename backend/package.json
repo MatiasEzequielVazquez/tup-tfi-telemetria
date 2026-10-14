@@ -18,12 +18,12 @@
     "node": ">=22"
   },
   "dependencies": {
-    "express": "^4.22.3",
+    "express": "^5.3.0",
     "mqtt": "^5.16.0",
     "postgres": "^3.4.9"
   },
   "devDependencies": {
-    "@types/express": "^4.17.25",
+    "@types/express": "^5.0.6",
     "@types/node": "^26.6.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"

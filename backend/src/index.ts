@@ -1,24 +1,36 @@
-import express from 'express';
+import { crearApp } from './app.js';
+import { cargarConfig, type Config } from './config.js';
 import { crearSql } from './db.js';
 
-const url = process.env.DATABASE_URL;
-if (!url) {
-  console.error('Falta DATABASE_URL en backend/.env');
+// Punto de entrada: arranca la API. Después se suman la ingesta MQTT (M3) y el temporizador (M8).
+
+let config: Config;
+try {
+  config = cargarConfig();
+} catch (e) {
+  console.error((e as Error).message);
   process.exit(1);
 }
 
-const sql = crearSql(url);
-const app = express();
+const sql = crearSql(config.databaseUrl);
+try {
+  await sql`select 1`;
+} catch (e) {
+  console.error(`No se pudo conectar a la base de datos: ${(e as Error).message}`);
+  process.exit(1);
+}
 
-// Chequeo de salud: confirma que la API está viva y llega a la base.
-app.get('/health', async (_req, res) => {
-  try {
-    const [fila] = await sql<{ unidades: number }[]>`select count(*)::int as unidades from unidades`;
-    res.json({ status: 'ok', db: 'ok', unidades: fila?.unidades ?? 0 });
-  } catch (e) {
-    res.status(503).json({ status: 'error', db: (e as Error).message });
-  }
+const app = crearApp({ sql, config });
+const server = app.listen(config.port, () => {
+  console.info(`API en http://localhost:${config.port}/api/v1 (${config.nodeEnv}, auth: ${config.auth.modo})`);
 });
 
-const port = Number(process.env.PORT) || 3000;
-app.listen(port, () => console.log(`API en http://localhost:${port}`));
+// Apagado prolijo: deja terminar las requests en curso y cierra las conexiones a la base.
+async function apagar(senal: string) {
+  console.info(`${senal}: cerrando…`);
+  server.close();
+  await sql.end({ timeout: 5 });
+  process.exit(0);
+}
+process.on('SIGINT', () => void apagar('SIGINT'));
+process.on('SIGTERM', () => void apagar('SIGTERM'));
