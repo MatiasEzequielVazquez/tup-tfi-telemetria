@@ -2,6 +2,9 @@ import express, { type RequestHandler } from 'express';
 import type { Config } from './config.js';
 import type { Sql } from './db.js';
 import { HttpError, manejadorErrores, noEncontrado } from './http/errores.js';
+import { autenticar } from './auth/middleware.js';
+import type { Verificador } from './auth/verificadores.js';
+import { rutasUsuarios } from './modulos/usuarios/rutas.js';
 
 export const BASE = '/api/v1';
 
@@ -46,9 +49,11 @@ const exigirBodyObjeto: RequestHandler = (req, _res, next) => {
 export interface Dependencias {
   sql: Sql;
   config: Config;
+  verificar: Verificador;
 }
 
-export function crearApp({ sql, config }: Dependencias) {
+export function crearApp(deps: Dependencias) {
+  const { sql, config } = deps;
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', true);
@@ -68,10 +73,15 @@ export function crearApp({ sql, config }: Dependencias) {
   });
 
   const api = express.Router();
-  // Acá se van a montar la autenticación (paso 3) y las rutas de cada módulo.
+  api.use(autenticar(sql, deps.verificar)); // todo lo que está bajo /api/v1 exige sesión
+  api.use(rutasUsuarios(deps));
   app.use(BASE, api);
 
-  app.use((req, _res, next) => next(noEncontrado(req.path.startsWith(BASE) ? 'Ruta inexistente.' : `Las rutas de la API empiezan con ${BASE}.`)));
+  // Cualquier ruta que no matcheó arriba: 404 con el formato del contrato.
+  app.use((req, _res, next) =>
+    next(noEncontrado(req.path.startsWith(BASE) ? 'Ruta inexistente.' : `Las rutas de la API empiezan con ${BASE}.`)),
+  );
+  // Siempre último: traduce cualquier error a { error: { code, message } }.
   app.use(manejadorErrores());
   return app;
 }

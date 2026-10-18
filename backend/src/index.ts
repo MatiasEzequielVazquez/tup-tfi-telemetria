@@ -1,4 +1,5 @@
 import { crearApp } from './app.js';
+import { verificadorDev, verificadorSupabase } from './auth/verificadores.js';
 import { cargarConfig, type Config } from './config.js';
 import { crearSql } from './db.js';
 
@@ -20,7 +21,11 @@ try {
   process.exit(1);
 }
 
-const app = crearApp({ sql, config });
+// Cómo se valida el token: contra Supabase Auth, o en modo dev (token = rol o email).
+const verificar = config.auth.modo === 'dev' ? verificadorDev(sql) : verificadorSupabase(config.auth);
+if (config.auth.modo === 'dev') console.warn('[auth] AUTH_MODE=dev: el token es el rol o el email. SOLO DESARROLLO.');
+
+const app = crearApp({ sql, config, verificar });
 const server = app.listen(config.port, () => {
   console.info(`API en http://localhost:${config.port}/api/v1 (${config.nodeEnv}, auth: ${config.auth.modo})`);
 });
