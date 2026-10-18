@@ -5,6 +5,7 @@ import { HttpError, manejadorErrores, noEncontrado } from './http/errores.js';
 import { autenticar } from './auth/middleware.js';
 import type { Verificador } from './auth/verificadores.js';
 import { rutasUsuarios } from './modulos/usuarios/rutas.js';
+import { rutasUnidades } from './modulos/unidades/rutas.js';
 
 export const BASE = '/api/v1';
 
@@ -75,6 +76,7 @@ export function crearApp(deps: Dependencias) {
   const api = express.Router();
   api.use(autenticar(sql, deps.verificar)); // todo lo que está bajo /api/v1 exige sesión
   api.use(rutasUsuarios(deps));
+  api.use(rutasUnidades(deps));
   app.use(BASE, api);
 
   // Cualquier ruta que no matcheó arriba: 404 con el formato del contrato.

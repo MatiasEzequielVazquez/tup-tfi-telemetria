@@ -28,3 +28,12 @@ export function crearSql(url: string, opciones: postgres.Options<{}> = {}) {
 }
 
 export type Sql = ReturnType<typeof crearSql>;
+
+/**
+ * Ejecuta fn dentro de una transacción: si algo falla, se deshace todo.
+ * Envoltorio sobre sql.begin porque los tipos de postgres.js pierden la firma
+ * "llamable" del objeto tx (tx`...` da error de tipos aunque funciona).
+ */
+export async function transaccion<T>(sql: Sql, fn: (tx: Sql) => Promise<T>): Promise<T> {
+  return (await sql.begin((tx) => fn(tx as unknown as Sql))) as T;
+}

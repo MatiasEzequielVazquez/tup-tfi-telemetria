@@ -2,7 +2,7 @@ import { Router } from 'express';
 import type { Dependencias } from '../../app.js';
 import { soloAdmin } from '../../auth/middleware.js';
 import { conflicto, noEncontrado, validacion } from '../../http/errores.js';
-import { ENUMS, REGEX_EMAIL, exigirCampos, exigirEnum, textoOpcional, type Body } from '../../http/validacion.js';
+import { ENUMS, REGEX_EMAIL, exigirCampos, exigirEnum, param, textoOpcional, type Body } from '../../http/validacion.js';
 import type { Rol } from '../../types/express.js';
 
 // M1 — Sesión y usuarios (RF01, RF17, RN11).
@@ -52,7 +52,7 @@ export function rutasUsuarios({ sql }: Dependencias) {
   r.patch('/usuarios/:email', soloAdmin, async (req, res) => {
     const b = req.body as Body;
     const [actual] = await sql<Usuario[]>`
-      select email, nombre, rol, created_at from usuarios where lower(email) = ${req.params.email.toLowerCase()}`;
+      select email, nombre, rol, created_at from usuarios where lower(email) = ${param(req.params.email).toLowerCase()}`;
     if (!actual) throw noEncontrado('No existe el usuario.');
 
     let rol = actual.rol;

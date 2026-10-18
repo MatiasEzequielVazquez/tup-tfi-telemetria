@@ -44,3 +44,30 @@ export function textoObligatorio(campo: string, valor: unknown, max: number): st
 }
 
 export const REGEX_EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+export const normalizarPatente = (p: unknown) => String(p ?? '').toUpperCase().trim();
+export const REGEX_PATENTE = /^[A-Z0-9]{6,10}$/;
+export const REGEX_DEVICE_UID = /^[\w-]{3,50}$/;
+
+/** Un parámetro de query como string, o undefined. */
+export const query = (v: unknown): string | undefined => (typeof v === 'string' && v !== '' ? v : undefined);
+
+/** Paginación del contrato: ?page=&page_size= (por defecto 1 y 20, máximo 100). */
+export function paginacion(q: Record<string, unknown>) {
+  const page = Math.max(1, parseInt(query(q.page) ?? '', 10) || 1);
+  const pageSize = Math.min(100, Math.max(1, parseInt(query(q.page_size) ?? '', 10) || 20));
+  return { page, pageSize, offset: (page - 1) * pageSize };
+}
+
+export const pagina = <T>(p: { page: number; pageSize: number }, data: T[], total: number) => ({
+  data,
+  page: p.page,
+  page_size: p.pageSize,
+  total,
+});
+
+/** Parámetro de ruta (:patente, :email…) como string. En Express 5 el tipo admite string[]. */
+export function param(v: string | string[] | undefined): string {
+  if (typeof v !== 'string' || v === '') throw validacion('Parámetro de ruta inválido.');
+  return v;
+}
