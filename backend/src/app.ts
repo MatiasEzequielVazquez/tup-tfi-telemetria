@@ -6,6 +6,7 @@ import { autenticar } from './auth/middleware.js';
 import type { Verificador } from './auth/verificadores.js';
 import { rutasUsuarios } from './modulos/usuarios/rutas.js';
 import { rutasUnidades } from './modulos/unidades/rutas.js';
+import { rutasDispositivos } from './modulos/dispositivos/rutas.js';
 
 export const BASE = '/api/v1';
 
@@ -77,6 +78,7 @@ export function crearApp(deps: Dependencias) {
   api.use(autenticar(sql, deps.verificar)); // todo lo que está bajo /api/v1 exige sesión
   api.use(rutasUsuarios(deps));
   api.use(rutasUnidades(deps));
+  api.use(rutasDispositivos(deps));
   app.use(BASE, api);
 
   // Cualquier ruta que no matcheó arriba: 404 con el formato del contrato.
