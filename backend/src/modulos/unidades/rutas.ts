@@ -4,10 +4,13 @@ import { soloAdmin } from '../../auth/middleware.js';
 import { transaccion } from '../../db.js';
 import { conflicto, validacion } from '../../http/errores.js';
 import {
-  ENUMS, REGEX_PATENTE, exigirCampos, exigirEnum, normalizarPatente, pagina, paginacion, query,
+  ENUMS, REGEX_PATENTE, exigirCampos, exigirEnum, normalizarPatente, pagina, paginacion, param, query,
   textoObligatorio, textoOpcional, type Body,
-} from '../../http/validacion.js';
+  } from '../../http/validacion.js';
 import { FILTROS_ESTADO, dispositivoVigente, listarFlota, obtenerUnidad, type FiltroEstado, type Unidad } from './repositorio.js';
+import { listarFallas } from '../fallas/repositorio.js';
+import { listarPlanes } from '../mantenimiento/planes.js';
+
 
 // M2 — Unidades (RF02, RN01) y M9 — vista de flota (RF14).
 
@@ -64,12 +67,24 @@ export function rutasUnidades({ sql }: Dependencias) {
     res.status(201).json(creada);
   });
 
-  r.get('/unidades/:patente', async (req, res) => {
-    res.json(await obtenerUnidad(sql, req.params.patente));
+    r.get('/unidades/:patente', async (req, res) => {
+    res.json(await obtenerUnidad(sql, param(req.params.patente)));
+  });
+
+    // Detalle consolidado (RF15): unidad + dispositivo vigente + planes + fallas activas.
+  r.get('/unidades/:patente/detalle', async (req, res) => {
+    const unidad = await obtenerUnidad(sql, param(req.params.patente));
+    // Las tres consultas son independientes: se lanzan en paralelo.
+    const [dispositivo, planes, fallas_activas] = await Promise.all([
+      dispositivoVigente(sql, unidad.patente),
+      listarPlanes(sql, unidad.patente),
+      listarFallas(sql, unidad.patente, 'activo'),
+    ]);
+    res.json({ unidad, dispositivo, planes, fallas_activas });
   });
 
   r.patch('/unidades/:patente', soloAdmin, async (req, res) => {
-    const u = await obtenerUnidad(sql, req.params.patente);
+    const u = await obtenerUnidad(sql, param(req.params.patente));
     const b = req.body as Body;
     const cambios: Record<string, string | number | null> = {};
     if (b.marca !== undefined) cambios.marca = textoObligatorio('marca', b.marca, 50);
@@ -96,7 +111,7 @@ export function rutasUnidades({ sql }: Dependencias) {
   // Baja lógica (RF02, RNF11): conserva el historial. 409 si tiene un dispositivo vinculado.
   r.delete('/unidades/:patente', soloAdmin, async (req, res) => {
     const baja = await transaccion(sql, async (tx) => {
-      const u = await obtenerUnidad(tx, req.params.patente, { bloquear: true });
+      const u = await obtenerUnidad(tx, param(req.params.patente), { bloquear: true });
       if (await dispositivoVigente(tx, u.patente)) {
         throw conflicto('La unidad tiene un dispositivo vinculado: desvinculalo antes de darla de baja.');
       }
@@ -108,3 +123,4 @@ export function rutasUnidades({ sql }: Dependencias) {
 
   return r;
 }
+
