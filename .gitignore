@@ -22,3 +22,8 @@ firmware/.pio/
 Thumbs.db
 .vscode/
 .idea/
+
+# Despliegue: secretos y datos generados en la VM
+deploy/caddy/
+deploy/hivemq/certs/
+deploy/hivemq/extensions/

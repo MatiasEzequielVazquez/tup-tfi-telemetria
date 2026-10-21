@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<hivemq>
+    <listeners>
+        <!-- Interno (red de Docker): lo usa el backend. No se publica fuera de la VM. -->
+        <tcp-listener>
+            <port>1883</port>
+            <bind-address>0.0.0.0</bind-address>
+            <name>interno</name>
+        </tcp-listener>
+        <!-- Externo con TLS (RNF03): dispositivos y simulador. Certificado de Let's Encrypt vía Caddy. -->
+        <tls-tcp-listener>
+            <port>8883</port>
+            <bind-address>0.0.0.0</bind-address>
+            <name>externo-tls</name>
+            <tls>
+                <keystore>
+                    <path>/opt/hivemq/certs/broker.p12</path>
+                    <password>${ENV:MQTT_KEYSTORE_PASSWORD}</password>
+                    <private-key-password>${ENV:MQTT_KEYSTORE_PASSWORD}</private-key-password>
+                </keystore>
+            </tls>
+        </tls-tcp-listener>
+    </listeners>
+</hivemq>

@@ -1,0 +1,53 @@
+# Producción en la VM de Oracle (AMD Micro, 1 GB RAM + 2 GB swap). Ver docs/despliegue.md.
+#   cd deploy && docker compose up -d --build
+name: tfi-telemetria
+
+services:
+  api:
+    build: ../backend
+    container_name: tfi-api
+    env_file: ../backend/.env
+    environment:
+      # Fijados acá, por encima del .env: producción nunca corre en modo dev.
+      NODE_ENV: production
+      AUTH_MODE: supabase
+      MQTT_BROKER_URL: mqtt://hivemq:1883   # red interna de Docker
+      NODE_OPTIONS: --max-old-space-size=160
+    mem_limit: 256m
+    restart: unless-stopped
+
+  hivemq:
+    image: hivemq/hivemq-ce
+    container_name: tfi-hivemq
+    environment:
+      HIVEMQ_ALLOW_ALL_CLIENTS: "false"     # sin esto, la imagen acepta cualquier cliente
+      JAVA_OPTS: -Xms128m -Xmx256m
+      MQTT_KEYSTORE_PASSWORD: ${MQTT_KEYSTORE_PASSWORD:?falta en deploy/.env}
+    ports:
+      - "8883:8883"                         # solo TLS hacia afuera; el 1883 queda interno
+    volumes:
+      - ./hivemq/config.xml:/opt/hivemq/conf/config.xml:ro
+      - ./hivemq/extensions:/opt/hivemq/extensions
+      - ./hivemq/certs:/opt/hivemq/certs:ro
+      - hivemq-data:/opt/hivemq/data
+    mem_limit: 400m
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: tfi-caddy
+    environment:
+      DOMINIO: ${DOMINIO:?falta en deploy/.env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../frontend/dist:/srv/dashboard:ro
+      - ./caddy/data:/data                  # certificados (los lee scripts/cert-mqtt.sh)
+      - ./caddy/config:/config
+    mem_limit: 64m
+    restart: unless-stopped
+
+volumes:
+  hivemq-data:
