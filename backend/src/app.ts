@@ -58,6 +58,8 @@ export interface Dependencias {
   sql: Sql;
   config: Config;
   verificar: Verificador;
+  /** Información extra para /health (por ejemplo, el estado de la ingesta MQTT). */
+  estado?: () => Record<string, unknown>;
 }
 
 export function crearApp(deps: Dependencias) {
@@ -74,9 +76,9 @@ export function crearApp(deps: Dependencias) {
   app.get('/health', async (_req, res) => {
     try {
       await sql`select 1`;
-      res.json({ status: 'ok', db: 'ok' });
+      res.json({ status: 'ok', db: 'ok', ...deps.estado?.() });
     } catch {
-      res.status(503).json({ status: 'error', db: 'sin conexión' });
+      res.status(503).json({ status: 'error', db: 'sin conexión', ...deps.estado?.() });
     }
   });
 

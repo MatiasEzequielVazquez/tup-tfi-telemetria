@@ -20,6 +20,14 @@ export interface Config {
     zonaHoraria: string;             // define qué día es "hoy" para un service
     toleranciaFuturoMinutos: number; // mensajes MQTT con reloj adelantado
   };
+  mqtt: {
+    habilitado: boolean;
+    url: string;
+    username?: string;
+    password?: string;
+    topic: string;
+    clientId: string;
+  };
 }
 
 function entero(nombre: string, valor: string | undefined, porDefecto: number, min = 1): number {
@@ -46,6 +54,10 @@ export function cargarConfig(env: NodeJS.ProcessEnv = process.env): Config {
     if (!env.SUPABASE_ANON_KEY) errores.push('Falta SUPABASE_ANON_KEY (necesaria para validar las sesiones).');
   }
 
+    // Sin MQTT_BROKER_URL la ingesta queda deshabilitada y la API funciona igual.
+  const mqttHabilitado = env.MQTT_HABILITADO ? env.MQTT_HABILITADO === 'true' : Boolean(env.MQTT_BROKER_URL);
+  if (mqttHabilitado && !env.MQTT_BROKER_URL) errores.push('MQTT_HABILITADO=true pero falta MQTT_BROKER_URL.');
+
   let config: Config | undefined;
   try {
     config = {
@@ -65,6 +77,15 @@ export function cargarConfig(env: NodeJS.ProcessEnv = process.env): Config {
         temporizadorMinutos: entero('TEMPORIZADOR_INTERVALO_MINUTOS', env.TEMPORIZADOR_INTERVALO_MINUTOS, 5),
         zonaHoraria: env.ZONA_HORARIA || 'America/Argentina/Buenos_Aires',
         toleranciaFuturoMinutos: entero('TOLERANCIA_FUTURO_MINUTOS', env.TOLERANCIA_FUTURO_MINUTOS, 10, 0),
+      },
+      mqtt: {
+        habilitado: mqttHabilitado,
+        url: env.MQTT_BROKER_URL ?? '',
+        username: env.MQTT_USERNAME || undefined,
+        password: env.MQTT_PASSWORD || undefined,
+        topic: env.MQTT_TOPIC_LECTURAS || 'telemetria/+/lecturas',
+        // Fijo: con sesión persistente, el broker reconoce al backend por este id.
+        clientId: env.MQTT_CLIENT_ID || 'tfi-backend',
       },
     };
   } catch (e) {
