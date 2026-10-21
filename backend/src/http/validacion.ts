@@ -71,3 +71,32 @@ export function param(v: string | string[] | undefined): string {
   if (typeof v !== 'string' || v === '') throw validacion('Parámetro de ruta inválido.');
   return v;
 }
+
+export const REGEX_FECHA = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Fecha 'YYYY-MM-DD' que existe en el calendario (rechaza 2026-02-30). */
+export function esFechaValida(s: unknown): s is string {
+  if (typeof s !== 'string' || !REGEX_FECHA.test(s)) return false;
+  const d = new Date(`${s}T00:00:00Z`);
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+}
+
+/**
+ * Fecha de hoy ('YYYY-MM-DD') en la zona horaria del negocio, no en UTC.
+ * Un service cargado a las 22 h en Argentina ya es "mañana" en UTC.
+ */
+export function hoyEn(zonaHoraria: string, instante = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: zonaHoraria, year: 'numeric', month: '2-digit', day: '2-digit' }).format(instante);
+}
+
+/** Filtro de período ?desde=&hasta= (YYYY-MM-DD, inclusivos). */
+export function periodo(q: Record<string, unknown>): { desde?: string; hasta?: string } {
+  const out: { desde?: string; hasta?: string } = {};
+  for (const k of ['desde', 'hasta'] as const) {
+    const v = query(q[k]);
+    if (v === undefined) continue;
+    if (!esFechaValida(v)) throw validacion(`${k} debe tener formato YYYY-MM-DD.`);
+    out[k] = v;
+  }
+  return out;
+}
