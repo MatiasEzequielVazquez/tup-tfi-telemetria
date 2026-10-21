@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "tsx --test \"test/**/*.test.ts\"",
+    "test": "tsx --env-file-if-exists=.env.test --test \"test/**/*.test.ts\"",
     "dev": "tsx watch --env-file=.env src/index.ts",
     "start": "node --env-file-if-exists=.env dist/index.js",
     "build": "tsc",
