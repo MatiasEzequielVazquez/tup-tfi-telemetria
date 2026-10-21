@@ -3,6 +3,7 @@ import { verificadorDev, verificadorSupabase } from './auth/verificadores.js';
 import { cargarConfig, type Config } from './config.js';
 import { crearSql } from './db.js';
 import { iniciarIngesta } from './modulos/ingesta/cliente-mqtt.js';
+import { iniciarTemporizador } from './modulos/temporizador/dispositivos.js';
 
 // Punto de entrada: arranca la API. Después se suman la ingesta MQTT (M3) y el temporizador (M8).
 
@@ -27,6 +28,7 @@ const verificar = config.auth.modo === 'dev' ? verificadorDev(sql) : verificador
 if (config.auth.modo === 'dev') console.warn('[auth] AUTH_MODE=dev: el token es el rol o el email. SOLO DESARROLLO.');
 
 const ingesta = config.mqtt.habilitado ? iniciarIngesta({ sql, config }) : null;
+const temporizador = iniciarTemporizador({ sql, config });
 if (!ingesta) console.warn('[mqtt] ingesta deshabilitada (sin MQTT_BROKER_URL)');
 
 const app = crearApp({
@@ -41,6 +43,7 @@ const server = app.listen(config.port, () => {
 
 // Apagado prolijo: deja de aceptar requests, termina el mensaje MQTT en curso y cierra la base.
 async function apagar(senal: string) {
+  temporizador.detener();
   console.info(`${senal}: cerrando…`);
   server.close();
   await ingesta?.cerrar();
