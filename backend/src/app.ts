@@ -10,6 +10,7 @@ import { rutasDispositivos } from './modulos/dispositivos/rutas.js';
 import { rutasMantenimiento } from './modulos/mantenimiento/rutas.js';
 import { rutasFallas } from './modulos/fallas/rutas.js';
 import { rutasServices } from './modulos/services/rutas.js';
+import { rutasPostergaciones } from './modulos/postergaciones/rutas.js';
 
 export const BASE = '/api/v1';
 
@@ -85,6 +86,7 @@ export function crearApp(deps: Dependencias) {
   api.use(rutasMantenimiento(deps));
   api.use(rutasFallas(deps));
   api.use(rutasServices(deps));
+  api.use(rutasPostergaciones(deps));
   app.use(BASE, api);
 
   // Cualquier ruta que no matcheó arriba: 404 con el formato del contrato.
