@@ -118,6 +118,6 @@ Las alertas se generan internamente (M4, M6, M8 disparan su creación); no hay e
 
 ## 9. Notas de diseño
 
-- **No hay endpoint de ingesta MQTT en esta API**: los dispositivos publican directo al broker (HiveMQ Cloud), no le pegan a la API REST. El módulo de ingesta (M3) es un proceso separado dentro del mismo backend que escucha el broker y escribe en la base — no expone rutas HTTP.
+- **No hay endpoint de ingesta MQTT en esta API**: los dispositivos publican directo al broker (HiveMQ CE, autoalojado en la VM del backend), no le pegan a la API REST. El módulo de ingesta (M3) es un proceso separado dentro del mismo backend que escucha el broker y escribe en la base — no expone rutas HTTP.
 - **Todas las respuestas de error** siguen el formato `{ error: { code, message } }`, con los códigos HTTP estándar (400 validación, 401 sin token, 403 rol insuficiente, 404 no encontrado, 409 conflicto de regla de negocio).
 - **Paginación**: los listados (`/unidades`, `/alertas`, historial) usan `?page=&page_size=`, default 20.

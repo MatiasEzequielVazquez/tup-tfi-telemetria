@@ -12,35 +12,44 @@
 
 ## Índice
 
-1. [Identificación de la problemática](#1-identificación-de-la-problemática)
-   - [1.1 Caso de estudio](#11-caso-de-estudio)
-   - [1.2 El problema](#12-el-problema)
-   - [1.3 Quién lo padece](#13-quién-lo-padece)
-   - [1.4 Evidencia de que el problema existe](#14-evidencia-de-que-el-problema-existe)
-   - [1.5 Qué pasa si no se resuelve](#15-qué-pasa-si-no-se-resuelve)
-   - [1.6 Por qué admite una solución tecnológica](#16-por-qué-admite-una-solución-tecnológica)
-2. [Propuesta de valor y alternativas](#2-propuesta-de-valor-y-alternativas)
-   - [2.1 Alternativas y por qué no alcanzan](#21-alternativas-y-por-qué-no-alcanzan)
-   - [2.2 Propuesta](#22-propuesta)
-3. [Actores](#3-actores)
-4. [Alcance](#4-alcance)
-   - [4.1 Alcance de la primera versión](#41-alcance-de-la-primera-versión)
-   - [4.2 Fuera de alcance](#42-fuera-de-alcance)
-5. [Requerimientos funcionales](#5-requerimientos-funcionales)
-6. [Requerimientos no funcionales](#6-requerimientos-no-funcionales)
-7. [Reglas de negocio](#7-reglas-de-negocio)
-8. [Casos de uso](#8-casos-de-uso)
-   - [8.1 Diagrama y listado](#81-diagrama-y-listado)
-   - [8.2 Casos de uso principales](#82-casos-de-uso-principales)
-9. [Plan de trabajo](#9-plan-de-trabajo)
-   - [9.1 Objetivos](#91-objetivos)
-   - [9.2 Estrategia de validación](#92-estrategia-de-validación)
-   - [9.3 Hardware](#93-hardware)
-   - [9.4 Stack de software](#94-stack-de-software)
-   - [9.5 Riesgos](#95-riesgos)
-10. [Trazabilidad entre problema y requerimientos](#10-trazabilidad-entre-problema-y-requerimientos)
-11. [Glosario](#11-glosario)
-12. [Anexo A. Ficha de la entrevista](#anexo-a-ficha-de-la-entrevista)
+- [Tecnicatura Universitaria en Programación a Distancia](#tecnicatura-universitaria-en-programación-a-distancia)
+    - [Trabajo Final Integrador](#trabajo-final-integrador)
+- [Sistema de Telemetría Vehicular para el Mantenimiento Preventivo de Flotas Mixtas](#sistema-de-telemetría-vehicular-para-el-mantenimiento-preventivo-de-flotas-mixtas)
+  - [Índice](#índice)
+  - [1. Identificación de la problemática](#1-identificación-de-la-problemática)
+    - [1.1 Caso de estudio](#11-caso-de-estudio)
+    - [1.2 El problema](#12-el-problema)
+    - [1.3 Quién lo padece](#13-quién-lo-padece)
+    - [1.4 Evidencia de que el problema existe](#14-evidencia-de-que-el-problema-existe)
+    - [1.5 Qué pasa si no se resuelve](#15-qué-pasa-si-no-se-resuelve)
+    - [1.6 Por qué admite una solución tecnológica](#16-por-qué-admite-una-solución-tecnológica)
+  - [2. Propuesta de valor y alternativas](#2-propuesta-de-valor-y-alternativas)
+    - [2.1 Alternativas y por qué no alcanzan](#21-alternativas-y-por-qué-no-alcanzan)
+    - [2.2 Propuesta](#22-propuesta)
+  - [3. Actores](#3-actores)
+  - [4. Alcance](#4-alcance)
+    - [4.1 Alcance de la primera versión](#41-alcance-de-la-primera-versión)
+    - [4.2 Fuera de alcance](#42-fuera-de-alcance)
+  - [5. Requerimientos funcionales](#5-requerimientos-funcionales)
+  - [6. Requerimientos no funcionales](#6-requerimientos-no-funcionales)
+  - [7. Reglas de negocio](#7-reglas-de-negocio)
+  - [8. Casos de uso](#8-casos-de-uso)
+    - [8.1 Diagrama y listado](#81-diagrama-y-listado)
+    - [8.2 Casos de uso principales](#82-casos-de-uso-principales)
+      - [CU06 — Transmitir lecturas](#cu06--transmitir-lecturas)
+      - [CU07 — Consultar estado de la flota](#cu07--consultar-estado-de-la-flota)
+      - [CU09 — Registrar service](#cu09--registrar-service)
+      - [CU10 — Postergar tarea](#cu10--postergar-tarea)
+      - [CU14 — Detectar dispositivos sin reportar](#cu14--detectar-dispositivos-sin-reportar)
+  - [9. Plan de trabajo](#9-plan-de-trabajo)
+    - [9.1 Objetivos](#91-objetivos)
+    - [9.2 Estrategia de validación](#92-estrategia-de-validación)
+    - [9.3 Hardware](#93-hardware)
+    - [9.4 Stack de software](#94-stack-de-software)
+    - [9.5 Riesgos](#95-riesgos)
+  - [10. Trazabilidad entre problema y requerimientos](#10-trazabilidad-entre-problema-y-requerimientos)
+  - [11. Glosario](#11-glosario)
+  - [Anexo A. Ficha de la entrevista](#anexo-a-ficha-de-la-entrevista)
 
 ---
 
@@ -229,7 +238,7 @@ El proyecto no pretende ser innovador frente a las soluciones comerciales. Su pe
 | RNF09 | Mantenibilidad | La interpretación de cada protocolo y del formato del mensaje queda aislada en el módulo de ingesta, de modo que un cambio en el firmware no afecte al resto del sistema. |
 | RNF10 | Usabilidad | El dashboard debe poder usarse desde el celular (diseño responsive), porque el responsable de mantenimiento trabaja en el taller. |
 | RNF11 | Trazabilidad | Todo service, postergación y carga manual registra el usuario y la fecha en que se realizó. |
-| RNF12 | Costo | La infraestructura del prototipo debe funcionar sobre planes gratuitos (Oracle Cloud Always Free, Supabase, HiveMQ Cloud). |
+| RNF12 | Costo | La infraestructura del prototipo debe funcionar sobre planes gratuitos (Oracle Cloud Always Free, Supabase, HiveMQ Cloud). *Implementado: Oracle Cloud Always Free, Supabase y HiveMQ CE autoalojado en la VM, porque HiveMQ Cloud dejó de ofrecer un plan gratuito.* |
 | RNF13 | Hardware | El dispositivo debe alimentarse del vehículo y admitir sistemas de 12 V y 24 V (directamente o mediante un conversor). |
 
 ## 7. Reglas de negocio
@@ -404,7 +413,7 @@ Como el equipo no tiene acceso a los camiones de la Empresa, la validación se h
 | Interfaz con el vehículo | SparkFun OBD-II UART (chip STN1110) | Hardware ya disponible en el equipo. El STN1110 es compatible con el juego de comandos del ELM327, soporta todos los protocolos OBD-II y, según su fabricante, suma soporte J1939 mejorado, 8 KB de buffer y filtros de mensajes ([comparación STN1110 vs ELM327](https://www.obdsol.com/downloads/stn1110_vs_elm327.pdf)). Se conecta al ESP32 por UART cableado. |
 | Microcontrolador | ESP32 | Conectividad, bajo costo y conocimiento previo del equipo. |
 | Conectividad | Módulo 4G | Los camiones operan fuera de redes WiFi. |
-| Mensajería | MQTT (HiveMQ Cloud) | Protocolo liviano para enlaces celulares inestables; desacopla el dispositivo del backend. |
+| Mensajería | MQTT (HiveMQ Cloud; *implementado con HiveMQ CE autoalojado*) | Protocolo liviano para enlaces celulares inestables; desacopla el dispositivo del backend. |
 
 **Alternativa evaluada:** leer el bus CAN directamente con el controlador CAN integrado del ESP32 (TWAI) y un transceptor CAN, sin interfaz OBD intermedia. Es más simple y más barata, pero se descarta para esta versión porque el equipo ya dispone de la interfaz SparkFun. Queda como opción si las pruebas muestran limitaciones del STN1110 con J1939.
 
@@ -418,11 +427,19 @@ Como el equipo no tiene acceso a los camiones de la Empresa, la validación se h
 
 | Capa | Tecnología | Framework / Herramienta | Justificación |
 |---|---|---|---|
-| Frontend | JavaScript (React) | React + librería de gráficos (Recharts / Chart.js) | Ambos integrantes lo conocen; ecosistema maduro para dashboards; permite una interfaz responsive, usable desde el celular en el taller. |
-| Backend | JavaScript (Node.js) | Express / NestJS | Unifica el lenguaje del software; su modelo de E/S no bloqueante sostiene el listener MQTT y la API REST en el mismo proceso. |
+| Frontend | JavaScript (React); *implementado en TypeScript* | React + librería de gráficos (Recharts / Chart.js); *implementado con Vite, Tailwind CSS y TanStack Query* | Ambos integrantes lo conocen; ecosistema maduro para dashboards; permite una interfaz responsive, usable desde el celular en el taller. |
+| Backend | JavaScript (Node.js); *implementado en TypeScript* | Express / NestJS; *implementado con Express 5* | Unifica el lenguaje del software; su modelo de E/S no bloqueante sostiene el listener MQTT y la API REST en el mismo proceso. |
 | Base de datos | Supabase (PostgreSQL) | Supabase SDK / Postgres + JSONB | Un motor para datos relacionales (unidades, reglas, services) y semiestructurados (lecturas), con autenticación y usuarios integrados. |
-| Mensajería IoT | MQTT | HiveMQ Cloud (plan gratuito) | Broker entre el dispositivo y el backend. |
-| Despliegue | VM Linux con Docker | Oracle Cloud Always Free (ARM) | El ingestor MQTT debe estar siempre activo; las opciones PaaS gratuitas evaluadas (Render, Railway) suspenden los procesos inactivos. |
+| Mensajería IoT | MQTT | HiveMQ Cloud (plan gratuito); *implementado con HiveMQ CE autoalojado* | Broker entre el dispositivo y el backend. |
+| Despliegue | VM Linux con Docker | Oracle Cloud Always Free (ARM); *implementado en AMD Micro* | El ingestor MQTT debe estar siempre activo; las opciones PaaS gratuitas evaluadas (Render, Railway) suspenden los procesos inactivos. |
+
+**Cambios en la implementación.** Durante el desarrollo se ajustaron tres elecciones de esta tabla, sin cambiar la arquitectura:
+
+- **Broker:** HiveMQ Cloud dejó de ofrecer un plan gratuito, lo que contradecía RNF12. Se reemplazó por HiveMQ CE (la edición open source del mismo broker) en la misma VM del backend, con TLS hacia afuera y un usuario por dispositivo con permiso solo sobre su propio topic (RNF03).
+- **VM:** no había capacidad disponible para la forma ARM (A1.Flex) en la región. Se usó la forma AMD Micro (E2.1.Micro), también Always Free, con 1 GB de RAM: alcanza con 2 GB de swap y un límite de memoria por contenedor.
+- **Lenguaje:** backend y frontend se implementaron en TypeScript en lugar de JavaScript, para compartir el tipado del contrato de la API (`docs/openapi.yaml`). El backend usa Express 5; NestJS resultaba excesivo para el tamaño de la API.
+
+El detalle está en [`docs/despliegue.md`](../despliegue.md).
 
 ### 9.5 Riesgos
 
