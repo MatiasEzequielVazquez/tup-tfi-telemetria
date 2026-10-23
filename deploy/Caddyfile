@@ -1,0 +1,18 @@
+# Un solo dominio para el dashboard y la API: el navegador no necesita CORS y todo va por HTTPS.
+{$DOMINIO} {
+	encode gzip
+
+	handle /api/* {
+		reverse_proxy api:3000
+	}
+	handle /health {
+		reverse_proxy api:3000
+	}
+
+	# Dashboard (React compilado con VITE_API_URL=/api/v1). Rutas del SPA -> index.html
+	handle {
+		root * /srv/dashboard
+		try_files {path} /index.html
+		file_server
+	}
+}
