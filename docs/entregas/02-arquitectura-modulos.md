@@ -41,6 +41,7 @@ Este documento presenta el esquema de base de datos y el listado de módulos a d
   - [3. Listado de módulos](#3-listado-de-módulos)
     - [3.1 Orden de desarrollo](#31-orden-de-desarrollo)
     - [3.2 Contrato del mensaje MQTT](#32-contrato-del-mensaje-mqtt)
+      - [Definiciones de la implementación](#definiciones-de-la-implementación)
   - [4. Trazabilidad entre requerimientos y diseño](#4-trazabilidad-entre-requerimientos-y-diseño)
 
 ---
@@ -329,6 +330,22 @@ Mensaje publicado por el dispositivo, protocolo-agnóstico (a diferencia de un c
 ```
 
 Para una unidad con protocolo `J1979`, el campo `origen` usa `{ "pid": "010C" }` en vez de `pgn`/`spn`, y el kilometraje se envía como `tipo: "km"` estimado por integración de velocidad, según lo definido en RN08. El módulo de ingesta (M3) es el único que interpreta `origen`; el resto del sistema solo usa `tipo` y `valor`. Las entradas `km` y `horas_motor` se guardan en `lecturas`; las de tipo `dtc` se registran en `fallas`. Un mensaje sin lecturas igual actualiza `dispositivos.ultima_comunicacion`, que es lo que usa el temporizador de CU14 para detectar dispositivos sin reportar.
+
+#### Definiciones de la implementación
+
+Precisiones que surgieron al implementar la ingesta (M3). **A confirmar con el firmware.**
+
+| Aspecto | Definición |
+|---|---|
+| Topic | `telemetria/<device_uid>/lecturas`. Cada dispositivo tiene un usuario propio en el broker, con permiso de publicación solo sobre su topic (RNF03). |
+| Calidad de servicio | QoS 1. El backend mantiene una sesión persistente: si está caído, el broker guarda los mensajes y los entrega al reconectar. Un duplicado de QoS 1 lo rechaza la PK de `lecturas`. |
+| Conexión | MQTT sobre TLS, puerto 8883. |
+| `timestamp` | Obligatorio, en ISO 8601 con zona horaria. Es la marca de tiempo de la lectura (RNF02). Se rechazan los mensajes con más de 10 minutos de adelanto respecto del servidor. |
+| Apertura de una falla | Un `dtc` con `"activo": true` (o sin `activo`) abre la falla si no estaba abierta. |
+| Cierre de una falla | Un `dtc` con `"activo": false` cierra la falla (RN12). Un mensaje sin `dtc` no cierra ninguna. |
+| Tipos desconocidos | Una lectura de un `tipo` no reconocido se ignora, sin descartar el resto del mensaje. |
+| Dispositivo no registrado | El mensaje se descarta. También se descartan las lecturas anteriores a la vinculación vigente. |
+| Mensajes atrasados | Una lectura enviada tarde (por ejemplo, después de estar sin señal) se procesa con su `timestamp` original y no se marca inconsistente, aunque ya haya lecturas posteriores (RN09). |
 
 ## 4. Trazabilidad entre requerimientos y diseño
 
