@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { APP_NAME } from '../config/app'
-import { AdminUnitsPage } from '../features/admin'
+import { AdminDevicesPage, AdminLayout, AdminUnitsPage } from '../features/admin'
 import { AlertsPage } from '../features/alerts'
 import { FleetPage, HistoryPage, UnitDetailPage } from '../features/fleet'
 import {
@@ -61,7 +61,10 @@ export const AppRouter = () => (
         <Route path="/alertas" element={<AlertsPage unitPath={unitPath} />} />
         <Route element={<RequireRole roles={['admin']} />}>
           <Route path="/administracion" element={<Navigate to="/administracion/unidades" replace />} />
-          <Route path="/administracion/unidades" element={<AdminUnitsPage unitPath={unitPath} />} />
+          <Route element={<AdminLayout />}>
+            <Route path="/administracion/unidades" element={<AdminUnitsPage unitPath={unitPath} />} />
+            <Route path="/administracion/dispositivos" element={<AdminDevicesPage unitPath={unitPath} />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Route>

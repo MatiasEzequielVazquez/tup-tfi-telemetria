@@ -9,6 +9,9 @@ export type AdminUnit = UnidadResumen
 /** Respuesta de alta, edición y baja de una unidad. */
 export type Unit = Complete<Schemas['Unidad']>
 
+/** Un dispositivo con su vinculación vigente (`vinculacion_actual`, o `null` si no está vinculado). */
+export type Device = Complete<Schemas['Dispositivo']>
+
 /** Cuerpo de POST /unidades. */
 export type UnitInput = Schemas['UnidadInput']
 
