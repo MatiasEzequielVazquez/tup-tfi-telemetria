@@ -91,7 +91,7 @@ const UnitDetail = ({ detalle }: { detalle: DetalleUnidad }) => {
         ) : (
           <ul className="grid gap-3">
             {planes.map((plan) => (
-              <PlanItem key={plan.codigo_tarea} plan={plan} />
+              <PlanItem key={plan.codigo_tarea} plan={plan} unidad={unidad} />
             ))}
           </ul>
         )}
