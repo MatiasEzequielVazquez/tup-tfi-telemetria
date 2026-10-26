@@ -1,7 +1,8 @@
-import { apiGet } from '../../../api/client'
-import { expectArray, expectRecord, expectString } from '../../../api/guards'
+import { apiGet, apiPost } from '../../../api/client'
+import { expectArray, expectNumber, expectRecord, expectString } from '../../../api/guards'
 import { getAllPages } from '../../../api/pagination'
-import type { DetalleUnidad, UnidadResumen } from '../../../api/types'
+import type { CargaKm, DetalleUnidad, Postergacion, Service, UnidadResumen } from '../../../api/types'
+import type { MileageInput, PostponeInput, ServiceInput } from '../types'
 import { fleetFiltersToQuery, type FleetFilters } from '../utils/filters'
 
 export interface Fleet {
@@ -43,4 +44,66 @@ export const getUnitDetail = async (
   expectArray(raw.fallas_activas, 'detalle › fallas_activas')
   if (raw.dispositivo !== null) expectRecord(raw.dispositivo, 'detalle › dispositivo')
   return raw as unknown as DetalleUnidad
+}
+
+/** POST /unidades/{patente}/kilometraje — carga manual (RF06). Devuelve la carga registrada. */
+export const loadMileage = async (
+  patente: string,
+  input: MileageInput,
+  signal?: AbortSignal,
+): Promise<CargaKm> => {
+  const raw = expectRecord(
+    await apiPost<unknown>('/unidades/{patente}/kilometraje', {
+      pathParams: { patente },
+      body: input,
+      signal,
+    }),
+    'POST /unidades/{patente}/kilometraje',
+  )
+  expectNumber(raw.km, 'carga › km')
+  return raw as unknown as CargaKm
+}
+
+/**
+ * POST /unidades/{patente}/planes/{codigo_tarea}/postergaciones — posterga una tarea (RF10,
+ * RN07). Devuelve la postergación registrada.
+ */
+export const postponeTask = async (
+  patente: string,
+  codigoTarea: string,
+  input: PostponeInput,
+  signal?: AbortSignal,
+): Promise<Postergacion> => {
+  const raw = expectRecord(
+    await apiPost<unknown>('/unidades/{patente}/planes/{codigo_tarea}/postergaciones', {
+      pathParams: { patente, codigo_tarea: codigoTarea },
+      body: input,
+      signal,
+    }),
+    'POST /unidades/{patente}/planes/{codigo_tarea}/postergaciones',
+  )
+  expectNumber(raw.km_limite_nuevo, 'postergación › km_limite_nuevo')
+  return raw as unknown as Postergacion
+}
+
+/**
+ * POST /unidades/{patente}/services — registra un service (RF09, RN06). Devuelve el service
+ * registrado, con sus tareas.
+ */
+export const registerService = async (
+  patente: string,
+  input: ServiceInput,
+  signal?: AbortSignal,
+): Promise<Service> => {
+  const raw = expectRecord(
+    await apiPost<unknown>('/unidades/{patente}/services', {
+      pathParams: { patente },
+      body: input,
+      signal,
+    }),
+    'POST /unidades/{patente}/services',
+  )
+  expectString(raw.fecha, 'service › fecha')
+  expectArray(raw.tareas, 'service › tareas')
+  return raw as unknown as Service
 }

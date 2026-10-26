@@ -1,3 +1,4 @@
+import type { DetalleUnidad } from '../../../api/types'
 import Card from '../../../shared/components/ui/Card'
 import Dato from '../../../shared/components/ui/Dato'
 import StatusBadge from '../../../shared/components/ui/StatusBadge'
@@ -5,9 +6,18 @@ import type { Plan } from '../types'
 import { formatDateTime } from '../../../shared/utils/formatDate'
 import { formatKm } from '../utils/format'
 import { estadoPlanInfo, MOTIVO_LABEL } from '../utils/statusLabels'
+import PostponeAction from './PostponeAction'
 
-/** Una tarea del plan de mantenimiento, con el estado y los km que calcula la API. */
-const PlanItem = ({ plan }: { plan: Plan }) => {
+interface PlanItemProps {
+  plan: Plan
+  unidad: DetalleUnidad['unidad']
+}
+
+/**
+ * Una tarea del plan de mantenimiento, con el estado y los km que calcula la API, y la acción
+ * de postergarla (CU10) cuando corresponde.
+ */
+const PlanItem = ({ plan, unidad }: PlanItemProps) => {
   const postergacion = plan.postergacion_vigente
   const kmRestantes =
     plan.km_restantes < 0
@@ -35,6 +45,7 @@ const PlanItem = ({ plan }: { plan: Plan }) => {
           Registrada el {formatDateTime(postergacion.fecha)} por {postergacion.email_usuario}.
         </p>
       )}
+      <PostponeAction plan={plan} unidad={unidad} />
     </Card>
   )
 }

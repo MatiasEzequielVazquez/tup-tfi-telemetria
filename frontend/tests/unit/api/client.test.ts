@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   ApiError,
   apiGet,
+  apiPost,
   buildUrl,
   setAccessTokenProvider,
   setUnauthorizedHandler,
@@ -43,6 +44,47 @@ describe('buildUrl', () => {
   it('falla de forma explícita si falta VITE_API_URL', () => {
     vi.stubEnv('VITE_API_URL', '')
     expect(() => buildUrl('/me')).toThrowError(/VITE_API_URL/)
+  })
+})
+
+describe('apiPost', () => {
+  it('envía el cuerpo como JSON, con los parámetros de ruta codificados, y devuelve la respuesta', async () => {
+    const creado = { patente: 'AB123CD', km: 415200 }
+    fetchMock.mockResolvedValue(jsonResponse(creado, { status: 201 }))
+
+    const result = await apiPost('/unidades/{patente}/kilometraje', {
+      pathParams: { patente: 'AB 123' },
+      body: { km: 415200 },
+    })
+
+    const [url, init] = fetchMock.mock.calls[0]
+    const headers = init?.headers as Headers
+    expect(url).toBe(`${BASE}/unidades/AB%20123/kilometraje`)
+    expect(init?.method).toBe('POST')
+    expect(init?.body).toBe('{"km":415200}')
+    expect(headers.get('Content-Type')).toBe('application/json')
+    expect(result).toEqual(creado)
+  })
+
+  it('conserva el mensaje del servidor cuando rechaza la operación (409)', async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse(
+        { error: { code: 'conflicto', message: 'El kilometraje no puede disminuir (RN09): el actual es 415000.' } },
+        { status: 409 },
+      ),
+    )
+
+    const error = await apiPost('/unidades/{patente}/kilometraje', {
+      pathParams: { patente: 'AB123CD' },
+      body: { km: 100 },
+    }).catch((e: unknown) => e)
+
+    expect(error).toMatchObject({
+      kind: 'http',
+      status: 409,
+      code: 'conflicto',
+      message: expect.stringContaining('RN09'),
+    })
   })
 })
 
