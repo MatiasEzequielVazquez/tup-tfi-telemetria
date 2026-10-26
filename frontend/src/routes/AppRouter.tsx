@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { APP_NAME } from '../config/app'
 import { AlertsPage } from '../features/alerts'
-import { FleetPage, UnitDetailPage } from '../features/fleet'
+import { FleetPage, HistoryPage, UnitDetailPage } from '../features/fleet'
 import { LOGIN_PATH, LoginPage, RequireSession, SessionBanner, SessionPanel } from '../features/session'
 import AppLayout, { type NavItem } from '../shared/components/layout/AppLayout'
 import NotFoundPage from './NotFoundPage'
@@ -37,6 +37,7 @@ export const AppRouter = () => (
         <Route path="/" element={<Navigate to="/unidades" replace />} />
         <Route path="/unidades" element={<FleetPage />} />
         <Route path="/unidades/:patente" element={<UnitDetailPage />} />
+        <Route path="/unidades/:patente/historial" element={<HistoryPage />} />
         <Route path="/alertas" element={<AlertsPage unitPath={unitPath} />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
