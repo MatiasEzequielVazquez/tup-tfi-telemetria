@@ -205,6 +205,10 @@ export function apiGet<T>(path: ApiPath, options: RequestOptions = {}): Promise<
   return apiRequest<T>('GET', path, options)
 }
 
+export function apiPost<T>(path: ApiPath, options: RequestOptions = {}): Promise<T> {
+  return apiRequest<T>('POST', path, options)
+}
+
 export function apiPatch<T>(path: ApiPath, options: RequestOptions = {}): Promise<T> {
   return apiRequest<T>('PATCH', path, options)
 }
