@@ -8,8 +8,10 @@ info:
     **Autenticación.** El login lo hace el frontend directo contra Supabase Auth (RF01); no hay endpoint de login.
     Cada request lleva `Authorization: Bearer <JWT de Supabase>`. El backend resuelve el rol en `usuarios.rol` (RN11).
 
-    **Mock.** `mock/server.js` implementa este contrato. Ahí el token se interpreta como rol:
-    `Bearer admin` o `Bearer mantenimiento`; cualquier otro valor se trata como admin.
+    **Implementaciones.** El backend (`backend/`) implementa este contrato; `mock/server.js` lo simula para
+    desarrollar el frontend sin backend. En ambos, el token `Bearer admin` o `Bearer mantenimiento` se interpreta
+    como rol (el backend solo con `AUTH_MODE=dev`, nunca en producción). Con cualquier otro valor, el mock responde
+    como admin y el backend en modo `supabase` valida el token contra Supabase Auth.
 
     **Convenciones.**
     - Fechas: ISO 8601 en UTC (`timestamptz`). `services.fecha` es solo fecha (`YYYY-MM-DD`).
@@ -21,7 +23,9 @@ info:
 
 servers:
   - url: http://localhost:3000/api/v1
-    description: Mock local (`node mock/server.js`) o backend en desarrollo
+    description: Backend en desarrollo o mock local (`node mock/server.js`)
+  - url: https://157-151-13-187.sslip.io/api/v1
+    description: Producción (el dashboard la consume con la ruta relativa `/api/v1`)
 security:
   - bearerAuth: []
 tags:
