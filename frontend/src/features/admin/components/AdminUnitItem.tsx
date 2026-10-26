@@ -54,6 +54,13 @@ const AdminUnitItem = ({ unit, unitPath, onDone }: AdminUnitItemProps) => {
 
       {unit.activa && (
         <div className="flex flex-wrap gap-3">
+          <Link
+            to={`/administracion/unidades/${encodeURIComponent(unit.patente)}/plan`}
+            aria-label={`Plan de mantenimiento de ${unit.patente}`}
+            className="inline-flex min-h-11 items-center rounded-lg border border-muted bg-surface px-4 font-semibold text-fg hover:bg-neutral-bg"
+          >
+            Plan de mantenimiento
+          </Link>
           <Button variant="secondary" aria-label={`Editar ${unit.patente}`} onClick={() => setEditing(true)}>
             Editar
           </Button>

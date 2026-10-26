@@ -5,7 +5,7 @@ import SelectField from '../../../shared/components/ui/SelectField'
 import TextField from '../../../shared/components/ui/TextField'
 import { usePostponeTask } from '../hooks/usePostponeTask'
 import type { Plan } from '../types'
-import { formatKm } from '../utils/format'
+import { formatKm } from '../../../shared/utils/formatKm'
 import {
   buildPostponeBody,
   MAX_DESCRIPTION_LENGTH,

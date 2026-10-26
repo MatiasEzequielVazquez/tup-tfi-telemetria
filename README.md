@@ -119,5 +119,5 @@ Ver [`docs/despliegue.md`](docs/despliegue.md).
 | Base de datos | Esquema y datos de ejemplo aplicados en Supabase |
 | Backend | Completo: API REST (M1, M2, M4–M7, M9), ingesta MQTT (M3) y temporizador (M8). 39 tests. Desplegado en producción. |
 | Infraestructura | VM de Oracle con HiveMQ CE (TLS y usuarios por dispositivo), Caddy con HTTPS y renovación automática de certificados |
-| Frontend | Login con Supabase Auth, flota, detalle de unidad y alertas. Carga manual de kilometraje, postergación de tareas, registro de services, historial de mantenimiento y administración de unidades y dispositivos. Pendiente: administración de planes de mantenimiento y usuarios |
+| Frontend | Login con Supabase Auth, flota, detalle de unidad y alertas. Carga manual de kilometraje, postergación de tareas, registro de services, historial de mantenimiento y administración de unidades, dispositivos, catálogo de tareas y planes de mantenimiento. Pendiente: administración de usuarios |
 | Firmware | Pendiente |

@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router'
 const SECTIONS = [
   { to: '/administracion/unidades', label: 'Unidades' },
   { to: '/administracion/dispositivos', label: 'Dispositivos' },
+  { to: '/administracion/catalogo', label: 'Catálogo' },
 ]
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>

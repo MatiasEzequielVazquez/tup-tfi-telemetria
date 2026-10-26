@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { DetalleUnidad } from '../../../api/types'
 import Button from '../../../shared/components/ui/Button'
 import Dialog from '../../../shared/components/ui/Dialog'
-import { formatKm } from '../utils/format'
+import { formatKm } from '../../../shared/utils/formatKm'
 import { canLoadMileage } from '../utils/mileage'
 import MileageForm from './MileageForm'
 

@@ -1,6 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { APP_NAME } from '../config/app'
-import { AdminDevicesPage, AdminLayout, AdminUnitsPage } from '../features/admin'
+import {
+  AdminCatalogPage,
+  AdminDevicesPage,
+  AdminLayout,
+  AdminUnitPlanPage,
+  AdminUnitsPage,
+} from '../features/admin'
 import { AlertsPage } from '../features/alerts'
 import { FleetPage, HistoryPage, UnitDetailPage } from '../features/fleet'
 import {
@@ -63,7 +69,9 @@ export const AppRouter = () => (
           <Route path="/administracion" element={<Navigate to="/administracion/unidades" replace />} />
           <Route element={<AdminLayout />}>
             <Route path="/administracion/unidades" element={<AdminUnitsPage unitPath={unitPath} />} />
+            <Route path="/administracion/unidades/:patente/plan" element={<AdminUnitPlanPage />} />
             <Route path="/administracion/dispositivos" element={<AdminDevicesPage unitPath={unitPath} />} />
+            <Route path="/administracion/catalogo" element={<AdminCatalogPage />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFoundPage />} />

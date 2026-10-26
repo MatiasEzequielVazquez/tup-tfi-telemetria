@@ -2,7 +2,7 @@ import type { Service } from '../../../api/types'
 import Card from '../../../shared/components/ui/Card'
 import Dato from '../../../shared/components/ui/Dato'
 import { formatDateOnly } from '../../../shared/utils/formatDate'
-import { formatKm } from '../utils/format'
+import { formatKm } from '../../../shared/utils/formatKm'
 
 /** Un service del historial: día, km, tareas cubiertas, observaciones y quién lo registró. */
 const ServiceHistoryItem = ({ service }: { service: Service }) => (
