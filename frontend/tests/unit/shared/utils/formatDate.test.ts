@@ -1,5 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { formatDate, formatDateOnly, formatDateTime } from '../../../../src/shared/utils/formatDate'
+import {
+  formatDate,
+  formatDateOnly,
+  formatDateTime,
+  todayDateOnly,
+} from '../../../../src/shared/utils/formatDate'
+
+describe('todayDateOnly', () => {
+  it('da el día en Buenos Aires, no el UTC', () => {
+    // 02:00 UTC del 8 de octubre son las 23:00 del 7 en Buenos Aires.
+    expect(todayDateOnly(new Date('2026-10-08T02:00:00Z'))).toBe('2026-10-07')
+    expect(todayDateOnly(new Date('2026-10-08T03:00:00Z'))).toBe('2026-10-08')
+  })
+})
 
 // Los nombres de mes abreviados dependen de los datos de ICU del entorno ("oct" u "oct."),
 // así que se compara con una expresión que admite ambos.

@@ -19,6 +19,19 @@ export const formatDate = (iso: string): string => {
   return Number.isNaN(date.getTime()) ? iso : dateFormatter.format(date)
 }
 
+const todayParts = new Intl.DateTimeFormat('en-US', {
+  timeZone: TIME_ZONE,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+})
+
+/** El día de hoy en Buenos Aires como `YYYY-MM-DD`, sin depender de la zona del navegador. */
+export const todayDateOnly = (now: Date = new Date()): string => {
+  const part = (type: string) => todayParts.formatToParts(now).find((p) => p.type === type)?.value ?? ''
+  return `${part('year')}-${part('month')}-${part('day')}`
+}
+
 // Una fecha sin hora (`YYYY-MM-DD`, como `services.fecha`) es un día de calendario, no un
 // instante: pasarla por `formatDate` la tomaría como medianoche UTC y en Buenos Aires
 // (UTC-3) se vería el día anterior. Se formatea en UTC para que el día no se corra.
