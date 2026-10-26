@@ -1,15 +1,16 @@
 # Frontend — Telemetría de flota
 
-Dashboard web (React + Vite + TypeScript + Tailwind CSS), organizado por funcionalidad (*feature-based*). Está conectado por HTTP a la API mock y permite consultar y filtrar la flota, ver el detalle de cada unidad y revisar alertas. El resto de las pantallas de [`docs/prototipo-frontend.md`](../docs/prototipo-frontend.md) se agrega sobre esta base.
+Dashboard web (React + Vite + TypeScript + Tailwind CSS), organizado por funcionalidad (*feature-based*). Se conecta por HTTP a la API (el backend o el mock), inicia sesión con Supabase Auth y permite consultar y filtrar la flota, ver el detalle de cada unidad y revisar alertas. El resto de las pantallas de [`docs/prototipo-frontend.md`](../docs/prototipo-frontend.md) se agrega sobre esta base.
 
 ## Qué incluye y qué no
 
 | Incluye | No incluye todavía |
 |---|---|
-| **Flota** con filtros por tenencia, estado y situación (activas / dadas de baja), guardados en la URL | Login real con Supabase Auth |
+| **Login** con Supabase Auth (correo y contraseña), rutas protegidas y cierre de sesión | Recuperar o cambiar la contraseña (se gestiona desde Supabase) |
+| **Flota** con filtros por tenencia, estado y situación (activas / dadas de baja), guardados en la URL | |
 | **Detalle de unidad** (`GET /unidades/{patente}/detalle`), que vuelve al listado con sus filtros | Formularios de service y postergación |
 | **Alertas**: listado con filtros y paginación, y acción "Marcar como revisada" | Carga manual de kilometraje |
-| Usuario actual (`GET /me`) y selector de rol **simulado** | Historial de mantenimiento y pantallas de administración |
+| Usuario actual (`GET /me`); en desarrollo, selector de rol **simulado** | Historial de mantenimiento y pantallas de administración |
 | Reintento que recupera la pantalla **y** la sesión del encabezado | |
 
 ## Requisitos
@@ -56,8 +57,19 @@ cp .env.example .env        # en PowerShell: Copy-Item .env.example .env
 | Variable | Valor inicial | Descripción |
 |---|---|---|
 | `VITE_API_URL` | `http://localhost:3000/api/v1` | URL base de la API, con el prefijo `/api/v1`. |
+| `VITE_AUTH_MODE` | `dev` en desarrollo, `supabase` en el build de producción | Origen de la sesión: `dev` (rol simulado) o `supabase` (login real). |
+| `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` | — | Proyecto de Supabase (Project Settings → API). Obligatorias con `VITE_AUTH_MODE=supabase`. La clave anon es pública por diseño; nunca usar la `service_role`. |
 
 `.env` no se versiona. Si se cambia, hay que reiniciar Vite. Apuntar a otro backend no requiere tocar las pantallas.
+
+### Modos de sesión
+
+| Modo | Cuándo | Cómo funciona |
+|---|---|---|
+| `dev` | Desarrollo contra el mock o contra un backend con `AUTH_MODE=dev` | No hay login: el token es el rol elegido en el selector "Rol simulado". Se muestra un aviso en el encabezado. **Está prohibido en el build de producción** (la aplicación muestra "Configuración incompleta"), igual que en el backend. |
+| `supabase` | Producción, o desarrollo contra un backend con `AUTH_MODE=supabase` | Pantalla de login; la sesión se guarda en el navegador y se renueva sola. El usuario tiene que existir también en la tabla `usuarios` del backend: si no, la API responde 403 `usuario_no_habilitado` y se informa "Acceso no habilitado". Si la API rechaza el token (401), se cierra la sesión y se vuelve al login. |
+
+Si falta alguna variable o el modo es inválido, la aplicación no arranca: muestra qué falta en pantalla.
 
 **4. Iniciar Vite** (terminal 2) — desde `frontend/`:
 
@@ -85,6 +97,7 @@ Los filtros viven en los parámetros de la URL: se conservan al recargar, al com
 
 | Ruta | Pantalla | Parámetros |
 |---|---|---|
+| `/login` | Inicio de sesión (el resto de las rutas exige sesión) | — |
 | `/` | Redirige a `/unidades` | — |
 | `/unidades` | Flota | `tenencia`, `estado`, `activa` |
 | `/unidades/:patente` | Detalle de unidad | — |
@@ -120,11 +133,11 @@ frontend/
 ├── index.html  package.json  vite.config.ts  tsconfig*.json  .oxlintrc.json  .env.example
 ├── tests/unit/                     # espejo de src/; no entra al build
 └── src/
-    ├── main.tsx                    # arranque: QueryClientProvider, css y token de sesión
+    ├── main.tsx                    # arranque: sesión, QueryClientProvider y css
     ├── App.tsx                     # BrowserRouter + AppRouter
-    ├── config/app.ts               # configuración de la app (nombre)
+    ├── config/                     # app.ts (nombre) y auth.ts (modo de sesión y Supabase)
     ├── api/                        # infraestructura HTTP, sin dependencias hacia arriba
-    │   ├── client.ts               #   cliente HTTP: URL base, token, GET/PATCH, errores, AbortSignal
+    │   ├── client.ts               #   cliente HTTP: URL base, token, 401, GET/PATCH, errores, AbortSignal
     │   ├── pagination.ts           #   listados paginados: una página o todas, con los mismos filtros
     │   ├── guards.ts               #   comprobaciones mínimas de forma de las respuestas
     │   ├── types.ts                #   alias de los tipos generados (sin redefinir entidades)
@@ -134,14 +147,14 @@ frontend/
     │   └── NotFoundPage.tsx
     ├── shared/                     # código sin conocimiento del dominio
     │   ├── components/             #   layout/AppLayout, ErrorBoundary, ui/ (Card, Dato, Button,
-    │   │                           #   SelectField, StatusBadge, LoaderSpinner, ErrorPanel)
+    │   │                           #   SelectField, TextField, StatusBadge, LoaderSpinner, ErrorPanel)
     │   ├── hooks/                  #   useDocumentTitle, useRetryFailedQueries
     │   ├── navigation/returnTarget.ts   # destino de regreso entre pantallas
     │   └── utils/formatDate.ts
     ├── features/
     │   ├── fleet/                  # flota: listado con filtros y detalle de unidad
     │   ├── alerts/                 # alertas: listado, filtros, paginación y revisión
-    │   └── session/                # usuario actual y sesión simulada de desarrollo
+    │   └── session/                # login, sesión (Supabase o simulada) y usuario actual
     └── css/main.css                # Tailwind + colores de diseño + foco
 ```
 
@@ -153,7 +166,7 @@ Cada feature tiene `index.ts` (API pública), `pages/`, `components/`, `hooks/`,
 |---|---|---|
 | `fleet` | Muestra la flota (con filtros) y el detalle de una unidad con lo que calcula la API. Es la única que conoce los endpoints `/unidades` para mostrar unidades. | No recalcula reglas de mantenimiento. No sabe quién es el usuario ni cómo se obtiene el token. No conoce las alertas. |
 | `alerts` | Lista y filtra alertas, pagina y marca alertas como revisadas (`/alertas`, `/alertas/revisar`). | No importa nada de `fleet`: la ruta al detalle de una unidad se la entrega `routes/AppRouter` por props. No decide qué rol puede revisar (lo resuelve la API). |
-| `session` | Obtiene el usuario actual (`/me`) y encapsula la **sesión simulada** (rol → token). Expone el proveedor de token que `main.tsx` registra en el cliente HTTP. | No implementa login real. |
+| `session` | Inicia y cierra la sesión (Supabase Auth, o la **simulada** en desarrollo), protege las rutas y obtiene el usuario actual (`/me`). `initSession()` conecta el token y el manejo del 401 con el cliente HTTP. | No decide qué puede hacer cada rol: lo resuelve la API (RN11). No guarda datos de dominio. |
 
 Dentro de cada feature, el flujo es: **página** → **hook** (TanStack Query / mutación) → **servicio** (función que llama a `api/client.ts`, sin React) → HTTP. Las páginas componen; los componentes presentan.
 
@@ -190,7 +203,7 @@ Las reglas 1–3 y 5 las comprueba `npm run lint` (`import/no-cycle` y `no-restr
 | Un área distinta (p. ej. administración de usuarios) | Una feature nueva `features/<nombre>/` con su `index.ts`, su bloque en `.oxlintrc.json` y su ruta en `routes/AppRouter.tsx` |
 | Un endpoint nuevo | Una función en el `services/` de la feature que lo usa; el contrato se regenera con `npm run api:types` |
 | Un componente visual sin dominio que usan varias features | `shared/components/ui/` |
-| Login real con Supabase Auth | Reemplazar la feature `session` y la línea `setAccessTokenProvider(...)` de `src/main.tsx` |
+| Otro origen de sesión | Una implementación de `AuthSession` (`features/session/types.ts`) en `features/session/services/` y su caso en `authSession.ts` |
 | Una prueba | `tests/unit/<misma ruta que en src/>/…test.ts` |
 
 ## Estilos: Tailwind CSS
@@ -206,7 +219,7 @@ Las reglas 1–3 y 5 las comprueba `npm run lint` (`import/no-cycle` y `no-restr
 - **El mock es un proceso separado.** El frontend obtiene los datos solo por HTTP; no importa `mock/data/db.json`. El contrato vive en `docs/openapi.yaml` y el mock en `mock/`: no hay copias en `frontend/`.
 - **Las escrituras del mock viven en memoria.** Marcar una alerta como revisada cambia lo que devuelven los GET siguientes hasta que se reinicia el mock o se llama a `POST /__mock/reset`.
 - **El dataset tiene fecha de referencia fija (7/10/2026).** Las fechas no avanzan solas; por eso la interfaz muestra fechas absolutas y no "hace N días".
-- **Sesión simulada, no autenticación.** El mock lee el header `Authorization: Bearer admin` o `Bearer mantenimiento` como si fuera el rol. El selector "Rol simulado" cambia ese valor, descarta lo cacheado y vuelve a pedir los datos. **No hay login real.** Ambos roles pueden revisar alertas (el contrato no lo restringe).
+- **Sesión: Supabase o simulada.** Ver [Modos de sesión](#modos-de-sesión). Con Supabase se usa `@supabase/auth-js` (el paquete de autenticación del que depende `supabase-js`) y no `supabase-js` completo: el dashboard solo inicia sesión y los datos pasan por la API propia, lo que ahorra unos 115 kB del build. Al cerrar sesión (o al perderla) se descarta todo lo cacheado, para que otro usuario no vea datos del anterior. La sesión simulada (`dev`) lee el header `Authorization: Bearer admin` o `Bearer mantenimiento` como si fuera el rol; el selector "Rol simulado" cambia ese valor y vuelve a pedir los datos. Ambos roles pueden revisar alertas (el contrato no lo restringe).
 - **Paginación de la flota.** `GET /unidades` es paginado (máximo 100 por página). `getFleet` pide páginas de 100 hasta reunir el `total` que informa la API, **enviando los mismos filtros en cada página**, de modo que nunca se muestra una página parcial como si fuera el resultado. Si la API devolviera menos unidades que su `total`, se muestra un error. El conteo en pantalla es el del resultado filtrado.
 - **Paginación de alertas.** Se muestra una página de 20 a la vez con "Anterior / Siguiente" y la posición ("Página X de Y"); el total es el de todo el resultado filtrado. Si tras revisar una alerta el total baja y la página queda fuera de rango, se vuelve a la última página.
 - **Sin datos del filtro anterior.** Los filtros forman parte de la clave de cada consulta y no se reutilizan datos de otra combinación: al cambiar de filtro se ve "Cargando…", no el resultado previo.
