@@ -6,6 +6,9 @@ export type Plan = DetalleUnidad['planes'][number]
 export type Falla = DetalleUnidad['fallas_activas'][number]
 export type Dispositivo = DetalleUnidad['dispositivo']
 
+/** Cuerpo de POST /unidades/{patente}/services. */
+export type ServiceInput = components['schemas']['ServiceInput']
+
 /** Cuerpo de POST /unidades/{patente}/planes/{codigo_tarea}/postergaciones. */
 export type PostponeInput = components['schemas']['PostergacionInput']
 

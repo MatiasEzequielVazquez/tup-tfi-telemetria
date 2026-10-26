@@ -1,8 +1,8 @@
 import { apiGet, apiPost } from '../../../api/client'
 import { expectArray, expectNumber, expectRecord, expectString } from '../../../api/guards'
 import { getAllPages } from '../../../api/pagination'
-import type { CargaKm, DetalleUnidad, Postergacion, UnidadResumen } from '../../../api/types'
-import type { MileageInput, PostponeInput } from '../types'
+import type { CargaKm, DetalleUnidad, Postergacion, Service, UnidadResumen } from '../../../api/types'
+import type { MileageInput, PostponeInput, ServiceInput } from '../types'
 import { fleetFiltersToQuery, type FleetFilters } from '../utils/filters'
 
 export interface Fleet {
@@ -84,4 +84,26 @@ export const postponeTask = async (
   )
   expectNumber(raw.km_limite_nuevo, 'postergación › km_limite_nuevo')
   return raw as unknown as Postergacion
+}
+
+/**
+ * POST /unidades/{patente}/services — registra un service (RF09, RN06). Devuelve el service
+ * registrado, con sus tareas.
+ */
+export const registerService = async (
+  patente: string,
+  input: ServiceInput,
+  signal?: AbortSignal,
+): Promise<Service> => {
+  const raw = expectRecord(
+    await apiPost<unknown>('/unidades/{patente}/services', {
+      pathParams: { patente },
+      body: input,
+      signal,
+    }),
+    'POST /unidades/{patente}/services',
+  )
+  expectString(raw.fecha, 'service › fecha')
+  expectArray(raw.tareas, 'service › tareas')
+  return raw as unknown as Service
 }

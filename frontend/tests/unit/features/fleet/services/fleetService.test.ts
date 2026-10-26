@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ApiError } from '../../../../../src/api/client'
-import { getFleet, getUnitDetail, loadMileage, postponeTask } from '../../../../../src/features/fleet/services/fleetService'
+import { getFleet, getUnitDetail, loadMileage, postponeTask, registerService } from '../../../../../src/features/fleet/services/fleetService'
 import { DEFAULT_FLEET_FILTERS } from '../../../../../src/features/fleet/utils/filters'
 
 const unidad = (patente: string) => ({
@@ -180,5 +180,67 @@ describe('postponeTask', () => {
     await expect(
       postponeTask('KX324HU', 'ACEITE_MOTOR', { motivo: 'falta_espacio', km_limite_nuevo: 1 }),
     ).rejects.toMatchObject({ kind: 'invalid-response' })
+  })
+})
+
+describe('registerService', () => {
+  it('registra el service de la unidad y devuelve el registrado, con sus tareas', async () => {
+    const service = {
+      patente: 'KX324HU',
+      fecha: '2026-10-07',
+      km: 415200,
+      observaciones: 'Sin novedades',
+      tareas: [{ codigo_tarea: 'ACEITE_MOTOR', nombre: 'Cambio de aceite de motor' }],
+    }
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify(service), { status: 201, headers: { 'Content-Type': 'application/json' } }),
+    )
+
+    const result = await registerService('KX324HU', {
+      fecha: '2026-10-07',
+      km: 415200,
+      observaciones: 'Sin novedades',
+      tareas: ['ACEITE_MOTOR'],
+    })
+
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(new URL(String(url)).pathname).toBe('/api/v1/unidades/KX324HU/services')
+    expect(init?.method).toBe('POST')
+    expect(JSON.parse(String(init?.body))).toEqual({
+      fecha: '2026-10-07',
+      km: 415200,
+      observaciones: 'Sin novedades',
+      tareas: ['ACEITE_MOTOR'],
+    })
+    expect(result).toEqual(service)
+  })
+
+  it('conserva el mensaje del servidor si ya hay un service ese día (409)', async () => {
+    fetchMock.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          error: { code: 'conflicto', message: 'Ya hay un service registrado para esa unidad en esa fecha.' },
+        }),
+        { status: 409, headers: { 'Content-Type': 'application/json' } },
+      ),
+    )
+
+    await expect(registerService('KX324HU', { km: 1, tareas: ['ACEITE_MOTOR'] })).rejects.toMatchObject({
+      status: 409,
+      code: 'conflicto',
+      message: expect.stringContaining('Ya hay un service'),
+    })
+  })
+
+  it('rechaza una respuesta sin fecha o sin lista de tareas', async () => {
+    fetchMock.mockResolvedValueOnce(json({ patente: 'KX324HU', tareas: [] }))
+    await expect(registerService('KX324HU', { km: 1, tareas: ['A'] })).rejects.toMatchObject({
+      kind: 'invalid-response',
+    })
+
+    fetchMock.mockResolvedValueOnce(json({ patente: 'KX324HU', fecha: '2026-10-07' }))
+    await expect(registerService('KX324HU', { km: 1, tareas: ['A'] })).rejects.toMatchObject({
+      kind: 'invalid-response',
+    })
   })
 })
