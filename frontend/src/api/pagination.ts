@@ -14,6 +14,8 @@ export interface PageResult<T> {
 interface PageOptions {
   /** Texto para los mensajes de error, ej. "GET /unidades". */
   label: string
+  /** Parámetros de ruta, para listados de una entidad (`/unidades/{patente}/services`). */
+  pathParams?: RequestOptions['pathParams']
   query?: RequestOptions['query']
   signal?: AbortSignal
   /** Comprobación mínima de cada elemento; debe lanzar si no tiene la forma esperada. */
@@ -43,6 +45,7 @@ export const getPage = async <T>(
   options: PageOptions & { page: number; pageSize: number },
 ): Promise<PageResult<T>> => {
   const raw = await apiGet<unknown>(path, {
+    pathParams: options.pathParams,
     query: { ...options.query, page: options.page, page_size: options.pageSize },
     signal: options.signal,
   })
