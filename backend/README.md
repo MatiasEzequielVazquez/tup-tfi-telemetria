@@ -61,7 +61,7 @@ Verificación: `GET http://localhost:3000/health` devuelve `{"status":"ok","db":
 | Variable | Por defecto | Descripción |
 |---|---|---|
 | `DATABASE_URL` | — | Cadena de conexión. En Supabase, el **Session pooler** con `?sslmode=require`. |
-| `AUTH_MODE` | `dev` (`supabase` si `NODE_ENV=production`) | `supabase` valida el token contra Supabase Auth. `dev` acepta `Bearer admin`, `Bearer mantenimiento` o `Bearer <email>`. `dev` está prohibido con `NODE_ENV=production`. |con `NODE_ENV=production`. |
+| `AUTH_MODE` | `dev` (`supabase` si `NODE_ENV=production`) | `supabase` valida el token contra Supabase Auth. `dev` acepta `Bearer admin`, `Bearer mantenimiento` o `Bearer <email>`. `dev` está prohibido con `NODE_ENV=production`. |
 | `SUPABASE_URL`, `SUPABASE_ANON_KEY` | — | Project Settings → API. Obligatorias con `AUTH_MODE=supabase`. |
 | `AUTH_CACHE_SEGUNDOS` | `60` | Tiempo que se recuerda un token ya validado. |
 | `MQTT_BROKER_URL` | — | Sin valor, la ingesta queda deshabilitada (la API funciona igual). |

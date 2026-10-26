@@ -43,7 +43,8 @@ export function invalidResponse(message: string): ApiError {
 
 // ---------- sesión ----------
 
-type AccessTokenProvider = () => string | null
+/** Puede ser asíncrono: una sesión real renueva el token vencido antes de devolverlo. */
+type AccessTokenProvider = () => string | null | Promise<string | null>
 
 let accessTokenProvider: AccessTokenProvider = () => null
 
@@ -53,6 +54,19 @@ let accessTokenProvider: AccessTokenProvider = () => null
  */
 export function setAccessTokenProvider(provider: AccessTokenProvider): void {
   accessTokenProvider = provider
+}
+
+/** Recibe el token con el que la API respondió 401, para que la sesión decida qué hacer. */
+type UnauthorizedHandler = (token: string) => void
+
+let unauthorizedHandler: UnauthorizedHandler = () => {}
+
+/**
+ * Registra qué hacer cuando la API rechaza el token enviado (HTTP 401). Se configura junto
+ * con el proveedor de token; el cliente no sabe qué implica cerrar la sesión.
+ */
+export function setUnauthorizedHandler(handler: UnauthorizedHandler): void {
+  unauthorizedHandler = handler
 }
 
 // ---------- URL ----------
@@ -137,7 +151,7 @@ export async function apiRequest<T>(
   const url = buildUrl(path, options)
 
   const headers = new Headers({ Accept: 'application/json' })
-  const token = accessTokenProvider()
+  const token = await accessTokenProvider()
   if (token) headers.set('Authorization', `Bearer ${token}`)
 
   let body: string | undefined
@@ -169,6 +183,7 @@ export async function apiRequest<T>(
   }
 
   if (!response.ok) {
+    if (response.status === 401 && token) unauthorizedHandler(token)
     const apiError = readErrorBody(parsed)
     if (apiError) {
       throw new ApiError('http', apiError.message, { status: response.status, code: apiError.code })

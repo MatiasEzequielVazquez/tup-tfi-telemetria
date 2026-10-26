@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import { APP_NAME } from '../config/app'
 import { AlertsPage } from '../features/alerts'
 import { FleetPage, UnitDetailPage } from '../features/fleet'
-import { SessionBanner, SessionPanel } from '../features/session'
+import { LOGIN_PATH, LoginPage, RequireSession, SessionBanner, SessionPanel } from '../features/session'
 import AppLayout, { type NavItem } from '../shared/components/layout/AppLayout'
 import NotFoundPage from './NotFoundPage'
 
@@ -17,26 +17,29 @@ const unitPath = (patente: string) => `/unidades/${encodeURIComponent(patente)}`
 
 /**
  * Rutas de la aplicación y composición de las features dentro del layout. Es el único lugar
- * que conoce a la vez el layout compartido y las features.
+ * que conoce a la vez el layout compartido y las features. Todo, salvo el login, exige sesión.
  */
 export const AppRouter = () => (
   <Routes>
-    <Route
-      element={
-        <AppLayout
-          brand={APP_NAME}
-          homePath="/unidades"
-          navItems={NAV_ITEMS}
-          headerEnd={<SessionPanel />}
-          notice={<SessionBanner />}
-        />
-      }
-    >
-      <Route path="/" element={<Navigate to="/unidades" replace />} />
-      <Route path="/unidades" element={<FleetPage />} />
-      <Route path="/unidades/:patente" element={<UnitDetailPage />} />
-      <Route path="/alertas" element={<AlertsPage unitPath={unitPath} />} />
-      <Route path="*" element={<NotFoundPage />} />
+    <Route path={LOGIN_PATH} element={<LoginPage />} />
+    <Route element={<RequireSession />}>
+      <Route
+        element={
+          <AppLayout
+            brand={APP_NAME}
+            homePath="/unidades"
+            navItems={NAV_ITEMS}
+            headerEnd={<SessionPanel />}
+            notice={<SessionBanner />}
+          />
+        }
+      >
+        <Route path="/" element={<Navigate to="/unidades" replace />} />
+        <Route path="/unidades" element={<FleetPage />} />
+        <Route path="/unidades/:patente" element={<UnitDetailPage />} />
+        <Route path="/alertas" element={<AlertsPage unitPath={unitPath} />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Route>
   </Routes>
 )

@@ -1,14 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { setAccessTokenProvider } from './api/client'
 import App from './App'
-import { getDevAccessToken } from './features/session'
+import { initSession } from './features/session'
 import './css/main.css'
 
-// Origen del token de cada request. Hoy es la sesión simulada del mock; con Supabase Auth
-// se reemplaza solo esta línea.
-setAccessTokenProvider(getDevAccessToken)
+// Conecta la sesión (Supabase Auth, o la simulada en desarrollo) con el cliente HTTP.
+initSession()
 
 const queryClient = new QueryClient({
   defaultOptions: {

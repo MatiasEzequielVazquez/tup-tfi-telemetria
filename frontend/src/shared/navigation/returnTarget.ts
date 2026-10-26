@@ -17,8 +17,9 @@ export const returnState = (path: string, label: string): ReturnState => ({
   returnTo: { path, label },
 })
 
-const isInternalPath = (value: string): boolean =>
-  value.startsWith('/') && !value.startsWith('//') && !value.includes('://')
+/** Ruta interna de la app: rechaza URLs absolutas, `//host` y barras invertidas. */
+export const isInternalPath = (value: string): boolean =>
+  value.startsWith('/') && !value.startsWith('//') && !value.includes('://') && !value.includes('\\')
 
 /** Lee el destino de regreso del `state`; si falta o no es válido, devuelve `fallback`. */
 export const readReturnTarget = (state: unknown, fallback: ReturnTarget): ReturnTarget => {

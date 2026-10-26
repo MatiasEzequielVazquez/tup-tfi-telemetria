@@ -1,5 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ApiError, apiGet, buildUrl, setAccessTokenProvider } from '../../../src/api/client'
+import {
+  ApiError,
+  apiGet,
+  buildUrl,
+  setAccessTokenProvider,
+  setUnauthorizedHandler,
+} from '../../../src/api/client'
 
 const BASE = 'http://api.test/api/v1'
 
@@ -16,6 +22,7 @@ beforeEach(() => {
   vi.stubEnv('VITE_API_URL', `${BASE}/`) // con barra final: el cliente debe normalizarla
   vi.stubGlobal('fetch', fetchMock)
   setAccessTokenProvider(() => null)
+  setUnauthorizedHandler(() => {})
 })
 
 afterEach(() => {
@@ -48,6 +55,44 @@ describe('apiGet', () => {
 
     const headers = fetchMock.mock.calls[0][1]?.headers as Headers
     expect(headers.get('Authorization')).toBe('Bearer mantenimiento')
+  })
+
+  it('espera al proveedor de token cuando es asíncrono', async () => {
+    setAccessTokenProvider(() => Promise.resolve('jwt-renovado'))
+    fetchMock.mockResolvedValue(jsonResponse({ ok: true }))
+
+    await apiGet('/me')
+
+    const headers = fetchMock.mock.calls[0][1]?.headers as Headers
+    expect(headers.get('Authorization')).toBe('Bearer jwt-renovado')
+  })
+
+  it('avisa con el token enviado cuando la API responde 401', async () => {
+    const handler = vi.fn()
+    setUnauthorizedHandler(handler)
+    setAccessTokenProvider(() => 'jwt-vencido')
+    fetchMock.mockResolvedValue(
+      jsonResponse({ error: { code: 'no_autenticado', message: 'Token inválido o vencido.' } }, { status: 401 }),
+    )
+
+    const error = await apiGet('/me').catch((e: unknown) => e)
+
+    expect(handler).toHaveBeenCalledExactlyOnceWith('jwt-vencido')
+    expect(error).toMatchObject({ kind: 'http', status: 401, code: 'no_autenticado' })
+  })
+
+  it('no avisa si no se envió token o si el error no es un 401', async () => {
+    const handler = vi.fn()
+    setUnauthorizedHandler(handler)
+
+    fetchMock.mockResolvedValueOnce(jsonResponse({ error: { code: 'no_autenticado', message: 'x' } }, { status: 401 }))
+    await apiGet('/me').catch(() => undefined) // sin token
+
+    setAccessTokenProvider(() => 'jwt')
+    fetchMock.mockResolvedValueOnce(jsonResponse({ error: { code: 'sin_permiso', message: 'x' } }, { status: 403 }))
+    await apiGet('/me').catch(() => undefined)
+
+    expect(handler).not.toHaveBeenCalled()
   })
 
   it('interpreta el formato de error { error: { code, message } }', async () => {

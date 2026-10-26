@@ -109,10 +109,12 @@ El dashboard se compila apuntando a la API del mismo dominio (`VITE_API_URL=/api
 ```bash
 # En la PC
 cd frontend
-echo "VITE_API_URL=/api/v1" > .env.production
+cp .env.production.example .env.production    # completar VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY
 npm ci && npm run build
 scp -r dist ubuntu@<IP>:~/tup-tfi-telemetria/frontend/
 ```
+
+`VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` salen de Supabase → Project Settings → API (los mismos valores que `SUPABASE_URL` y `SUPABASE_ANON_KEY` del backend). La clave anon es pública, porque queda dentro del JavaScript del dashboard; nunca usar la `service_role`. En producción la sesión es siempre Supabase: el build rechaza `VITE_AUTH_MODE=dev`.
 
 ### 3.4 Arranque y certificado del broker
 
