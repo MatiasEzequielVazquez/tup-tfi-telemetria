@@ -109,7 +109,7 @@ El dashboard se compila apuntando a la API del mismo dominio (`VITE_API_URL=/api
 ```bash
 # En la PC
 cd frontend
-echo "VITE_API_URL=/api/v1" > .env.production
+cp .env.production.example .env.production    # VITE_API_URL=/api/v1
 npm ci && npm run build
 scp -r dist ubuntu@<IP>:~/tup-tfi-telemetria/frontend/
 ```
