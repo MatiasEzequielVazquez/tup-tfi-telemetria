@@ -3,8 +3,22 @@ import {
   formatDate,
   formatDateOnly,
   formatDateTime,
+  isDateOnly,
   todayDateOnly,
 } from '../../../../src/shared/utils/formatDate'
+
+describe('isDateOnly', () => {
+  it('acepta un YYYY-MM-DD que existe en el calendario', () => {
+    expect(isDateOnly('2026-10-07')).toBe(true)
+    expect(isDateOnly('2028-02-29')).toBe(true) // bisiesto
+  })
+
+  it('rechaza días que no existen y otros formatos', () => {
+    for (const value of ['2026-02-30', '2027-02-29', '2026-13-01', '2026-10-7', '07/10/2026', '2026-10-07T00:00:00Z', '']) {
+      expect(isDateOnly(value)).toBe(false)
+    }
+  })
+})
 
 describe('todayDateOnly', () => {
   it('da el día en Buenos Aires, no el UTC', () => {

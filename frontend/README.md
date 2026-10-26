@@ -13,7 +13,8 @@ Dashboard web (React + Vite + TypeScript + Tailwind CSS), organizado por funcion
 | **Carga manual de kilometraje** desde el detalle de unidad (`POST /unidades/{patente}/kilometraje`) | |
 | **Postergar una tarea** del plan, con motivo y nuevo límite en km (`POST /unidades/{patente}/planes/{codigo_tarea}/postergaciones`) | |
 | **Registrar un service** de la unidad, con las tareas realizadas, fecha, km y observaciones (`POST /unidades/{patente}/services`) | |
-| Usuario actual (`GET /me`); en desarrollo, selector de rol **simulado** | Historial de mantenimiento y pantallas de administración |
+| **Historial de mantenimiento** de la unidad: services y postergaciones, con filtro por período y paginación (`GET /unidades/{patente}/services` y `/postergaciones`) | Pantallas de administración |
+| Usuario actual (`GET /me`); en desarrollo, selector de rol **simulado** | |
 | Reintento que recupera la pantalla **y** la sesión del encabezado | |
 
 ## Requisitos
@@ -104,6 +105,7 @@ Los filtros viven en los parámetros de la URL: se conservan al recargar, al com
 | `/` | Redirige a `/unidades` | — |
 | `/unidades` | Flota | `tenencia`, `estado`, `activa` |
 | `/unidades/:patente` | Detalle de unidad | — |
+| `/unidades/:patente/historial` | Historial de services y postergaciones | `desde`, `hasta`, `services_page`, `postergaciones_page` |
 | `/alertas` | Alertas | `estado`, `tipo`, `patente`, `page` |
 
 ### Flota (`/unidades`)
@@ -126,6 +128,17 @@ Ejemplo: `/unidades?tenencia=fletero&estado=con_fallas&activa=false`. "Limpiar f
 | `page` | entero ≥ 1 | 1 | `page` (con `page_size=20`) |
 
 Cambiar un filtro vuelve a la página 1. "Restablecer filtros" vuelve a `/alertas` (abiertas).
+
+### Historial de una unidad (`/unidades/:patente/historial`)
+
+| Parámetro | Valores | Por defecto | Se envía a la API como |
+|---|---|---|---|
+| `desde` | fecha `YYYY-MM-DD` que exista en el calendario | sin límite | `desde` (en ambos listados) |
+| `hasta` | fecha `YYYY-MM-DD` que exista en el calendario | sin límite | `hasta` (en ambos listados) |
+| `services_page` | entero ≥ 1 | 1 | `page` del listado de services (con `page_size=10`) |
+| `postergaciones_page` | entero ≥ 1 | 1 | `page` del listado de postergaciones (con `page_size=10`) |
+
+Cambiar el período vuelve las dos listas a la página 1; cambiar la página de una no toca la otra. "Limpiar período" vuelve a `/unidades/:patente/historial`.
 
 ## Arquitectura
 
@@ -150,7 +163,7 @@ frontend/
     │   └── NotFoundPage.tsx
     ├── shared/                     # código sin conocimiento del dominio
     │   ├── components/             #   layout/AppLayout, ErrorBoundary, ui/ (Card, Dato, Button,
-    │   │                           #   SelectField, TextField, TextAreaField, Dialog, StatusBadge, LoaderSpinner, ErrorPanel)
+    │   │                           #   SelectField, TextField, TextAreaField, Dialog, Pagination, StatusBadge, LoaderSpinner, ErrorPanel)
     │   ├── hooks/                  #   useDocumentTitle, useRetryFailedQueries
     │   ├── navigation/returnTarget.ts   # destino de regreso entre pantallas
     │   └── utils/formatDate.ts
@@ -167,7 +180,7 @@ Cada feature tiene `index.ts` (API pública), `pages/`, `components/`, `hooks/`,
 
 | Feature | Qué hace | Qué NO hace |
 |---|---|---|
-| `fleet` | Muestra la flota (con filtros) y el detalle de una unidad con lo que calcula la API, y permite cargar el kilometraje a mano, postergar tareas y registrar services. Es la única que conoce los endpoints `/unidades` para mostrar unidades. | No recalcula reglas de mantenimiento. No sabe quién es el usuario ni cómo se obtiene el token. No conoce las alertas. |
+| `fleet` | Muestra la flota (con filtros) y el detalle de una unidad con lo que calcula la API, su historial de mantenimiento, y permite cargar el kilometraje a mano, postergar tareas y registrar services. Es la única que conoce los endpoints `/unidades` para mostrar unidades. | No recalcula reglas de mantenimiento. No sabe quién es el usuario ni cómo se obtiene el token. No conoce las alertas. |
 | `alerts` | Lista y filtra alertas, pagina y marca alertas como revisadas (`/alertas`, `/alertas/revisar`). | No importa nada de `fleet`: la ruta al detalle de una unidad se la entrega `routes/AppRouter` por props. No decide qué rol puede revisar (lo resuelve la API). |
 | `session` | Inicia y cierra la sesión (Supabase Auth, o la **simulada** en desarrollo), protege las rutas y obtiene el usuario actual (`/me`). `initSession()` conecta el token y el manejo del 401 con el cliente HTTP. | No decide qué puede hacer cada rol: lo resuelve la API (RN11). No guarda datos de dominio. |
 
@@ -229,6 +242,7 @@ Las reglas 1–3 y 5 las comprueba `npm run lint` (`import/no-cycle` y `no-restr
 - **Revisión de alertas.** Las alertas no tienen un id: se identifican por su `origen` y su `clave` completa, que se reenvía tal cual (`{ origen, ...clave }`). La acción queda deshabilitada y marcada "Marcando…" mientras se procesa y **la alerta no se muestra como revisada hasta que el servidor confirma** y las listas se vuelven a pedir. Si falla, se muestra el mensaje del servidor y el botón pasa a "Reintentar". El resultado se anuncia en una región `aria-live`. No hay modal de confirmación.
 - **Carga manual de kilometraje (CU11).** El botón "Cargar kilometraje" está en el detalle de la unidad, y solo se ofrece si la unidad está activa y no tiene un dispositivo **activo** (RF06: con uno activo, el kilometraje llega por MQTT; en su lugar se indica que lo informa el dispositivo). El formulario (en un diálogo) pide kilometraje y fecha. El cliente valida lo básico (obligatorio, no negativo, no menor al actual por RN09, fecha no futura) para avisar rápido, pero **el servidor decide**: su mensaje de error (por ejemplo, un 409) se muestra tal cual. Si la fecha es hoy no se envía y el servidor usa el instante actual; una fecha pasada se envía a mediodía de Argentina (UTC-3, sin horario de verano) para que el día no se corra. Al confirmar se vuelven a pedir **todos** los datos en pantalla, porque un nuevo kilometraje recalcula los planes y puede generar alertas, que son de otra feature.
 - **Postergar una tarea (CU10).** El botón "Postergar" está en cada tarea del plan que está **próxima o vencida**, en una unidad activa. El formulario (en un diálogo) pide el motivo (sin valor por defecto: queda registrado), una descripción obligatoria si el motivo es "otro" (RN07) y el nuevo límite en km, que se propone como el km actual más 4.000 (una semana de operación) redondeado hacia arriba, porque el contrato pide un entero. El cliente rechaza un límite menor o igual al km actual, pero **el servidor decide** y su mensaje se muestra tal cual. Al confirmar, la tarea pasa a postergada, se anuncia el resultado en una región `aria-live` (que sigue visible aunque el botón desaparezca) y se vuelven a pedir todos los datos en pantalla.
+- **Historial de mantenimiento (CU13).** Se llega desde el enlace "Ver el historial de services y postergaciones" del detalle de la unidad, y vuelve al detalle conservando el destino de regreso (el listado de flota con sus filtros). Son **dos listados independientes**, cada uno con su paginación de 10 (la API los pagina por separado, así que no se mezclan en una sola línea de tiempo); comparten el período, que vive en la URL. Cada service muestra el día, el km, las tareas cubiertas, las observaciones y quién lo registró; cada postergación, la tarea, el motivo, el nuevo límite, quién y cuándo, y si está **abierta** o **cerrada por un service** posterior (RN06). `services.fecha` es un día de calendario y se muestra con `formatDateOnly`. Si "desde" es posterior a "hasta" no se consulta y se avisa. Una página fuera de rango (por ejemplo, editada en la URL) vuelve a la última.
 - **Registrar un service (CU09).** El botón "Registrar service" está en la sección "Plan de mantenimiento" de una unidad activa con tareas en su plan. El formulario (en un diálogo, con desplazamiento si no entra en pantalla) pide las **tareas realizadas** (casillas, de la más urgente a la menos: vencida, próxima, postergada, al día), la fecha (hoy por defecto, no futura), el km (el actual por defecto) y observaciones opcionales. Se muestran todas las tareas del plan, no solo las pendientes: un service puede cubrir una que todavía está al día. No se guarda sin ninguna tarea marcada. El km puede ser menor al actual (el service pudo hacerse antes); si es mayor, el servidor adelanta el de la unidad. Solo se admite un service por unidad y por día: el 409 del servidor se muestra dentro del formulario. Al confirmar, las tareas cubiertas reinician su cuenta (RN06), se anuncia el resultado y se vuelven a pedir todos los datos en pantalla.
 - **Formularios.** `TextField`, `TextAreaField` y `SelectField` (con ayuda y error asociados al campo) y `Dialog` (sobre el elemento nativo `<dialog>`: foco, Esc y devolución del foco los resuelve el navegador) son componentes compartidos; los formularios usan `noValidate` y muestran sus propios mensajes en español.
 - **Fechas sin hora.** `services.fecha` es un día de calendario, no un instante: se muestra con `formatDateOnly`, no con `formatDate`, que la correría un día hacia atrás en Buenos Aires.

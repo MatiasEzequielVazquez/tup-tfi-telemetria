@@ -12,6 +12,7 @@ import {
   TENENCIA_LABEL,
 } from '../utils/statusLabels'
 import FaultItem from './FaultItem'
+import HistoryLink from './HistoryLink'
 import MileageAction from './MileageAction'
 import PlanItem from './PlanItem'
 import ServiceAction from './ServiceAction'
@@ -111,6 +112,10 @@ const UnitDetail = ({ detalle }: { detalle: DetalleUnidad }) => {
             ))}
           </ul>
         )}
+      </Section>
+
+      <Section id="sec-historial" title="Historial de mantenimiento">
+        <HistoryLink patente={unidad.patente} />
       </Section>
     </>
   )
