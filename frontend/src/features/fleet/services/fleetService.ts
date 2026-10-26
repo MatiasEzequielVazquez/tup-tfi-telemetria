@@ -1,7 +1,8 @@
-import { apiGet } from '../../../api/client'
-import { expectArray, expectRecord, expectString } from '../../../api/guards'
+import { apiGet, apiPost } from '../../../api/client'
+import { expectArray, expectNumber, expectRecord, expectString } from '../../../api/guards'
 import { getAllPages } from '../../../api/pagination'
-import type { DetalleUnidad, UnidadResumen } from '../../../api/types'
+import type { CargaKm, DetalleUnidad, UnidadResumen } from '../../../api/types'
+import type { MileageInput } from '../types'
 import { fleetFiltersToQuery, type FleetFilters } from '../utils/filters'
 
 export interface Fleet {
@@ -43,4 +44,22 @@ export const getUnitDetail = async (
   expectArray(raw.fallas_activas, 'detalle › fallas_activas')
   if (raw.dispositivo !== null) expectRecord(raw.dispositivo, 'detalle › dispositivo')
   return raw as unknown as DetalleUnidad
+}
+
+/** POST /unidades/{patente}/kilometraje — carga manual (RF06). Devuelve la carga registrada. */
+export const loadMileage = async (
+  patente: string,
+  input: MileageInput,
+  signal?: AbortSignal,
+): Promise<CargaKm> => {
+  const raw = expectRecord(
+    await apiPost<unknown>('/unidades/{patente}/kilometraje', {
+      pathParams: { patente },
+      body: input,
+      signal,
+    }),
+    'POST /unidades/{patente}/kilometraje',
+  )
+  expectNumber(raw.km, 'carga › km')
+  return raw as unknown as CargaKm
 }

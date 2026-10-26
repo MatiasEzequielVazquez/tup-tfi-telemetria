@@ -32,3 +32,4 @@ export type MotivoPostergacion = Schemas['MotivoPostergacion']
 export type Me = Complete<Schemas['Me']>
 export type UnidadResumen = Complete<Schemas['UnidadResumen']>
 export type DetalleUnidad = Complete<Schemas['DetalleUnidad']>
+export type CargaKm = Complete<Schemas['CargaKm']>

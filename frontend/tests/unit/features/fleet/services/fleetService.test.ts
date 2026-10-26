@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ApiError } from '../../../../../src/api/client'
-import { getFleet, getUnitDetail } from '../../../../../src/features/fleet/services/fleetService'
+import { getFleet, getUnitDetail, loadMileage } from '../../../../../src/features/fleet/services/fleetService'
 import { DEFAULT_FLEET_FILTERS } from '../../../../../src/features/fleet/utils/filters'
 
 const unidad = (patente: string) => ({
@@ -103,5 +103,34 @@ describe('getUnitDetail', () => {
     fetchMock.mockResolvedValueOnce(json({ unidad: { patente: 'AAA111' }, dispositivo: null }))
 
     await expect(getUnitDetail('AAA111')).rejects.toMatchObject({ kind: 'invalid-response' })
+  })
+})
+
+describe('loadMileage', () => {
+  it('envía el kilometraje a la unidad y devuelve la carga registrada', async () => {
+    const carga = {
+      patente: 'KX324HU',
+      fecha: '2026-10-07T15:00:00Z',
+      km: 415200,
+      fuente: 'manual',
+      email_usuario: 'a@b.co',
+    }
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify(carga), { status: 201, headers: { 'Content-Type': 'application/json' } }),
+    )
+
+    const result = await loadMileage('KX324HU', { km: 415200, fecha: '2026-10-01T12:00:00-03:00' })
+
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(new URL(String(url)).pathname).toBe('/api/v1/unidades/KX324HU/kilometraje')
+    expect(init?.method).toBe('POST')
+    expect(JSON.parse(String(init?.body))).toEqual({ km: 415200, fecha: '2026-10-01T12:00:00-03:00' })
+    expect(result).toEqual(carga)
+  })
+
+  it('rechaza una respuesta sin el kilometraje', async () => {
+    fetchMock.mockResolvedValueOnce(json({ patente: 'KX324HU' }))
+
+    await expect(loadMileage('KX324HU', { km: 1 })).rejects.toMatchObject({ kind: 'invalid-response' })
   })
 })
