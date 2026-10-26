@@ -38,11 +38,19 @@ export const todayDateOnly = (now: Date = new Date()): string => {
 const dateOnlyFormatter = new Intl.DateTimeFormat('es-AR', { dateStyle: 'medium', timeZone: 'UTC' })
 const DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/
 
-export const formatDateOnly = (value: string): string => {
+const parseDateOnly = (value: string): Date | null => {
   const match = DATE_ONLY.exec(value)
-  if (!match) return value
+  if (!match) return null
   const [year, month, day] = [Number(match[1]), Number(match[2]), Number(match[3])]
   const date = new Date(Date.UTC(year, month - 1, day))
   // Rechaza días que no existen (2026-02-30), que Date correría al mes siguiente.
-  return date.getUTCMonth() === month - 1 ? dateOnlyFormatter.format(date) : value
+  return date.getUTCMonth() === month - 1 ? date : null
+}
+
+/** ¿Es un `YYYY-MM-DD` que existe en el calendario? */
+export const isDateOnly = (value: string): boolean => parseDateOnly(value) !== null
+
+export const formatDateOnly = (value: string): string => {
+  const date = parseDateOnly(value)
+  return date ? dateOnlyFormatter.format(date) : value
 }
