@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ApiError } from '../../../../../src/api/client'
-import { getFleet, getUnitDetail, loadMileage } from '../../../../../src/features/fleet/services/fleetService'
+import { getFleet, getUnitDetail, loadMileage, postponeTask } from '../../../../../src/features/fleet/services/fleetService'
 import { DEFAULT_FLEET_FILTERS } from '../../../../../src/features/fleet/utils/filters'
 
 const unidad = (patente: string) => ({
@@ -132,5 +132,53 @@ describe('loadMileage', () => {
     fetchMock.mockResolvedValueOnce(json({ patente: 'KX324HU' }))
 
     await expect(loadMileage('KX324HU', { km: 1 })).rejects.toMatchObject({ kind: 'invalid-response' })
+  })
+})
+
+describe('postponeTask', () => {
+  it('posterga la tarea de la unidad y devuelve la postergación registrada', async () => {
+    const postergacion = {
+      patente: 'KX324HU',
+      codigo_tarea: 'ACEITE_MOTOR',
+      motivo: 'otro',
+      motivo_descripcion: 'Esperando repuesto',
+      km_limite_nuevo: 419000,
+      cerrada: false,
+    }
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify(postergacion), { status: 201, headers: { 'Content-Type': 'application/json' } }),
+    )
+
+    const result = await postponeTask('KX324HU', 'ACEITE_MOTOR', {
+      motivo: 'otro',
+      motivo_descripcion: 'Esperando repuesto',
+      km_limite_nuevo: 419000,
+    })
+
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(new URL(String(url)).pathname).toBe('/api/v1/unidades/KX324HU/planes/ACEITE_MOTOR/postergaciones')
+    expect(init?.method).toBe('POST')
+    expect(JSON.parse(String(init?.body))).toEqual({
+      motivo: 'otro',
+      motivo_descripcion: 'Esperando repuesto',
+      km_limite_nuevo: 419000,
+    })
+    expect(result).toEqual(postergacion)
+  })
+
+  it('codifica el código de la tarea en la ruta', async () => {
+    fetchMock.mockResolvedValueOnce(json({ km_limite_nuevo: 1 }))
+
+    await postponeTask('AB123CD', 'TAREA/X', { motivo: 'falta_espacio', km_limite_nuevo: 1 })
+
+    expect(String(fetchMock.mock.calls[0][0])).toContain('/planes/TAREA%2FX/postergaciones')
+  })
+
+  it('rechaza una respuesta sin el nuevo límite', async () => {
+    fetchMock.mockResolvedValueOnce(json({ patente: 'KX324HU' }))
+
+    await expect(
+      postponeTask('KX324HU', 'ACEITE_MOTOR', { motivo: 'falta_espacio', km_limite_nuevo: 1 }),
+    ).rejects.toMatchObject({ kind: 'invalid-response' })
   })
 })

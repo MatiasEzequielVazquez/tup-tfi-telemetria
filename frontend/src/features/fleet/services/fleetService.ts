@@ -1,8 +1,8 @@
 import { apiGet, apiPost } from '../../../api/client'
 import { expectArray, expectNumber, expectRecord, expectString } from '../../../api/guards'
 import { getAllPages } from '../../../api/pagination'
-import type { CargaKm, DetalleUnidad, UnidadResumen } from '../../../api/types'
-import type { MileageInput } from '../types'
+import type { CargaKm, DetalleUnidad, Postergacion, UnidadResumen } from '../../../api/types'
+import type { MileageInput, PostponeInput } from '../types'
 import { fleetFiltersToQuery, type FleetFilters } from '../utils/filters'
 
 export interface Fleet {
@@ -62,4 +62,26 @@ export const loadMileage = async (
   )
   expectNumber(raw.km, 'carga › km')
   return raw as unknown as CargaKm
+}
+
+/**
+ * POST /unidades/{patente}/planes/{codigo_tarea}/postergaciones — posterga una tarea (RF10,
+ * RN07). Devuelve la postergación registrada.
+ */
+export const postponeTask = async (
+  patente: string,
+  codigoTarea: string,
+  input: PostponeInput,
+  signal?: AbortSignal,
+): Promise<Postergacion> => {
+  const raw = expectRecord(
+    await apiPost<unknown>('/unidades/{patente}/planes/{codigo_tarea}/postergaciones', {
+      pathParams: { patente, codigo_tarea: codigoTarea },
+      body: input,
+      signal,
+    }),
+    'POST /unidades/{patente}/planes/{codigo_tarea}/postergaciones',
+  )
+  expectNumber(raw.km_limite_nuevo, 'postergación › km_limite_nuevo')
+  return raw as unknown as Postergacion
 }

@@ -1,10 +1,13 @@
-import type { paths } from '../../api/schema'
+import type { components, paths } from '../../api/schema'
 import type { DetalleUnidad } from '../../api/types'
 
 // Piezas del detalle de unidad que la feature maneja por separado.
 export type Plan = DetalleUnidad['planes'][number]
 export type Falla = DetalleUnidad['fallas_activas'][number]
 export type Dispositivo = DetalleUnidad['dispositivo']
+
+/** Cuerpo de POST /unidades/{patente}/planes/{codigo_tarea}/postergaciones. */
+export type PostponeInput = components['schemas']['PostergacionInput']
 
 /** Cuerpo de POST /unidades/{patente}/kilometraje. */
 export type MileageInput =
