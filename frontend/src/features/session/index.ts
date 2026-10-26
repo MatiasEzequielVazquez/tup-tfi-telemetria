@@ -1,4 +1,7 @@
 // API pública de la feature session: lo único que el resto de la app puede importar.
+export { default as LoginPage } from './pages/LoginPage'
+export { default as RequireSession } from './components/RequireSession'
 export { default as SessionBanner } from './components/SessionBanner'
 export { default as SessionPanel } from './components/SessionPanel'
-export { getDevAccessToken } from './services/devSessionStore'
+export { initSession } from './services/authSession'
+export { LOGIN_PATH } from './utils/redirect'
