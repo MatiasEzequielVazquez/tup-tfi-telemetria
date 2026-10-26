@@ -12,6 +12,7 @@ import {
   TENENCIA_LABEL,
 } from '../utils/statusLabels'
 import FaultItem from './FaultItem'
+import MileageAction from './MileageAction'
 import PlanItem from './PlanItem'
 
 const Section = ({ id, title, children }: { id: string; title: string; children: ReactNode }) => (
@@ -58,6 +59,7 @@ const UnitDetail = ({ detalle }: { detalle: DetalleUnidad }) => {
           </Dato>
           <Dato etiqueta="Alta en el sistema">{formatDate(unidad.created_at)}</Dato>
         </dl>
+        <MileageAction unidad={unidad} dispositivo={dispositivo} />
       </Section>
 
       <Section id="sec-dispositivo" title="Dispositivo">
