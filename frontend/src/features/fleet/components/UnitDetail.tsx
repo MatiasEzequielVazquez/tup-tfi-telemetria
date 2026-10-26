@@ -14,6 +14,7 @@ import {
 import FaultItem from './FaultItem'
 import MileageAction from './MileageAction'
 import PlanItem from './PlanItem'
+import ServiceAction from './ServiceAction'
 
 const Section = ({ id, title, children }: { id: string; title: string; children: ReactNode }) => (
   <section aria-labelledby={id} className="mt-6">
@@ -84,6 +85,7 @@ const UnitDetail = ({ detalle }: { detalle: DetalleUnidad }) => {
       </Section>
 
       <Section id="sec-planes" title="Plan de mantenimiento">
+        <ServiceAction unidad={unidad} planes={planes} />
         {planes.length === 0 ? (
           <Card>
             <p>Esta unidad no tiene tareas de mantenimiento asignadas.</p>
