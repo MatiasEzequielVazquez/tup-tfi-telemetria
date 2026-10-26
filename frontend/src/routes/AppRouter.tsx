@@ -6,6 +6,7 @@ import {
   AdminLayout,
   AdminUnitPlanPage,
   AdminUnitsPage,
+  AdminUsersPage,
 } from '../features/admin'
 import { AlertsPage } from '../features/alerts'
 import { FleetPage, HistoryPage, UnitDetailPage } from '../features/fleet'
@@ -17,6 +18,7 @@ import {
   SessionBanner,
   SessionPanel,
   useCan,
+  useCurrentUser,
 } from '../features/session'
 import AppLayout, { type NavItem } from '../shared/components/layout/AppLayout'
 import NotFoundPage from './NotFoundPage'
@@ -51,6 +53,10 @@ const AppShell = () => {
   )
 }
 
+// La gestión de usuarios necesita saber quién tiene la sesión iniciada (para avisar si un
+// administrador se quita su propio rol) sin conocer la feature session: se lo entrega esta ruta.
+const AdminUsersRoute = () => <AdminUsersPage currentEmail={useCurrentUser().data?.email} />
+
 /**
  * Rutas de la aplicación y composición de las features dentro del layout. Es el único lugar
  * que conoce a la vez el layout compartido y las features. Todo, salvo el login, exige sesión.
@@ -72,6 +78,7 @@ export const AppRouter = () => (
             <Route path="/administracion/unidades/:patente/plan" element={<AdminUnitPlanPage />} />
             <Route path="/administracion/dispositivos" element={<AdminDevicesPage unitPath={unitPath} />} />
             <Route path="/administracion/catalogo" element={<AdminCatalogPage />} />
+            <Route path="/administracion/usuarios" element={<AdminUsersRoute />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFoundPage />} />

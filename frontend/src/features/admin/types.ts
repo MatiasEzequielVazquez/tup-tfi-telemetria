@@ -26,6 +26,15 @@ export type PlanEdit = NonNullable<
   paths['/unidades/{patente}/planes/{codigo_tarea}']['patch']['requestBody']
 >['content']['application/json']
 
+/** Un usuario del sistema con su rol (RN11). */
+export type User = Complete<Schemas['Usuario']>
+
+/** Cuerpo de POST /usuarios. */
+export type UserInput = Schemas['UsuarioInput']
+
+/** Cuerpo de PATCH /usuarios/{email}: solo lo que cambia. */
+export type UserEdit = NonNullable<paths['/usuarios/{email}']['patch']['requestBody']>['content']['application/json']
+
 /** Cuerpo de POST /tareas-catalogo. */
 export type CatalogTaskInput = Schemas['TareaCatalogo']
 

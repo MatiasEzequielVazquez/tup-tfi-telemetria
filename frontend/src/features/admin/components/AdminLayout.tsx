@@ -4,6 +4,7 @@ const SECTIONS = [
   { to: '/administracion/unidades', label: 'Unidades' },
   { to: '/administracion/dispositivos', label: 'Dispositivos' },
   { to: '/administracion/catalogo', label: 'Catálogo' },
+  { to: '/administracion/usuarios', label: 'Usuarios' },
 ]
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
