@@ -212,3 +212,7 @@ export function apiPost<T>(path: ApiPath, options: RequestOptions = {}): Promise
 export function apiPatch<T>(path: ApiPath, options: RequestOptions = {}): Promise<T> {
   return apiRequest<T>('PATCH', path, options)
 }
+
+export function apiDelete<T>(path: ApiPath, options: RequestOptions = {}): Promise<T> {
+  return apiRequest<T>('DELETE', path, options)
+}

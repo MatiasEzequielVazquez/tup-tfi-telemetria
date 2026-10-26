@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   ApiError,
+  apiDelete,
   apiGet,
   apiPost,
   buildUrl,
@@ -85,6 +86,36 @@ describe('apiPost', () => {
       code: 'conflicto',
       message: expect.stringContaining('RN09'),
     })
+  })
+})
+
+describe('apiDelete', () => {
+  it('envía un DELETE a la ruta con los parámetros codificados, sin cuerpo, y devuelve la respuesta', async () => {
+    const baja = { patente: 'AB123CD', activa: false }
+    fetchMock.mockResolvedValue(jsonResponse(baja))
+
+    const result = await apiDelete('/unidades/{patente}', { pathParams: { patente: 'AB 123' } })
+
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(url).toBe(`${BASE}/unidades/AB%20123`)
+    expect(init?.method).toBe('DELETE')
+    expect(init?.body).toBeUndefined()
+    expect(result).toEqual(baja)
+  })
+
+  it('conserva el mensaje del servidor cuando rechaza la baja (409)', async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse(
+        { error: { code: 'conflicto', message: 'La unidad tiene un dispositivo vinculado: desvinculalo antes de darla de baja.' } },
+        { status: 409 },
+      ),
+    )
+
+    const error = await apiDelete('/unidades/{patente}', { pathParams: { patente: 'AB123CD' } }).catch(
+      (e: unknown) => e,
+    )
+
+    expect(error).toMatchObject({ status: 409, code: 'conflicto', message: expect.stringContaining('dispositivo vinculado') })
   })
 })
 
