@@ -38,7 +38,7 @@ const Dialog = ({ open, title, onClose, children }: DialogProps) => {
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
-      className="m-auto w-[min(32rem,calc(100%-2rem))] rounded-lg border border-line bg-surface p-0 text-fg backdrop:bg-black/50"
+      className="m-auto max-h-[calc(100dvh-2rem)] w-[min(32rem,calc(100%-2rem))] overflow-y-auto rounded-lg border border-line bg-surface p-0 text-fg backdrop:bg-black/50"
     >
       {open && (
         <div className="p-4">
