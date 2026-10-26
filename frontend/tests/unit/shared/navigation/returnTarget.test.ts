@@ -19,7 +19,8 @@ describe('readReturnTarget', () => {
   })
 
   it('ignora destinos que no son rutas internas', () => {
-    for (const path of ['https://sitio.externo/x', '//sitio.externo/x', 'unidades', 'javascript:alert(1)']) {
+    const externas = ['https://sitio.externo/x', '//sitio.externo/x', '/\\sitio.externo/x', 'unidades', 'javascript:alert(1)']
+    for (const path of externas) {
       expect(readReturnTarget(returnState(path, 'x'), FALLBACK)).toEqual(FALLBACK)
     }
   })
