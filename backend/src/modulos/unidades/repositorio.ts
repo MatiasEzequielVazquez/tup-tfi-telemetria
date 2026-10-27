@@ -64,7 +64,7 @@ export async function listarFlota(
       select u.patente, u.marca, u.modelo, u.anio, u.tenencia, u.titular, u.protocolo, u.km_actual, u.km_fuente, u.activa,
              (select case min(case p.estado when 'vencida' then 1 when 'proxima' then 2 when 'postergada' then 3 else 4 end)
                        when 1 then 'vencida' when 2 then 'proxima' when 3 then 'postergada' when 4 then 'al_dia' end
-                from planes_mantenimiento p where p.patente = u.patente) as estado_mantenimiento,
+                from planes_mantenimiento p where p.patente = u.patente and p.activo) as estado_mantenimiento,
              (select count(*)::int from fallas fa where fa.patente = u.patente and fa.fecha_cierre is null) as fallas_activas,
              d.device_uid, d.estado as dispositivo_estado, d.ultima_comunicacion
         from unidades u

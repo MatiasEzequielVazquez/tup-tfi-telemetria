@@ -79,9 +79,9 @@ export function rutasServices({ sql, config }: Dependencias) {
       // service_tareas apunta al catálogo, no al plan (evita un ciclo en el DER):
       // acá se verifica que cada tarea esté en el plan de la unidad.
       const enPlan = await tx<{ codigo_tarea: string }[]>`
-        select codigo_tarea from planes_mantenimiento where patente = ${u.patente} and codigo_tarea in ${tx(codigos)}`;
+        select codigo_tarea from planes_mantenimiento where patente = ${u.patente} and activo and codigo_tarea in ${tx(codigos)}`;
       const sinPlan = codigos.filter((c) => !enPlan.some((p) => p.codigo_tarea === c));
-      if (sinPlan.length) throw validacion(`Tareas que no están en el plan de la unidad: ${sinPlan.join(', ')}.`);
+      if (sinPlan.length) throw validacion(`Tareas que no están en el plan activo de la unidad: ${sinPlan.join(', ')}.`);
 
       // Un service por unidad y por día: lo garantiza la PK (patente, fecha).
       const [creado] = await tx`

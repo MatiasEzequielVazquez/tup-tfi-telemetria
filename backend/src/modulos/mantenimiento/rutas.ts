@@ -121,23 +121,40 @@ export function rutasMantenimiento({ sql }: Dependencias) {
     res.status(201).json(plan);
   });
 
-  // Editar intervalo o umbral de un plan: cambia cuándo vence, así que recalcula.
+  // Editar intervalo o umbral (cambia cuándo vence, así que recalcula) y dar de baja o
+  // reactivar el plan. Baja lógica: el plan inactivo no se evalúa ni genera alertas, pero
+  // conserva sus services, postergaciones y alertas (RNF11).
   r.patch('/unidades/:patente/planes/:codigo_tarea', soloAdmin, async (req, res) => {
     const b = req.body as Body;
     const codigo = param(req.params.codigo_tarea);
-    const cambios: Record<string, number> = {};
+    const cambios: Record<string, number | boolean> = {};
     for (const c of ['intervalo_km', 'umbral_aviso_km'] as const) {
       if (b[c] === undefined) continue;
       if (!esEnteroPositivo(b[c])) throw validacion(`${c} debe ser un entero positivo.`);
       cambios[c] = b[c];
     }
+    if (b.activo !== undefined) {
+      if (typeof b.activo !== 'boolean') throw validacion('activo debe ser true o false.');
+      cambios.activo = b.activo;
+    }
 
     const plan = await transaccion(sql, async (tx) => {
       const u = await obtenerUnidad(tx, param(req.params.patente), { bloquear: true });
-      const [existe] = await tx`select 1 from planes_mantenimiento where patente = ${u.patente} and codigo_tarea = ${codigo}`;
-      if (!existe) throw noEncontrado('La unidad no tiene ese plan.');
+      const [actual] = await tx<{ activo: boolean }[]>`
+        select activo from planes_mantenimiento where patente = ${u.patente} and codigo_tarea = ${codigo}`;
+      if (!actual) throw noEncontrado('La unidad no tiene ese plan.');
+      if (cambios.activo === true) {
+        const [cat] = await tx<{ activa: boolean }[]>`select activa from tareas_catalogo where codigo = ${codigo}`;
+        if (!actual.activo && !cat?.activa) throw validacion('La tarea está dada de baja en el catálogo: reactivala primero.');
+      }
+
       if (Object.keys(cambios).length) {
         await tx`update planes_mantenimiento set ${tx(cambios)} where patente = ${u.patente} and codigo_tarea = ${codigo}`;
+        // Al darlo de baja, la postergación abierta pierde sentido.
+        if (cambios.activo === false) {
+          await tx`update postergaciones set cerrada = true
+                    where patente = ${u.patente} and codigo_tarea = ${codigo} and not cerrada`;
+        }
         await recalcularPlanes(tx, u.patente);
       }
       return obtenerPlan(tx, u.patente, codigo);

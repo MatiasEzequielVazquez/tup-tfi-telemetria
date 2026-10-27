@@ -70,8 +70,10 @@ export function rutasPostergaciones({ sql, config }: Dependencias) {
 
     const post = await transaccion(sql, async (tx) => {
       const u = await obtenerUnidad(tx, param(req.params.patente), { bloquear: true });
-      const [plan] = await tx`select 1 from planes_mantenimiento where patente = ${u.patente} and codigo_tarea = ${codigo}`;
+      const [plan] = await tx<{ activo: boolean }[]>`
+        select activo from planes_mantenimiento where patente = ${u.patente} and codigo_tarea = ${codigo}`;
       if (!plan) throw noEncontrado('La unidad no tiene ese plan.');
+      if (!plan.activo) throw validacion('El plan está dado de baja: no se puede postergar.');
 
       // RN07
       exigirCampos(b, ['motivo', 'km_limite_nuevo']);
