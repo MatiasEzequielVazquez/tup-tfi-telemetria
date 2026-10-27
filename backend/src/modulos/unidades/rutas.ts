@@ -77,7 +77,7 @@ export function rutasUnidades({ sql }: Dependencias) {
     // Las tres consultas son independientes: se lanzan en paralelo.
     const [dispositivo, planes, fallas_activas] = await Promise.all([
       dispositivoVigente(sql, unidad.patente),
-      listarPlanes(sql, unidad.patente),
+      listarPlanes(sql, unidad.patente, { soloActivos: true }),
       listarFallas(sql, unidad.patente, 'activo'),
     ]);
     res.json({ unidad, dispositivo, planes, fallas_activas });

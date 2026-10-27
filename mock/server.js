@@ -20,6 +20,10 @@ const SEED = path.join(__dirname, 'data', 'db.json');
 let db;
 const cargarSeed = () => {
   db = JSON.parse(fs.readFileSync(SEED, 'utf8'));
+  // Bajas lógicas: los datos de ejemplo no traen los campos; todo arranca activo.
+  for (const u of db.usuarios) u.activo ??= true;
+  for (const t of db.tareas_catalogo) t.activa ??= true;
+  for (const p of db.planes_mantenimiento) p.activo ??= true;
 };
 cargarSeed();
 
@@ -71,15 +75,18 @@ function filtrarPeriodo(items, campo, q) {
 // Bearer admin | Bearer mantenimiento | Bearer <email de un usuario> | cualquier otro token (ej. JWT real de Supabase) -> admin.
 // Sin header: admin, salvo STRICT_AUTH=1 (401).
 function resolverUsuario(req) {
-  const admin = db.usuarios.find((u) => u.rol === 'admin');
+  const admin = db.usuarios.find((u) => u.rol === 'admin' && u.activo);
   const m = /^Bearer\s+(.+)$/i.exec(req.headers.authorization || '');
   if (!m) {
     if (STRICT) throw new HttpError(401, 'no_autenticado', 'Falta el header Authorization: Bearer <token>.');
     return admin;
   }
   const token = m[1].trim();
-  if (token === 'admin' || token === 'mantenimiento') return db.usuarios.find((u) => u.rol === token);
+  if (token === 'admin' || token === 'mantenimiento') return db.usuarios.find((u) => u.rol === token && u.activo);
   const porEmail = db.usuarios.find((u) => u.email === token);
+  if (porEmail && !porEmail.activo) {
+    throw new HttpError(403, 'usuario_no_habilitado', 'Tu usuario fue dado de baja. Pedile a un administrador que lo reactive.');
+  }
   if (porEmail) return porEmail;
   if (STRICT) throw new HttpError(401, 'no_autenticado', 'Token inválido.');
   return admin;
@@ -103,7 +110,7 @@ function dispositivoDeUnidad(patente) {
 }
 
 function resumenUnidad(u) {
-  const planes = db.planes_mantenimiento.filter((p) => p.patente === u.patente);
+  const planes = db.planes_mantenimiento.filter((p) => p.patente === u.patente && p.activo);
   const disp = dispositivoDeUnidad(u.patente);
   return {
     patente: u.patente,
@@ -135,6 +142,7 @@ function vistaPlan(plan) {
     km_limite: ev.km_limite,
     km_restantes: redondear(ev.km_limite - u.km_actual),
     estado: plan.estado,
+    activo: plan.activo,
     postergacion_vigente: post && {
       fecha: post.fecha,
       motivo: post.motivo,
@@ -145,10 +153,10 @@ function vistaPlan(plan) {
   };
 }
 const ordenTarea = (codigo) => db.tareas_catalogo.findIndex((t) => t.codigo === codigo);
-const planesDe = (patente) =>
+const planesDe = (patente, { soloActivos = false } = {}) =>
   db.planes_mantenimiento
-    .filter((p) => p.patente === patente)
-    .sort((a, b) => ordenTarea(a.codigo_tarea) - ordenTarea(b.codigo_tarea))
+    .filter((p) => p.patente === patente && (!soloActivos || p.activo))
+    .sort((a, b) => Number(b.activo) - Number(a.activo) || ordenTarea(a.codigo_tarea) - ordenTarea(b.codigo_tarea))
     .map(vistaPlan);
 
 const vistaFalla = (f) => ({
@@ -247,7 +255,7 @@ function todasLasAlertas() {
 // Recalcula el estado de los planes de una unidad (RN04, RN05, RN07) y genera alertas al pasar a próxima/vencida (RF12).
 function recalcularPlanes(patente) {
   const u = unidadPorPatente(patente);
-  for (const plan of db.planes_mantenimiento.filter((p) => p.patente === patente)) {
+  for (const plan of db.planes_mantenimiento.filter((p) => p.patente === patente && p.activo)) {
     const ev = evaluarPlan(plan, u.km_actual, postergacionAbierta(db, patente, plan.codigo_tarea));
     if (ev.estado === plan.estado) continue;
     plan.estado = ev.estado;
@@ -287,7 +295,7 @@ route(
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email)) throw err400('Email inválido.');
     if (!enumOk('rol', body.rol)) throw err400('rol debe ser admin o mantenimiento.');
     if (db.usuarios.some((u) => u.email === body.email)) throw err409('Ya existe un usuario con ese email.');
-    const nuevo = { email: body.email, nombre: body.nombre || null, rol: body.rol, created_at: ahora() };
+    const nuevo = { email: body.email, nombre: body.nombre || null, rol: body.rol, activo: true, created_at: ahora() };
     db.usuarios.push(nuevo);
     return creado(nuevo);
   },
@@ -296,13 +304,20 @@ route(
 route(
   'PATCH',
   '/usuarios/:email',
-  ({ params, body }) => {
+  ({ params, body, user }) => {
     const u = db.usuarios.find((x) => x.email === params.email);
     if (!u) throw err404('No existe el usuario.');
-    if (body.rol !== undefined) {
-      if (!enumOk('rol', body.rol)) throw err400('rol debe ser admin o mantenimiento.');
-      u.rol = body.rol;
+    const rol = body.rol ?? u.rol;
+    if (body.rol !== undefined && !enumOk('rol', body.rol)) throw err400('rol debe ser admin o mantenimiento.');
+    if (body.activo !== undefined && typeof body.activo !== 'boolean') throw err400('activo debe ser true o false.');
+    const activo = body.activo ?? u.activo;
+    if (!activo && u.email === user.email) throw err409('No podés darte de baja a vos mismo.');
+    const adminsActivos = db.usuarios.filter((x) => x.rol === 'admin' && x.activo).length;
+    if (u.rol === 'admin' && u.activo && (rol !== 'admin' || !activo) && adminsActivos <= 1) {
+      throw err409('No se puede quitar el rol ni dar de baja al único administrador activo.');
     }
+    u.rol = rol;
+    u.activo = activo;
     if (body.nombre !== undefined) u.nombre = body.nombre;
     return ok(u);
   },
@@ -387,7 +402,7 @@ route(
     return ok({
       unidad: u,
       dispositivo: dispositivoDeUnidad(u.patente),
-      planes: planesDe(u.patente),
+      planes: planesDe(u.patente, { soloActivos: true }),
       fallas_activas: db.fallas
         .filter((f) => f.patente === u.patente && !f.fecha_cierre)
         .sort((a, b) => b.fecha_aparicion.localeCompare(a.fecha_aparicion))
@@ -442,7 +457,14 @@ route(
 );
 
 // 3. Motor de mantenimiento (M4)
-route('GET', '/tareas-catalogo', () => ok({ data: db.tareas_catalogo }));
+route('GET', '/tareas-catalogo', ({ query }) => {
+  const activa = query.get('activa');
+  if (activa && !['true', 'false'].includes(activa)) throw err400('activa debe ser true o false.');
+  const data = db.tareas_catalogo
+    .filter((t) => !activa || t.activa === (activa === 'true'))
+    .sort((a, b) => Number(b.activa) - Number(a.activa));
+  return ok({ data });
+});
 route(
   'POST',
   '/tareas-catalogo',
@@ -453,12 +475,34 @@ route(
     const umbral = body.umbral_aviso_km_default ?? 4000;
     if (!esEntPos(umbral)) throw err400('umbral_aviso_km_default debe ser un entero positivo.');
     if (db.tareas_catalogo.some((t) => t.codigo === body.codigo)) throw err409('Ya existe una tarea con ese código.');
-    const t = { codigo: body.codigo, nombre: body.nombre, intervalo_km_default: body.intervalo_km_default, umbral_aviso_km_default: umbral };
+    const t = { codigo: body.codigo, nombre: body.nombre, intervalo_km_default: body.intervalo_km_default, umbral_aviso_km_default: umbral, activa: true };
     db.tareas_catalogo.push(t);
     return creado(t);
   },
   { admin: true },
 );
+route(
+  'PATCH',
+  '/tareas-catalogo/:codigo',
+  ({ params, body }) => {
+    const t = db.tareas_catalogo.find((x) => x.codigo === params.codigo);
+    if (!t) throw err404('No existe la tarea en el catálogo.');
+    const campos = ['nombre', 'intervalo_km_default', 'umbral_aviso_km_default', 'activa'].filter((c) => body[c] !== undefined);
+    if (!campos.length) throw err400('Indicá al menos un campo: nombre, intervalo_km_default, umbral_aviso_km_default o activa.');
+    if (body.nombre !== undefined && !esTexto(body.nombre)) throw err400('nombre no puede estar vacío.');
+    for (const c of ['intervalo_km_default', 'umbral_aviso_km_default']) {
+      if (body[c] !== undefined && !esEntPos(body[c])) throw err400(`${c} debe ser un entero positivo.`);
+    }
+    if (body.activa !== undefined && typeof body.activa !== 'boolean') throw err400('activa debe ser true o false.');
+    for (const c of campos) t[c] = c === 'nombre' ? body.nombre.trim() : body[c];
+    return ok(t);
+  },
+  { admin: true },
+);
+
+
+
+
 route('GET', '/unidades/:patente/planes', ({ params }) => ok({ data: planesDe(getUnidad(params.patente).patente) }));
 route(
   'POST',
@@ -468,6 +512,7 @@ route(
     exigirCampos(body, ['codigo_tarea']);
     const cat = db.tareas_catalogo.find((t) => t.codigo === body.codigo_tarea);
     if (!cat) throw err400('La tarea no existe en el catálogo.');
+    if (!cat.activa) throw err400('La tarea está dada de baja en el catálogo.');
     if (db.planes_mantenimiento.some((p) => p.patente === u.patente && p.codigo_tarea === cat.codigo)) {
       throw err409('La unidad ya tiene asignada esa tarea.');
     }
@@ -484,6 +529,7 @@ route(
       umbral_aviso_km: umbral,
       km_ultimo_service: kmUlt,
       estado: 'al_dia',
+      active: true,
       created_at: ahora(),
     };
     db.planes_mantenimiento.push(plan);
@@ -500,9 +546,20 @@ route(
     const plan = db.planes_mantenimiento.find((p) => p.patente === u.patente && p.codigo_tarea === params.codigo_tarea);
     if (!plan) throw err404('La unidad no tiene ese plan.');
     for (const c of ['intervalo_km', 'umbral_aviso_km']) {
-      if (body[c] === undefined) continue;
-      if (!esEntPos(body[c])) throw err400(`${c} debe ser un entero positivo.`);
-      plan[c] = body[c];
+      if (body[c] !== undefined && !esEntPos(body[c])) throw err400(`${c} debe ser un entero positivo.`);
+    }
+    if (body.activo !== undefined && typeof body.activo !== 'boolean') throw err400('activo debe ser true o false.');
+    if (body.activo === true && !plan.activo) {
+      const cat = db.tareas_catalogo.find((t) => t.codigo === plan.codigo_tarea);
+      if (!cat?.activa) throw err400('La tarea está dada de baja en el catálogo: reactivala primero.');
+    }
+    for (const c of ['intervalo_km', 'umbral_aviso_km', 'activo']) {
+      if (body[c] !== undefined) plan[c] = body[c];
+    }
+    if (body.activo === false) {
+      db.postergaciones
+        .filter((p) => p.patente === u.patente && p.codigo_tarea === plan.codigo_tarea && !p.cerrada)
+        .forEach((p) => (p.cerrada = true));
     }
     recalcularPlanes(u.patente);
     return ok(vistaPlan(plan));
@@ -528,8 +585,8 @@ route('POST', '/unidades/:patente/services', ({ params, body, user }) => {
   if (fecha > hoy()) throw err400('La fecha del service no puede ser futura.');
   if (!Array.isArray(body.tareas) || body.tareas.length === 0) throw err400('Seleccioná al menos una tarea.');
   const codigos = [...new Set(body.tareas)];
-  const sinPlan = codigos.filter((c) => !db.planes_mantenimiento.some((p) => p.patente === u.patente && p.codigo_tarea === c));
-  if (sinPlan.length) throw err400(`Tareas que no están en el plan de la unidad: ${sinPlan.join(', ')}.`);
+  const sinPlan = codigos.filter((c) => !db.planes_mantenimiento.some((p) => p.patente === u.patente && p.codigo_tarea === c && p.activo));
+  if (sinPlan.length) throw err400(`Tareas que no están en el plan activo de la unidad: ${sinPlan.join(', ')}.`);
   if (db.services.some((s) => s.patente === u.patente && s.fecha === fecha)) throw err409('Ya hay un service registrado para esa unidad en esa fecha.');
 
   const service = {
@@ -565,6 +622,7 @@ route('POST', '/unidades/:patente/planes/:codigo_tarea/postergaciones', ({ param
   const u = getUnidad(params.patente);
   const plan = db.planes_mantenimiento.find((p) => p.patente === u.patente && p.codigo_tarea === params.codigo_tarea);
   if (!plan) throw err404('La unidad no tiene ese plan.');
+  if (!plan.activo) throw err400('El plan está dado de baja: no se puede postergar.');
   exigirCampos(body, ['motivo', 'km_limite_nuevo']);
   if (!enumOk('motivo', body.motivo)) throw err400('motivo debe ser falta_espacio, salida_urgente u otro.');
   if (body.motivo === 'otro' && !esTexto(body.motivo_descripcion)) throw err400('Con motivo "otro" la descripción es obligatoria (RN07).');

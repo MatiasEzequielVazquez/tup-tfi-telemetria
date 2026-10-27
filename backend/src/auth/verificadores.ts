@@ -47,7 +47,7 @@ export function verificadorDev(sql: Sql): Verificador {
   return async (token) => {
     if (token === 'admin' || token === 'mantenimiento') {
       const [u] = await sql<{ email: string }[]>`
-        select email from usuarios where rol = ${token} order by created_at, email limit 1`;
+        select email from usuarios where rol = ${token} and activo order by created_at, email limit 1`;
       return u?.email ?? null;
     }
     return token.includes('@') ? token.toLowerCase() : null;

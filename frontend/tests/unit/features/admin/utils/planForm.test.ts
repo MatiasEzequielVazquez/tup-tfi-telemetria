@@ -19,6 +19,7 @@ const task = (codigo: string, intervalo = 40000, umbral = 4000): CatalogTask => 
   nombre: `Tarea ${codigo}`,
   intervalo_km_default: intervalo,
   umbral_aviso_km_default: umbral,
+  activa: true,
 })
 const plan = (codigo_tarea: string, patch: Partial<UnitPlan> = {}) =>
   ({ codigo_tarea, nombre: codigo_tarea, intervalo_km: 40000, umbral_aviso_km: 4000, estado: 'al_dia', ...patch }) as UnitPlan

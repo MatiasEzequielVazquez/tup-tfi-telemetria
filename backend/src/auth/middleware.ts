@@ -23,12 +23,16 @@ export function autenticar(sql: Sql, verificar: Verificador): RequestHandler {
     }
     if (!email) throw noAutenticado();
 
-    const [usuario] = await sql<UsuarioSesion[]>`
-      select email, nombre, rol from usuarios where lower(email) = ${email}`;
+    const [usuario] = await sql<(UsuarioSesion & { activo: boolean })[]>`
+      select email, nombre, rol, activo from usuarios where lower(email) = ${email}`;
     if (!usuario) {
       throw new HttpError(403, 'usuario_no_habilitado', 'Tu usuario no está habilitado en el sistema. Pedile acceso a un administrador.');
     }
-    req.usuario = usuario;
+    // Baja lógica (RF17): la sesión de Supabase sigue siendo válida, pero el sistema ya no le da acceso.
+    if (!usuario.activo) {
+      throw new HttpError(403, 'usuario_no_habilitado', 'Tu usuario fue dado de baja. Pedile a un administrador que lo reactive.');
+    }
+    req.usuario = { email: usuario.email, nombre: usuario.nombre, rol: usuario.rol };
     next();
   };
 }

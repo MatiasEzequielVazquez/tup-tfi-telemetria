@@ -166,6 +166,94 @@ describe('API REST', { skip: SIN_DB }, () => {
     });
   });
 
+  describe('Bajas lógicas (RF07, RF17)', () => {
+    it('usuarios: baja, bloqueo de acceso y reactivación; no a uno mismo ni al último admin', async () => {
+      const marcela = 'marcela.sosa@flota.example';
+      let r = await e.api('PATCH', `/usuarios/${marcela}`, { body: { activo: false } });
+      assert.equal(r.status, 200);
+      assert.equal(r.body.activo, false);
+      r = await e.api('GET', '/me', { token: marcela });
+      assert.equal(r.status, 403);
+      assert.equal(r.body.error.code, 'usuario_no_habilitado');
+      assert.equal((await e.api('PATCH', `/usuarios/${marcela}`, { body: { activo: true } })).status, 200);
+      assert.equal((await e.api('GET', '/me', { token: marcela })).status, 200);
+
+      // El token "admin" es Laura (la admin activa más antigua): no puede darse de baja a sí misma.
+      assert.equal((await e.api('PATCH', '/usuarios/laura.gomez@flota.example', { body: { activo: false } })).status, 409);
+      // Con Pablo dado de baja, Laura queda como única admin activa: no se le puede quitar el rol.
+      assert.equal((await e.api('PATCH', '/usuarios/pablo.rinaldi@flota.example', { body: { activo: false } })).status, 200);
+      assert.equal((await e.api('PATCH', '/usuarios/laura.gomez@flota.example', { body: { rol: 'mantenimiento' } })).status, 409);
+      assert.equal((await e.api('PATCH', '/usuarios/pablo.rinaldi@flota.example', { body: { activo: true } })).status, 200);
+
+      assert.equal((await e.api('PATCH', `/usuarios/${marcela}`, { body: { activo: 'no' } })).status, 400);
+    });
+
+    it('catálogo: edición sin afectar planes existentes; una tarea inactiva no se asigna', async () => {
+      let r = await e.api('PATCH', '/tareas-catalogo/ACEITE_CAJA', { body: { activa: false, intervalo_km_default: 120000 } });
+      assert.equal(r.status, 200);
+      assert.deepEqual([r.body.activa, r.body.intervalo_km_default], [false, 120000]);
+
+      const activas = (await e.api('GET', '/tareas-catalogo?activa=true')).body.data.map((t: { codigo: string }) => t.codigo);
+      assert.ok(!activas.includes('ACEITE_CAJA'));
+      assert.equal((await e.api('GET', '/tareas-catalogo')).body.data.length, activas.length + 1);
+
+      // El plan existente conserva su intervalo.
+      const planes = (await e.api('GET', '/unidades/AP414XV/planes')).body.data;
+      assert.equal(planes.find((p: { codigo_tarea: string }) => p.codigo_tarea === 'ACEITE_CAJA').intervalo_km, 150000);
+
+      // No se puede asignar a una unidad nueva.
+      assert.equal((await e.api('POST', '/unidades', { body: { patente: 'AC456DE', marca: 'Iveco', tenencia: 'propia', protocolo: 'J1939' } })).status, 201);
+      assert.equal((await e.api('POST', '/unidades/AC456DE/planes', { body: { codigo_tarea: 'ACEITE_CAJA' } })).status, 400);
+
+      assert.equal((await e.api('PATCH', '/tareas-catalogo/ACEITE_CAJA', { body: {} })).status, 400);
+      assert.equal((await e.api('PATCH', '/tareas-catalogo/NO_EXISTE', { body: { activa: true } })).status, 404);
+      r = await e.api('PATCH', '/tareas-catalogo/ACEITE_CAJA', { body: { activa: true, intervalo_km_default: 150000 } });
+      assert.equal(r.body.activa, true);
+      assert.equal((await e.api('POST', '/unidades/AC456DE/planes', { body: { codigo_tarea: 'ACEITE_CAJA' } })).status, 201);
+    });
+
+    it('planes: inactivo no se evalúa ni alerta; al reactivar se recalcula (una alerta)', async () => {
+      const base = '/unidades/AP414XV/planes/ACEITE_MOTOR';
+      const plan = async () =>
+        (await e.api('GET', '/unidades/AP414XV/planes')).body.data.find((p: { codigo_tarea: string }) => p.codigo_tarea === 'ACEITE_MOTOR');
+      const alertasMotor = async () =>
+        (await e.api('GET', '/alertas?patente=AP414XV&page_size=100')).body.data.filter(
+          (a: { origen: string; referencia: string }) => a.origen === 'plan' && a.referencia === 'ACEITE_MOTOR',
+        ).length;
+
+      const antes = await plan();
+      assert.equal(antes.activo, true);
+      const r = await e.api('PATCH', base, { body: { activo: false } });
+      assert.equal(r.status, 200);
+      assert.equal(r.body.activo, false);
+
+      // Fuera del detalle, pero visible en el listado de planes.
+      const detalle = (await e.api('GET', '/unidades/AP414XV/detalle')).body;
+      assert.ok(!detalle.planes.some((p: { codigo_tarea: string }) => p.codigo_tarea === 'ACEITE_MOTOR'));
+      assert.equal((await plan()).activo, false);
+
+      // No admite services ni postergaciones.
+      const km = detalle.unidad.km_actual;
+      assert.equal((await e.api('POST', '/unidades/AP414XV/services', { body: { km: km + 10, tareas: ['ACEITE_MOTOR'] } })).status, 400);
+      assert.equal((await e.api('POST', `${base}/postergaciones`, { body: { motivo: 'falta_espacio', km_limite_nuevo: km + 5000 } })).status, 400);
+
+      // Supera el límite mientras está inactivo: no cambia de estado ni genera alerta.
+      const alertasAntes = await alertasMotor();
+      const superado = antes.km_limite + 100;
+      assert.equal((await e.api('POST', '/unidades/AP414XV/kilometraje', { body: { km: superado } })).status, 201);
+      assert.equal((await plan()).estado, antes.estado);
+      assert.equal(await alertasMotor(), alertasAntes);
+
+      // Al reactivarlo se evalúa: vencida, con una sola alerta nueva.
+      const re = await e.api('PATCH', base, { body: { activo: true } });
+      assert.deepEqual([re.body.activo, re.body.estado], [true, 'vencida']);
+      assert.equal(await alertasMotor(), alertasAntes + 1);
+
+      assert.equal((await e.api('PATCH', base, { body: { activo: 'si' } })).status, 400);
+    });
+  });
+
+
   describe('Errores generales', () => {
     it('JSON inválido, body que no es objeto y ruta inexistente', async () => {
       assert.equal((await e.api('POST', '/unidades/AP414XV/kilometraje', { body: '{malo' })).status, 400);

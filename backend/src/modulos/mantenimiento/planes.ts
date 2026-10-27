@@ -12,6 +12,7 @@ interface FilaPlan {
   umbral_aviso_km: number;
   km_ultimo_service: number;
   estado: EstadoPlan;
+  activo: boolean;
   km_actual: number;
   post_fecha: Date | null;
   post_motivo: string | null;
@@ -21,10 +22,10 @@ interface FilaPlan {
 }
 
 /** Planes de una unidad (o uno solo), con el km actual y la postergación abierta más reciente. */
-function consultarPlanes(sql: Sql, patente: string, codigoTarea?: string) {
+function consultarPlanes(sql: Sql, patente: string, op: { codigoTarea?: string; soloActivos?: boolean } = {}) {
   return sql<FilaPlan[]>`
     select p.patente, p.codigo_tarea, t.nombre, p.intervalo_km, p.umbral_aviso_km, p.km_ultimo_service,
-           p.estado, u.km_actual,
+           p.estado, p.activo, u.km_actual,
            pg.fecha as post_fecha, pg.motivo as post_motivo, pg.motivo_descripcion as post_motivo_descripcion,
            pg.km_limite_nuevo as post_km_limite_nuevo, pg.email_usuario as post_email_usuario
       from planes_mantenimiento p
@@ -37,8 +38,9 @@ function consultarPlanes(sql: Sql, patente: string, codigoTarea?: string) {
          limit 1
       ) pg on true
      where p.patente = ${patente}
-       ${codigoTarea ? sql`and p.codigo_tarea = ${codigoTarea}` : sql``}
-     order by t.intervalo_km_default, t.codigo`;
+       ${op.codigoTarea ? sql`and p.codigo_tarea = ${op.codigoTarea}` : sql``}
+       ${op.soloActivos ? sql`and p.activo` : sql``}
+     order by p.activo desc, t.intervalo_km_default, t.codigo`;
 }
 
 const postergacionDe = (f: FilaPlan) =>
@@ -65,16 +67,17 @@ function vistaPlan(f: FilaPlan) {
     km_limite,
     km_restantes: redondear(km_limite - f.km_actual), // negativo si ya venció
     estado: f.estado,
+    activo: f.activo,
     postergacion_vigente: post,
   };
 }
 
-export async function listarPlanes(sql: Sql, patente: string) {
-  return (await consultarPlanes(sql, patente)).map(vistaPlan);
+export async function listarPlanes(sql: Sql, patente: string, { soloActivos = false } = {}) {
+  return (await consultarPlanes(sql, patente, { soloActivos })).map(vistaPlan);
 }
 
 export async function obtenerPlan(sql: Sql, patente: string, codigoTarea: string) {
-  const [f] = await consultarPlanes(sql, patente, codigoTarea);
+  const [f] = await consultarPlanes(sql, patente, { codigoTarea });
   return f ? vistaPlan(f) : null;
 }
 
@@ -90,7 +93,7 @@ export async function recalcularPlanes(tx: Sql, patente: string, instante = new 
   await tx`select 1 from unidades where patente = ${patente} for update`;
   const cambios: { codigo_tarea: string; de: EstadoPlan; a: EstadoPlan }[] = [];
 
-  for (const f of await consultarPlanes(tx, patente)) {
+  for (const f of await consultarPlanes(tx, patente, { soloActivos: true })) {
     const { estado } = evaluarPlan(f, f.km_actual, postergacionDe(f));
     if (estado === f.estado) continue;
 
