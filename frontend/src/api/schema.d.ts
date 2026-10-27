@@ -132,7 +132,13 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Modifica nombre o rol (admin) */
+        /**
+         * Modifica nombre o rol, o da de baja / reactiva (admin, RF17)
+         * @description Baja lógica con `activo: false`: el usuario conserva sus registros (RNF11), pero recibe 403
+         *     `usuario_no_habilitado` aunque tenga sesión válida en Supabase. Con `activo: true` se reactiva.
+         *     409 si el admin intenta darse de baja a sí mismo, o si se quita el rol o se da de baja
+         *     al único administrador activo.
+         */
         patch: {
             parameters: {
                 query?: never;
@@ -144,9 +150,15 @@ export interface paths {
             };
             requestBody: {
                 content: {
+                    /**
+                     * @example {
+                     *       "activo": false
+                     *     }
+                     */
                     "application/json": {
                         nombre?: string;
                         rol?: components["schemas"]["Rol"];
+                        activo?: boolean;
                     };
                 };
             };
@@ -163,6 +175,7 @@ export interface paths {
                 400: components["responses"]["Validacion"];
                 403: components["responses"]["SinPermiso"];
                 404: components["responses"]["NoEncontrado"];
+                409: components["responses"]["Conflicto"];
             };
         };
         trace?: never;
@@ -613,10 +626,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Catálogo de tareas con sus intervalos por defecto (RF07, RN03) */
+        /**
+         * Catálogo de tareas con sus intervalos por defecto (RF07, RN03)
+         * @description Sin filtro devuelve todas, incluidas las dadas de baja (para poder reactivarlas), con las activas primero.
+         *     Para elegir una tarea al asignarla a una unidad, usar `activa=true`.
+         */
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    activa?: boolean;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -634,6 +653,7 @@ export interface paths {
                         };
                     };
                 };
+                400: components["responses"]["Validacion"];
             };
         };
         put?: never;
@@ -679,6 +699,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tareas-catalogo/{codigo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example ACEITE_CAJA */
+                codigo: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Edita o da de baja / reactiva una tarea del catálogo (admin, RF07)
+         * @description Los valores por defecto solo se usan al asignar la tarea a una unidad: los planes existentes no cambian.
+         *     Baja lógica con `activa: false`: la tarea no se puede asignar a más unidades, pero sus planes,
+         *     services y alertas se conservan. El código no se puede editar.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    /** @example ACEITE_CAJA */
+                    codigo: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    /**
+                     * @example {
+                     *       "activa": false
+                     *     }
+                     */
+                    "application/json": {
+                        nombre?: string;
+                        intervalo_km_default?: number;
+                        umbral_aviso_km_default?: number;
+                        activa?: boolean;
+                    };
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TareaCatalogo"];
+                    };
+                };
+                400: components["responses"]["Validacion"];
+                403: components["responses"]["SinPermiso"];
+                404: components["responses"]["NoEncontrado"];
+            };
+        };
+        trace?: never;
+    };
     "/unidades/{patente}/planes": {
         parameters: {
             query?: never;
@@ -689,7 +773,10 @@ export interface paths {
             };
             cookie?: never;
         };
-        /** Planes de la unidad con su estado actual (RF07, RF08) */
+        /**
+         * Planes de la unidad con su estado actual (RF07, RF08)
+         * @description Incluye los planes dados de baja (`activo = false`), después de los activos. El detalle de la unidad muestra solo los activos.
+         */
         get: {
             parameters: {
                 query?: never;
@@ -721,6 +808,7 @@ export interface paths {
          * Asigna una tarea del catálogo a la unidad (admin)
          * @description `intervalo_km` y `umbral_aviso_km` toman el valor del catálogo si se omiten.
          *     `km_ultimo_service` es opcional; si se omite, el mock asume el km actual (decisión abierta).
+         *     La tarea tiene que estar activa en el catálogo (400 si está dada de baja).
          */
         post: {
             parameters: {
@@ -784,7 +872,13 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Edita intervalo o umbral de un plan (admin) */
+        /**
+         * Edita intervalo o umbral, o da de baja / reactiva un plan (admin, RF07)
+         * @description Baja lógica con `activo: false`: el plan no se evalúa, no genera alertas, no cuenta en el estado de la flota
+         *     ni admite services o postergaciones (400). Se cierra su postergación abierta y se conserva el historial.
+         *     Con `activo: true` se reactiva y se recalcula su estado (puede pasar a próxima o vencida y generar la alerta).
+         *     No se puede reactivar si la tarea está dada de baja en el catálogo (400).
+         */
         patch: {
             parameters: {
                 query?: never;
@@ -799,9 +893,15 @@ export interface paths {
             };
             requestBody: {
                 content: {
+                    /**
+                     * @example {
+                     *       "activo": false
+                     *     }
+                     */
                     "application/json": {
                         intervalo_km?: number;
                         umbral_aviso_km?: number;
+                        activo?: boolean;
                     };
                 };
             };
@@ -1283,6 +1383,8 @@ export interface components {
             email?: string;
             nombre?: string | null;
             rol?: components["schemas"]["Rol"];
+            /** @description false si fue dado de baja */
+            activo?: boolean;
             /** Format: date-time */
             created_at?: string;
         };
@@ -1386,6 +1488,8 @@ export interface components {
             intervalo_km_default: number;
             /** @default 4000 */
             umbral_aviso_km_default: number;
+            /** @description false si fue dada de baja. Se ignora en el alta. */
+            readonly activa?: boolean;
         };
         PostergacionVigente: {
             /** Format: date-time */
@@ -1406,6 +1510,8 @@ export interface components {
             /** @description km_limite - km actual de la unidad; negativo si ya se pasó */
             km_restantes?: number;
             estado?: components["schemas"]["EstadoPlan"];
+            /** @description false si el plan fue dado de baja */
+            activo?: boolean;
             postergacion_vigente?: components["schemas"]["PostergacionVigente"];
         };
         PlanInput: {
