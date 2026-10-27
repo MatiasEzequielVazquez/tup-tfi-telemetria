@@ -116,6 +116,8 @@ scp -r dist ubuntu@<IP>:~/tup-tfi-telemetria/frontend/
 
 `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` salen de Supabase → Project Settings → API (los mismos valores que `SUPABASE_URL` y `SUPABASE_ANON_KEY` del backend). La clave anon es pública, porque queda dentro del JavaScript del dashboard; nunca usar la `service_role`. En producción la sesión es siempre Supabase: el build rechaza `VITE_AUTH_MODE=dev`.
 
+Caddy sirve los archivos nuevos sin reiniciarse. No hay que borrar `frontend/dist` en la VM antes de copiar: Caddy la tiene montada en `/srv/dashboard`, y si la carpeta se recrea el contenedor queda apuntando a una vacía. Basta con pisar su contenido.
+
 ### 3.4 Arranque y certificado del broker
 
 Caddy obtiene el certificado de Let's Encrypt al arrancar. HiveMQ usa ese mismo certificado, convertido a PKCS#12 por [`deploy/scripts/cert-mqtt.sh`](../deploy/scripts/cert-mqtt.sh):
