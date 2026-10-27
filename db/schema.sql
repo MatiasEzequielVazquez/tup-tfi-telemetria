@@ -34,6 +34,9 @@ create table usuarios (
     email       varchar(100) primary key,
     nombre      varchar(100),
     rol         rol_usuario not null,
+    -- Baja lógica (RF17): un usuario inactivo no puede operar, pero sus registros
+    -- (services, postergaciones, cargas de km) conservan la referencia (RNF11).
+    activo      boolean not null default true,
     created_at  timestamptz not null default now()
 );
 
@@ -124,7 +127,10 @@ create table tareas_catalogo (
     codigo                      varchar(20) primary key,
     nombre                      varchar(100) not null,
     intervalo_km_default        int not null check (intervalo_km_default > 0),
-    umbral_aviso_km_default     int not null default 4000 check (umbral_aviso_km_default > 0)
+    umbral_aviso_km_default     int not null default 4000 check (umbral_aviso_km_default > 0),
+    -- Baja lógica (RF07): una tarea inactiva no se puede asignar a nuevas unidades;
+    -- los planes existentes y su historial no cambian.
+    activa                      boolean not null default true
 );
 
 insert into tareas_catalogo (codigo, nombre, intervalo_km_default, umbral_aviso_km_default) values
@@ -143,6 +149,9 @@ create table planes_mantenimiento (
     umbral_aviso_km     int not null check (umbral_aviso_km > 0),
     km_ultimo_service   numeric(10,1) not null default 0,
     estado              estado_plan not null default 'al_dia',
+    -- Baja lógica (RF07): un plan inactivo no se evalúa ni genera alertas, pero conserva
+    -- sus services, postergaciones y alertas. Se puede reactivar.
+    activo              boolean not null default true,
     created_at          timestamptz not null default now(),
     primary key (patente, codigo_tarea)
 );
