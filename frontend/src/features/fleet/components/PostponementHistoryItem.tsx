@@ -3,7 +3,7 @@ import Card from '../../../shared/components/ui/Card'
 import Dato from '../../../shared/components/ui/Dato'
 import StatusBadge, { type StatusInfo } from '../../../shared/components/ui/StatusBadge'
 import { formatDateTime } from '../../../shared/utils/formatDate'
-import { formatKm } from '../utils/format'
+import { formatKm } from '../../../shared/utils/formatKm'
 import { MOTIVO_LABEL } from '../utils/statusLabels'
 
 // `cerrada` es true cuando un service posterior cubrió la tarea (RN06).

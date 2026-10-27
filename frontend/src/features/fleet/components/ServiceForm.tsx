@@ -7,7 +7,7 @@ import TextField from '../../../shared/components/ui/TextField'
 import { todayDateOnly } from '../../../shared/utils/formatDate'
 import { useRegisterService } from '../hooks/useRegisterService'
 import type { Plan } from '../types'
-import { formatKm } from '../utils/format'
+import { formatKm } from '../../../shared/utils/formatKm'
 import {
   buildServiceBody,
   initialServiceValues,

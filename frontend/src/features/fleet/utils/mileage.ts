@@ -1,5 +1,5 @@
 import type { Dispositivo, MileageInput } from '../types'
-import { formatKm } from './format'
+import { formatKm } from '../../../shared/utils/formatKm'
 
 /** Lo que el usuario escribe en el formulario de carga de kilometraje. */
 export interface MileageFormValues {

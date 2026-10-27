@@ -4,7 +4,7 @@ import Card from '../../../shared/components/ui/Card'
 import Dato from '../../../shared/components/ui/Dato'
 import StatusBadge from '../../../shared/components/ui/StatusBadge'
 import { formatDate, formatDateTime } from '../../../shared/utils/formatDate'
-import { formatKm } from '../utils/format'
+import { formatKm } from '../../../shared/utils/formatKm'
 import {
   estadoDispositivoInfo,
   FUENTE_KM_LABEL,

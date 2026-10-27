@@ -1,8 +1,25 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { APP_NAME } from '../config/app'
+import {
+  AdminCatalogPage,
+  AdminDevicesPage,
+  AdminLayout,
+  AdminUnitPlanPage,
+  AdminUnitsPage,
+  AdminUsersPage,
+} from '../features/admin'
 import { AlertsPage } from '../features/alerts'
 import { FleetPage, HistoryPage, UnitDetailPage } from '../features/fleet'
-import { LOGIN_PATH, LoginPage, RequireSession, SessionBanner, SessionPanel } from '../features/session'
+import {
+  LOGIN_PATH,
+  LoginPage,
+  RequireRole,
+  RequireSession,
+  SessionBanner,
+  SessionPanel,
+  useCan,
+  useCurrentUser,
+} from '../features/session'
 import AppLayout, { type NavItem } from '../shared/components/layout/AppLayout'
 import NotFoundPage from './NotFoundPage'
 
@@ -11,9 +28,34 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/alertas', label: 'Alertas' },
 ]
 
-// Las alertas enlazan al detalle de una unidad sin conocer la feature fleet: la ruta se
-// les entrega desde acá.
+// Solo para administradores (RN11). Activa también con las subrutas (/administracion/...).
+const ADMIN_NAV_ITEM: NavItem = { to: '/administracion', label: 'Administración' }
+
+// Las alertas y la administración enlazan al detalle de una unidad sin conocer la feature
+// fleet: la ruta se les entrega desde acá.
 const unitPath = (patente: string) => `/unidades/${encodeURIComponent(patente)}`
+
+/**
+ * Encabezado y estructura de la aplicación. Va dentro de `RequireSession`, así que el usuario
+ * ya está cargado y la navegación puede mostrar solo lo que su rol permite.
+ */
+const AppShell = () => {
+  const isAdmin = useCan('admin')
+
+  return (
+    <AppLayout
+      brand={APP_NAME}
+      homePath="/unidades"
+      navItems={isAdmin ? [...NAV_ITEMS, ADMIN_NAV_ITEM] : NAV_ITEMS}
+      headerEnd={<SessionPanel />}
+      notice={<SessionBanner />}
+    />
+  )
+}
+
+// La gestión de usuarios necesita saber quién tiene la sesión iniciada (para avisar si un
+// administrador se quita su propio rol) sin conocer la feature session: se lo entrega esta ruta.
+const AdminUsersRoute = () => <AdminUsersPage currentEmail={useCurrentUser().data?.email} />
 
 /**
  * Rutas de la aplicación y composición de las features dentro del layout. Es el único lugar
@@ -23,22 +65,22 @@ export const AppRouter = () => (
   <Routes>
     <Route path={LOGIN_PATH} element={<LoginPage />} />
     <Route element={<RequireSession />}>
-      <Route
-        element={
-          <AppLayout
-            brand={APP_NAME}
-            homePath="/unidades"
-            navItems={NAV_ITEMS}
-            headerEnd={<SessionPanel />}
-            notice={<SessionBanner />}
-          />
-        }
-      >
+      <Route element={<AppShell />}>
         <Route path="/" element={<Navigate to="/unidades" replace />} />
         <Route path="/unidades" element={<FleetPage />} />
         <Route path="/unidades/:patente" element={<UnitDetailPage />} />
         <Route path="/unidades/:patente/historial" element={<HistoryPage />} />
         <Route path="/alertas" element={<AlertsPage unitPath={unitPath} />} />
+        <Route element={<RequireRole roles={['admin']} />}>
+          <Route path="/administracion" element={<Navigate to="/administracion/unidades" replace />} />
+          <Route element={<AdminLayout />}>
+            <Route path="/administracion/unidades" element={<AdminUnitsPage unitPath={unitPath} />} />
+            <Route path="/administracion/unidades/:patente/plan" element={<AdminUnitPlanPage />} />
+            <Route path="/administracion/dispositivos" element={<AdminDevicesPage unitPath={unitPath} />} />
+            <Route path="/administracion/catalogo" element={<AdminCatalogPage />} />
+            <Route path="/administracion/usuarios" element={<AdminUsersRoute />} />
+          </Route>
+        </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Route>

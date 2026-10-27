@@ -3,7 +3,7 @@ import type { DetalleUnidad } from '../../../api/types'
 import Button from '../../../shared/components/ui/Button'
 import Dialog from '../../../shared/components/ui/Dialog'
 import type { Plan } from '../types'
-import { formatKm } from '../utils/format'
+import { formatKm } from '../../../shared/utils/formatKm'
 import { canPostpone } from '../utils/postpone'
 import PostponeForm from './PostponeForm'
 

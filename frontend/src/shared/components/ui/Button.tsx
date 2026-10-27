@@ -1,12 +1,13 @@
 import type { ButtonHTMLAttributes } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'danger'
 }
 
 const VARIANTS = {
   primary: 'bg-accent text-on-accent border-accent hover:opacity-90',
   secondary: 'bg-surface text-fg border-muted hover:bg-neutral-bg',
+  danger: 'bg-danger-fg text-surface border-danger-fg hover:opacity-90',
 }
 
 /** Botón de acción. El estado `disabled` no depende solo del color: baja la opacidad y cambia el cursor. */

@@ -1,6 +1,6 @@
 import type { EstadoPlan, MotivoPostergacion } from '../../../api/types'
 import type { PostponeInput } from '../types'
-import { formatKm } from './format'
+import { formatKm } from '../../../shared/utils/formatKm'
 import { MOTIVO_LABEL } from './statusLabels'
 
 /** Una semana de operación (RN05, CU10): el nuevo límite que se propone sobre el km actual. */

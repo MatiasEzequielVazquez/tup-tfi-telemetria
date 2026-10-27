@@ -4,7 +4,7 @@ import Button from '../../../shared/components/ui/Button'
 import TextField from '../../../shared/components/ui/TextField'
 import { todayDateOnly } from '../../../shared/utils/formatDate'
 import { useLoadMileage } from '../hooks/useLoadMileage'
-import { formatKm } from '../utils/format'
+import { formatKm } from '../../../shared/utils/formatKm'
 import {
   buildMileageBody,
   validateMileage,
