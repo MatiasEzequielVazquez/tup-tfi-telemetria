@@ -26,7 +26,13 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-const ana = { email: 'ana.perez@flota.example', nombre: 'Ana Pérez', rol: 'mantenimiento', created_at: '2026-01-01T00:00:00Z' }
+const ana = {
+  email: 'ana.perez@flota.example',
+  nombre: 'Ana Pérez',
+  rol: 'mantenimiento',
+  activo: true,
+  created_at: '2026-01-01T00:00:00Z',
+}
 
 describe('getUsers', () => {
   it('pide los usuarios y devuelve la lista', async () => {
@@ -38,14 +44,24 @@ describe('getUsers', () => {
     expect(result).toEqual([ana])
   })
 
-  it('rechaza una respuesta sin lista o con un usuario sin email o sin rol', async () => {
+  it('conserva a los usuarios dados de baja', async () => {
+    const baja = { ...ana, email: 'baja@flota.example', activo: false }
+    fetchMock.mockResolvedValueOnce(json({ data: [ana, baja] }))
+
+    expect(await getUsers()).toEqual([ana, baja])
+  })
+
+  it('rechaza una respuesta sin lista o con un usuario sin email, sin rol o sin estado', async () => {
     fetchMock.mockResolvedValueOnce(json({}))
     await expect(getUsers()).rejects.toMatchObject({ kind: 'invalid-response' })
 
-    fetchMock.mockResolvedValueOnce(json({ data: [{ rol: 'admin' }] }))
+    fetchMock.mockResolvedValueOnce(json({ data: [{ rol: 'admin', activo: true }] }))
     await expect(getUsers()).rejects.toMatchObject({ kind: 'invalid-response' })
 
-    fetchMock.mockResolvedValueOnce(json({ data: [{ email: 'a@b.co' }] }))
+    fetchMock.mockResolvedValueOnce(json({ data: [{ email: 'a@b.co', activo: true }] }))
+    await expect(getUsers()).rejects.toMatchObject({ kind: 'invalid-response' })
+
+    fetchMock.mockResolvedValueOnce(json({ data: [{ email: 'a@b.co', rol: 'admin' }] }))
     await expect(getUsers()).rejects.toMatchObject({ kind: 'invalid-response' })
   })
 })
@@ -86,6 +102,29 @@ describe('updateUser', () => {
     expect(requested()).toMatchObject({ path: '/api/v1/usuarios/ana%2Bprueba%40flota.example', method: 'PATCH' })
     expect(JSON.parse(String(requested().body))).toEqual({ rol: 'admin' })
     expect(result).toMatchObject({ rol: 'admin' })
+  })
+
+  it('da de baja y reactiva con `activo`', async () => {
+    fetchMock.mockResolvedValueOnce(json({ ...ana, activo: false }))
+    expect(await updateUser(ana.email, { activo: false })).toMatchObject({ activo: false })
+    expect(requested()).toMatchObject({ method: 'PATCH' })
+    expect(JSON.parse(String(requested().body))).toEqual({ activo: false })
+
+    fetchMock.mockClear()
+    fetchMock.mockResolvedValueOnce(json(ana))
+    expect(await updateUser(ana.email, { activo: true })).toMatchObject({ activo: true })
+    expect(JSON.parse(String(requested().body))).toEqual({ activo: true })
+  })
+
+  it('conserva el mensaje del servidor si un administrador se da de baja a sí mismo (409)', async () => {
+    fetchMock.mockResolvedValueOnce(
+      json({ error: { code: 'conflicto', message: 'No podés darte de baja a vos mismo.' } }, 409),
+    )
+
+    await expect(updateUser('laura.gomez@flota.example', { activo: false })).rejects.toMatchObject({
+      status: 409,
+      message: 'No podés darte de baja a vos mismo.',
+    })
   })
 
   it('conserva el mensaje del servidor si deja al sistema sin administradores (409)', async () => {
