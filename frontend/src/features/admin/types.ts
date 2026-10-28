@@ -38,6 +38,11 @@ export type UserEdit = NonNullable<paths['/usuarios/{email}']['patch']['requestB
 /** Cuerpo de POST /tareas-catalogo. */
 export type CatalogTaskInput = Schemas['TareaCatalogo']
 
+/** Cuerpo de PATCH /tareas-catalogo/{codigo}: solo lo que cambia, o `activa` para la baja. */
+export type CatalogTaskEdit = NonNullable<
+  paths['/tareas-catalogo/{codigo}']['patch']['requestBody']
+>['content']['application/json']
+
 /** Cuerpo de POST /unidades. */
 export type UnitInput = Schemas['UnidadInput']
 

@@ -1,6 +1,6 @@
-// AdminUnitPlanPage.tsx — plan de mantenimiento de una unidad: asignar tareas del catálogo y
-// ajustar su intervalo y su aviso (CU04 · RF07, RN03), ruta /administracion/unidades/:patente/plan.
-// Solo para administradores (RN11).
+// AdminUnitPlanPage.tsx — plan de mantenimiento de una unidad: asignar tareas del catálogo,
+// ajustar su intervalo y su aviso, y darlas de baja o reactivarlas (CU04 · RF07, RN03), ruta
+// /administracion/unidades/:patente/plan. Solo para administradores (RN11).
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { ApiError } from '../../../api/client'
@@ -31,7 +31,8 @@ const AdminUnitPlanPage = () => {
   useDocumentTitle(`Plan de ${patente} - ${APP_NAME}`)
   const unit = useAdminUnit(patente)
   const plans = useUnitPlans(patente)
-  const catalog = useCatalog()
+  // Para asignar solo se ofrecen las tareas activas del catálogo.
+  const catalog = useCatalog({ activa: true })
   const retry = useRetryFailedQueries()
   const [assigning, setAssigning] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
@@ -71,6 +72,8 @@ const AdminUnitPlanPage = () => {
 
   const { data: unidad } = unit
   const available = assignableTasks(catalog.data, plans.data)
+  const activePlans = plans.data.filter((plan) => plan.activo)
+  const inactivePlans = plans.data.filter((plan) => !plan.activo)
 
   return (
     <>
@@ -115,29 +118,58 @@ const AdminUnitPlanPage = () => {
           ) : (
             <p className="text-muted">
               {plans.data.length === 0
-                ? 'El catálogo no tiene tareas para asignar.'
-                : 'La unidad ya tiene todas las tareas del catálogo.'}
+                ? 'El catálogo no tiene tareas activas para asignar.'
+                : 'La unidad ya tiene todas las tareas activas del catálogo.'}
             </p>
           )}
         </div>
       )}
 
-      {plans.data.length === 0 ? (
+      {activePlans.length === 0 ? (
         <Card>
-          <p>Esta unidad no tiene tareas de mantenimiento asignadas.</p>
+          <p>
+            {inactivePlans.length === 0
+              ? 'Esta unidad no tiene tareas de mantenimiento asignadas.'
+              : 'Esta unidad no tiene tareas de mantenimiento activas.'}
+          </p>
         </Card>
       ) : (
-        <ul className="grid gap-3">
-          {plans.data.map((plan) => (
-            <AdminPlanItem
-              key={plan.codigo_tarea}
-              patente={patente}
-              plan={plan}
-              editable={unidad.activa}
-              onDone={setNotice}
-            />
-          ))}
-        </ul>
+        <>
+          <h2 className="mb-2 text-lg font-bold">Tareas del plan</h2>
+          <ul className="grid gap-3">
+            {activePlans.map((plan) => (
+              <AdminPlanItem
+                key={plan.codigo_tarea}
+                patente={patente}
+                plan={plan}
+                editable={unidad.activa}
+                onDone={setNotice}
+              />
+            ))}
+          </ul>
+        </>
+      )}
+
+      {inactivePlans.length > 0 && (
+        <section className="mt-6" aria-labelledby="plan-inactivas">
+          <h2 id="plan-inactivas" className="mb-1 text-lg font-bold">
+            Tareas dadas de baja
+          </h2>
+          <p className="mb-2 text-sm text-muted">
+            No generan alertas ni cuentan en el estado de la flota. Conservan su historial y se pueden reactivar.
+          </p>
+          <ul className="grid gap-3">
+            {inactivePlans.map((plan) => (
+              <AdminPlanItem
+                key={plan.codigo_tarea}
+                patente={patente}
+                plan={plan}
+                editable={unidad.activa}
+                onDone={setNotice}
+              />
+            ))}
+          </ul>
+        </section>
       )}
 
       <AssignTaskDialog

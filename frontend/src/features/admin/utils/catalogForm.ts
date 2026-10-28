@@ -1,4 +1,4 @@
-import type { CatalogTaskInput } from '../types'
+import type { CatalogTask, CatalogTaskEdit, CatalogTaskInput } from '../types'
 import { parsePositiveInteger } from './numbers'
 
 /** Código de una tarea: mayúsculas, números y guion bajo, de 2 a 20 caracteres. */
@@ -28,17 +28,29 @@ export const emptyCatalogValues = (): CatalogFormValues => ({
   umbral: String(DEFAULT_WARNING_KM),
 })
 
+export const catalogTaskToValues = (task: CatalogTask): CatalogFormValues => ({
+  codigo: task.codigo,
+  nombre: task.nombre,
+  intervalo: String(task.intervalo_km_default),
+  umbral: String(task.umbral_aviso_km_default),
+})
+
 /**
  * Validaciones previas al envío, para avisar sin ir al servidor. El servidor sigue siendo
- * quien decide (código repetido, por ejemplo).
+ * quien decide (código repetido, por ejemplo). Al editar no se valida el código: no se cambia.
  */
-export const validateCatalogTask = (values: CatalogFormValues): CatalogFormErrors => {
+export const validateCatalogTask = (
+  values: CatalogFormValues,
+  { editing }: { editing: boolean } = { editing: false },
+): CatalogFormErrors => {
   const errors: CatalogFormErrors = {}
 
-  const codigo = normalizeCodigo(values.codigo)
-  if (codigo === '') errors.codigo = 'Ingresá el código.'
-  else if (!CODIGO_PATTERN.test(codigo)) {
-    errors.codigo = 'Código inválido: de 2 a 20 caracteres entre mayúsculas, números y guion bajo.'
+  if (!editing) {
+    const codigo = normalizeCodigo(values.codigo)
+    if (codigo === '') errors.codigo = 'Ingresá el código.'
+    else if (!CODIGO_PATTERN.test(codigo)) {
+      errors.codigo = 'Código inválido: de 2 a 20 caracteres entre mayúsculas, números y guion bajo.'
+    }
   }
 
   const nombre = values.nombre.trim()
@@ -62,3 +74,17 @@ export const buildCatalogBody = (values: CatalogFormValues): CatalogTaskInput =>
   intervalo_km_default: parsePositiveInteger(values.intervalo) as number,
   umbral_aviso_km_default: parsePositiveInteger(values.umbral) as number,
 })
+
+/** Cuerpo de la edición: solo lo que cambió. Solo se llama con valores ya validados. */
+export const buildEditCatalogBody = (values: CatalogFormValues, original: CatalogTask): CatalogTaskEdit => {
+  const body: CatalogTaskEdit = {}
+  const nombre = values.nombre.trim()
+  const intervalo = parsePositiveInteger(values.intervalo) as number
+  const umbral = parsePositiveInteger(values.umbral) as number
+  if (nombre !== original.nombre) body.nombre = nombre
+  if (intervalo !== original.intervalo_km_default) body.intervalo_km_default = intervalo
+  if (umbral !== original.umbral_aviso_km_default) body.umbral_aviso_km_default = umbral
+  return body
+}
+
+export const hasCatalogChanges = (body: CatalogTaskEdit): boolean => Object.keys(body).length > 0
