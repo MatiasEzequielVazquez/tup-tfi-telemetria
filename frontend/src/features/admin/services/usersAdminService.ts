@@ -1,11 +1,12 @@
 import { apiGet, apiPatch, apiPost } from '../../../api/client'
-import { expectArray, expectRecord, expectString } from '../../../api/guards'
+import { expectArray, expectBoolean, expectRecord, expectString } from '../../../api/guards'
 import type { User, UserEdit, UserInput } from '../types'
 
 const checkUser = (raw: unknown, where: string): User => {
   const user = expectRecord(raw, where)
   expectString(user.email, `${where} › email`)
   expectString(user.rol, `${where} › rol`)
+  expectBoolean(user.activo, `${where} › activo`)
   return user as unknown as User
 }
 
@@ -24,7 +25,11 @@ export const getUsers = async (signal?: AbortSignal): Promise<User[]> => {
 export const createUser = async (input: UserInput, signal?: AbortSignal): Promise<User> =>
   checkUser(await apiPost<unknown>('/usuarios', { body: input, signal }), 'POST /usuarios')
 
-/** PATCH /usuarios/{email} — cambia el nombre o el rol. 409 si deja al sistema sin administradores. */
+/**
+ * PATCH /usuarios/{email} — cambia el nombre o el rol, o lo da de baja o lo reactiva (`activo`,
+ * RF17). 409 si deja al sistema sin administradores activos o si el administrador se da de baja
+ * a sí mismo.
+ */
 export const updateUser = async (email: string, input: UserEdit, signal?: AbortSignal): Promise<User> =>
   checkUser(
     await apiPatch<unknown>('/usuarios/{email}', { pathParams: { email }, body: input, signal }),

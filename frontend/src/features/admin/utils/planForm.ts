@@ -20,7 +20,10 @@ export interface AssignFormValues {
 
 export type AssignFormErrors = Partial<Record<keyof AssignFormValues, string>>
 
-/** Tareas del catálogo que la unidad todavía no tiene (una tarea no se asigna dos veces). */
+/**
+ * Tareas del catálogo que la unidad todavía no tiene (una tarea no se asigna dos veces). Una con
+ * el plan dado de baja cuenta como que la tiene: se reactiva, no se vuelve a asignar.
+ */
 export const assignableTasks = (catalog: readonly CatalogTask[], plans: readonly UnitPlan[]): CatalogTask[] =>
   catalog.filter((task) => !plans.some((plan) => plan.codigo_tarea === task.codigo))
 

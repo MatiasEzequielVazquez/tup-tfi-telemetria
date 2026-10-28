@@ -27,7 +27,13 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-const plan = { codigo_tarea: 'ACEITE_MOTOR', nombre: 'Cambio de aceite de motor', intervalo_km: 40000, umbral_aviso_km: 4000 }
+const plan = {
+  codigo_tarea: 'ACEITE_MOTOR',
+  nombre: 'Cambio de aceite de motor',
+  intervalo_km: 40000,
+  umbral_aviso_km: 4000,
+  activo: true,
+}
 
 describe('getUnit', () => {
   it('pide los datos básicos de la unidad', async () => {
@@ -58,11 +64,21 @@ describe('getUnitPlans', () => {
     expect(result).toEqual([plan])
   })
 
-  it('rechaza un plan sin código de tarea o sin intervalo', async () => {
-    fetchMock.mockResolvedValueOnce(json({ data: [{ intervalo_km: 1 }] }))
+  it('incluye los planes dados de baja', async () => {
+    const baja = { ...plan, codigo_tarea: 'ACEITE_CAJA', activo: false }
+    fetchMock.mockResolvedValueOnce(json({ data: [plan, baja] }))
+
+    expect(await getUnitPlans('AB123CD')).toEqual([plan, baja])
+  })
+
+  it('rechaza un plan sin código de tarea, sin intervalo o sin estado', async () => {
+    fetchMock.mockResolvedValueOnce(json({ data: [{ intervalo_km: 1, activo: true }] }))
     await expect(getUnitPlans('X')).rejects.toMatchObject({ kind: 'invalid-response' })
 
-    fetchMock.mockResolvedValueOnce(json({ data: [{ codigo_tarea: 'A' }] }))
+    fetchMock.mockResolvedValueOnce(json({ data: [{ codigo_tarea: 'A', activo: true }] }))
+    await expect(getUnitPlans('X')).rejects.toMatchObject({ kind: 'invalid-response' })
+
+    fetchMock.mockResolvedValueOnce(json({ data: [{ codigo_tarea: 'A', intervalo_km: 1 }] }))
     await expect(getUnitPlans('X')).rejects.toMatchObject({ kind: 'invalid-response' })
   })
 })
@@ -103,5 +119,27 @@ describe('updatePlan', () => {
     expect(requested()).toMatchObject({ path: '/api/v1/unidades/AB%20123/planes/TAREA%2FX', method: 'PATCH' })
     expect(JSON.parse(String(requested().body))).toEqual({ intervalo_km: 60000 })
     expect(result).toMatchObject({ intervalo_km: 60000 })
+  })
+
+  it('da de baja y reactiva con `activo`', async () => {
+    fetchMock.mockResolvedValueOnce(json({ ...plan, activo: false }))
+    expect(await updatePlan('AB123CD', 'ACEITE_MOTOR', { activo: false })).toMatchObject({ activo: false })
+    expect(JSON.parse(String(requested().body))).toEqual({ activo: false })
+
+    fetchMock.mockClear()
+    fetchMock.mockResolvedValueOnce(json(plan))
+    expect(await updatePlan('AB123CD', 'ACEITE_MOTOR', { activo: true })).toMatchObject({ activo: true })
+    expect(JSON.parse(String(requested().body))).toEqual({ activo: true })
+  })
+
+  it('conserva el mensaje del servidor si la tarea está dada de baja en el catálogo (400)', async () => {
+    fetchMock.mockResolvedValueOnce(
+      json({ error: { code: 'validacion', message: 'La tarea está dada de baja en el catálogo.' } }, 400),
+    )
+
+    await expect(updatePlan('AB123CD', 'ACEITE_MOTOR', { activo: true })).rejects.toMatchObject({
+      status: 400,
+      message: 'La tarea está dada de baja en el catálogo.',
+    })
   })
 })

@@ -25,6 +25,11 @@ export function expectNumber(value: unknown, what: string): number {
   return value
 }
 
+export function expectBoolean(value: unknown, what: string): boolean {
+  if (typeof value !== 'boolean') throw invalidResponse(`se esperaba un booleano en ${what}.`)
+  return value
+}
+
 export function expectString(value: unknown, what: string): string {
   if (typeof value !== 'string') throw invalidResponse(`se esperaba un texto en ${what}.`)
   return value

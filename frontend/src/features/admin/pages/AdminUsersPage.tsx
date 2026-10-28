@@ -1,4 +1,4 @@
-// AdminUsersPage.tsx — gestión de usuarios: alta y cambio de rol o nombre (CU05 · RF17, RN11),
+// AdminUsersPage.tsx — gestión de usuarios: alta, cambio de rol o nombre, baja y reactivación (CU05 · RF17, RN11),
 // ruta /administracion/usuarios. Solo para administradores.
 import { useState } from 'react'
 import { APP_NAME } from '../../../config/app'
@@ -23,6 +23,7 @@ const AdminUsersPage = ({ currentEmail }: AdminUsersPageProps) => {
   const retry = useRetryFailedQueries()
   const [creating, setCreating] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
+  const inactive = data?.filter((user) => !user.activo).length ?? 0
 
   return (
     <>
@@ -65,7 +66,10 @@ const AdminUsersPage = ({ currentEmail }: AdminUsersPageProps) => {
 
       {data && data.length > 0 && (
         <>
-          <p className="mb-3 text-muted">{data.length === 1 ? '1 usuario' : `${data.length} usuarios`}</p>
+          <p className="mb-3 text-muted">
+            {data.length === 1 ? '1 usuario' : `${data.length} usuarios`}
+            {inactive > 0 && ` · ${inactive === 1 ? '1 dado de baja' : `${inactive} dados de baja`}`}
+          </p>
           <ul className="grid gap-3">
             {data.map((user) => (
               <UserItem key={user.email} user={user} currentEmail={currentEmail} onDone={setNotice} />

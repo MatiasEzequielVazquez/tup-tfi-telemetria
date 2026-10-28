@@ -1,16 +1,16 @@
-// AdminCatalogPage.tsx — catálogo de tareas de mantenimiento con sus intervalos por defecto
-// (CU04 · RF07, RN03), ruta /administracion/catalogo. Solo para administradores (RN11).
+// AdminCatalogPage.tsx — catálogo de tareas de mantenimiento con sus intervalos por defecto:
+// alta, edición, baja y reactivación (CU04 · RF07, RN03), ruta /administracion/catalogo.
+// Solo para administradores (RN11).
 import { useState } from 'react'
 import { APP_NAME } from '../../../config/app'
 import Button from '../../../shared/components/ui/Button'
 import Card from '../../../shared/components/ui/Card'
-import Dato from '../../../shared/components/ui/Dato'
 import ErrorPanel from '../../../shared/components/ui/ErrorPanel'
 import LoaderSpinner from '../../../shared/components/ui/LoaderSpinner'
 import { useDocumentTitle } from '../../../shared/hooks/useDocumentTitle'
 import { useRetryFailedQueries } from '../../../shared/hooks/useRetryFailedQueries'
-import { formatKm } from '../../../shared/utils/formatKm'
-import CreateCatalogTaskDialog from '../components/CreateCatalogTaskDialog'
+import CatalogTaskFormDialog from '../components/CatalogTaskFormDialog'
+import CatalogTaskItem from '../components/CatalogTaskItem'
 import { useCatalog } from '../hooks/useCatalog'
 
 const AdminCatalogPage = () => {
@@ -19,6 +19,7 @@ const AdminCatalogPage = () => {
   const retry = useRetryFailedQueries()
   const [creating, setCreating] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
+  const inactive = data?.filter((task) => !task.activa).length ?? 0
 
   return (
     <>
@@ -64,26 +65,23 @@ const AdminCatalogPage = () => {
       )}
 
       {data && data.length > 0 && (
-        <ul className="grid gap-3">
-          {data.map((task) => (
-            <Card as="li" key={task.codigo} className="space-y-3">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h2 className="text-lg font-bold">{task.nombre}</h2>
-                <p className="text-sm text-muted">{task.codigo}</p>
-              </div>
-              <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <Dato etiqueta="Intervalo por defecto">{formatKm(task.intervalo_km_default)}</Dato>
-                <Dato etiqueta="Aviso por defecto">{formatKm(task.umbral_aviso_km_default)}</Dato>
-              </dl>
-            </Card>
-          ))}
-        </ul>
+        <>
+          <p className="mb-3 text-muted">
+            {data.length === 1 ? '1 tarea' : `${data.length} tareas`}
+            {inactive > 0 && ` · ${inactive === 1 ? '1 dada de baja' : `${inactive} dadas de baja`}`}
+          </p>
+          <ul className="grid gap-3">
+            {data.map((task) => (
+              <CatalogTaskItem key={task.codigo} task={task} onDone={setNotice} />
+            ))}
+          </ul>
+        </>
       )}
 
-      <CreateCatalogTaskDialog
+      <CatalogTaskFormDialog
         open={creating}
         onClose={() => setCreating(false)}
-        onCreated={(task) => {
+        onSaved={(task) => {
           setNotice(`Tarea ${task.nombre} creada.`)
           setCreating(false)
         }}

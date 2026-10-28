@@ -1,11 +1,12 @@
 import { apiGet, apiPatch, apiPost } from '../../../api/client'
-import { expectArray, expectNumber, expectRecord, expectString } from '../../../api/guards'
+import { expectArray, expectBoolean, expectNumber, expectRecord, expectString } from '../../../api/guards'
 import type { PlanEdit, PlanInput, Unit, UnitPlan } from '../types'
 
 const checkPlan = (raw: unknown, where: string): UnitPlan => {
   const plan = expectRecord(raw, where)
   expectString(plan.codigo_tarea, `${where} › codigo_tarea`)
   expectNumber(plan.intervalo_km, `${where} › intervalo_km`)
+  expectBoolean(plan.activo, `${where} › activo`)
   return plan as unknown as UnitPlan
 }
 
@@ -20,7 +21,10 @@ export const getUnit = async (patente: string, signal?: AbortSignal): Promise<Un
   return unit as unknown as Unit
 }
 
-/** GET /unidades/{patente}/planes — las tareas de la unidad con su estado actual (RF07, RF08). */
+/**
+ * GET /unidades/{patente}/planes — las tareas de la unidad con su estado actual (RF07, RF08).
+ * Incluye las dadas de baja (`activo: false`), después de las activas.
+ */
 export const getUnitPlans = async (patente: string, signal?: AbortSignal): Promise<UnitPlan[]> => {
   const where = 'GET /unidades/{patente}/planes'
   const body = expectRecord(await apiGet<unknown>('/unidades/{patente}/planes', { pathParams: { patente }, signal }), where)
@@ -34,7 +38,11 @@ export const assignTask = async (patente: string, input: PlanInput, signal?: Abo
     'POST /unidades/{patente}/planes',
   )
 
-/** PATCH /unidades/{patente}/planes/{codigo_tarea} — cambia el intervalo o el aviso; recalcula el estado. */
+/**
+ * PATCH /unidades/{patente}/planes/{codigo_tarea} — cambia el intervalo o el aviso, o da de baja
+ * o reactiva el plan (`activo`); recalcula el estado. Reactivar da 400 si la tarea está dada de
+ * baja en el catálogo.
+ */
 export const updatePlan = async (
   patente: string,
   codigoTarea: string,

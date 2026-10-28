@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest'
+import type { CatalogTask } from '../../../../../src/features/admin/types'
 import {
   buildCatalogBody,
+  buildEditCatalogBody,
+  catalogTaskToValues,
   DEFAULT_WARNING_KM,
   emptyCatalogValues,
+  hasCatalogChanges,
   MAX_NOMBRE,
   normalizeCodigo,
   validateCatalogTask,
@@ -87,5 +91,51 @@ describe('buildCatalogBody', () => {
       intervalo_km_default: 80000,
       umbral_aviso_km_default: 4000,
     })
+  })
+})
+
+const original: CatalogTask = {
+  codigo: 'FILTRO_AIRE',
+  nombre: 'Filtro de aire',
+  intervalo_km_default: 80000,
+  umbral_aviso_km_default: 4000,
+  activa: true,
+}
+
+describe('catalogTaskToValues', () => {
+  it('pasa la tarea a los textos del formulario', () => {
+    expect(catalogTaskToValues(original)).toEqual(valid)
+  })
+})
+
+describe('validateCatalogTask (edición)', () => {
+  it('no valida el código, que no se puede cambiar', () => {
+    expect(validateCatalogTask({ ...valid, codigo: '' }, { editing: true })).toEqual({})
+    expect(validateCatalogTask({ ...valid, codigo: '' }, { editing: false })).toHaveProperty('codigo')
+  })
+
+  it('sigue exigiendo nombre y valores válidos', () => {
+    expect(Object.keys(validateCatalogTask({ ...valid, nombre: ' ', intervalo: '0' }, { editing: true })).sort()).toEqual([
+      'intervalo',
+      'nombre',
+    ])
+  })
+})
+
+describe('buildEditCatalogBody', () => {
+  it('envía solo lo que cambió', () => {
+    expect(buildEditCatalogBody({ ...valid, intervalo: '90000' }, original)).toEqual({ intervalo_km_default: 90000 })
+    expect(buildEditCatalogBody({ ...valid, nombre: ' Filtro de aire grande ', umbral: '5000' }, original)).toEqual({
+      nombre: 'Filtro de aire grande',
+      umbral_aviso_km_default: 5000,
+    })
+  })
+
+  it('sin cambios no envía nada, y lo avisa hasCatalogChanges', () => {
+    const body = buildEditCatalogBody({ ...valid, nombre: ' Filtro de aire ' }, original)
+
+    expect(body).toEqual({})
+    expect(hasCatalogChanges(body)).toBe(false)
+    expect(hasCatalogChanges({ activa: false })).toBe(true)
   })
 })

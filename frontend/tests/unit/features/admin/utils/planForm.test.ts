@@ -34,6 +34,14 @@ describe('assignableTasks', () => {
     expect(assignableTasks(catalog, [plan('SECADOR_AIRE')]).map((t) => t.codigo)).toEqual(['ACEITE_MOTOR', 'ACEITE_CAJA'])
   })
 
+  it('no ofrece una tarea cuyo plan está dado de baja: se reactiva, no se vuelve a asignar', () => {
+    const catalog = [task('ACEITE_MOTOR'), task('SECADOR_AIRE')]
+
+    expect(assignableTasks(catalog, [plan('SECADOR_AIRE', { activo: false })]).map((t) => t.codigo)).toEqual([
+      'ACEITE_MOTOR',
+    ])
+  })
+
   it('con todas asignadas no ofrece ninguna, y sin plan ofrece todas', () => {
     expect(assignableTasks([task('A')], [plan('A')])).toEqual([])
     expect(assignableTasks([task('A'), task('B')], [])).toHaveLength(2)
