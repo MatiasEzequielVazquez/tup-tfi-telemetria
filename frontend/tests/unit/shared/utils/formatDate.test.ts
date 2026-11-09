@@ -5,6 +5,7 @@ import {
   formatDateTime,
   isDateOnly,
   todayDateOnly,
+  toDateOnly,
 } from '../../../../src/shared/utils/formatDate'
 
 describe('isDateOnly', () => {
@@ -25,6 +26,13 @@ describe('todayDateOnly', () => {
     // 02:00 UTC del 8 de octubre son las 23:00 del 7 en Buenos Aires.
     expect(todayDateOnly(new Date('2026-10-08T02:00:00Z'))).toBe('2026-10-07')
     expect(todayDateOnly(new Date('2026-10-08T03:00:00Z'))).toBe('2026-10-08')
+  })
+})
+
+describe('toDateOnly', () => {
+  it('da el día calendario de cualquier instante en Buenos Aires', () => {
+    expect(toDateOnly(new Date('2026-11-09T01:30:00Z'))).toBe('2026-11-08')
+    expect(toDateOnly(new Date('2026-11-09T03:00:00Z'))).toBe('2026-11-09')
   })
 })
 
