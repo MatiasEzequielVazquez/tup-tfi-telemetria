@@ -10,6 +10,7 @@ Dashboard web (React + Vite + TypeScript + Tailwind CSS), organizado por funcion
 | **Flota** con filtros por tenencia, estado y situación (activas / dadas de baja), guardados en la URL | |
 | **Detalle de unidad** (`GET /unidades/{patente}/detalle`), que vuelve al listado con sus filtros | |
 | **Alertas**: listado con filtros y paginación, y acción "Marcar como revisada" | |
+| **Analíticas**: indicadores (promedios, alertas, fallas) y seis gráficos de ECharts calculados con lo que ya expone la API | Curva de km en el tiempo por unidad (la API no expone lecturas ni historial de km) |
 | **Carga manual de kilometraje** desde el detalle de unidad (`POST /unidades/{patente}/kilometraje`) | |
 | **Postergar una tarea** del plan, con motivo y nuevo límite en km (`POST /unidades/{patente}/planes/{codigo_tarea}/postergaciones`) | |
 | **Registrar un service** de la unidad, con las tareas realizadas, fecha, km y observaciones (`POST /unidades/{patente}/services`) | |
@@ -111,6 +112,7 @@ Los filtros viven en los parámetros de la URL: se conservan al recargar, al com
 | `/unidades/:patente` | Detalle de unidad | — |
 | `/unidades/:patente/historial` | Historial de services y postergaciones | `desde`, `hasta`, `services_page`, `postergaciones_page` |
 | `/alertas` | Alertas | `estado`, `tipo`, `patente`, `page` |
+| `/analiticas` | Analíticas de la flota (se actualiza cada 30 s) | — |
 | `/administracion` | Redirige a `/administracion/unidades`. Solo administradores | — |
 | `/administracion/unidades` | Gestión de unidades. Solo administradores | `activa` (`false` = dadas de baja) |
 | `/administracion/dispositivos` | Gestión de dispositivos. Solo administradores | — |
@@ -174,15 +176,17 @@ frontend/
     ├── shared/                     # código sin conocimiento del dominio
     │   ├── components/             #   layout/AppLayout, ErrorBoundary, ui/ (Card, Dato, Button,
     │   │                           #   SelectField, TextField, TextAreaField, Dialog, Pagination, StatusBadge, LoaderSpinner, ErrorPanel)
-    │   ├── hooks/                  #   useDocumentTitle, useRetryFailedQueries
+    │   │                           #   y charts/ (EChart: wrapper de ECharts sobre canvas, con el registro de tipos de gráfico)
+    │   ├── hooks/                  #   useDocumentTitle, useRetryFailedQueries, useChartColors
     │   ├── navigation/returnTarget.ts   # destino de regreso entre pantallas
-    │   └── utils/                  #   formatDate.ts, formatKm.ts
+    │   └── utils/                  #   formatDate.ts, formatKm.ts, chartColors.ts
     ├── features/
     │   ├── fleet/                  # flota: listado con filtros y detalle de unidad
     │   ├── alerts/                 # alertas: listado, filtros, paginación y revisión
+    │   ├── analytics/              # analíticas: indicadores y gráficos de la flota (ECharts)
     │   ├── admin/                  # administración (solo admin): unidades, dispositivos, catálogo, planes y usuarios
     │   └── session/                # login, sesión (Supabase o simulada), usuario actual y roles
-    └── css/main.css                # Tailwind + colores de diseño + foco
+    └── css/main.css                # Tailwind + colores de diseño (y de gráficos) + foco
 ```
 
 Cada feature tiene `index.ts` (API pública), `pages/`, `components/`, `hooks/`, `services/`, `utils/` y, si hace falta, `types.ts`.
@@ -193,6 +197,7 @@ Cada feature tiene `index.ts` (API pública), `pages/`, `components/`, `hooks/`,
 |---|---|---|
 | `fleet` | Muestra la flota (con filtros) y el detalle de una unidad con lo que calcula la API, su historial de mantenimiento, y permite cargar el kilometraje a mano, postergar tareas y registrar services. Es la única que conoce los endpoints `/unidades` para mostrar unidades. | No recalcula reglas de mantenimiento. No sabe quién es el usuario ni cómo se obtiene el token. No conoce las alertas. |
 | `alerts` | Lista y filtra alertas, pagina y marca alertas como revisadas (`/alertas`, `/alertas/revisar`). | No importa nada de `fleet`: la ruta al detalle de una unidad se la entrega `routes/AppRouter` por props. No decide qué rol puede revisar (lo resuelve la API). |
+| `analytics` | Indicadores y gráficos de la flota (`/analiticas`): calcula promedios, distribuciones y conteos en el navegador con `GET /unidades` y `GET /alertas`, y los dibuja con ECharts. Pide sus datos por su cuenta con `api/pagination`. | No importa nada de otra feature. No escribe nada en la API. No recalcula el estado de mantenimiento: usa el que informa la API. |
 | `admin` | Administración, solo para administradores (RN11): hoy, alta, edición y baja de unidades (`POST`, `PATCH` y `DELETE /unidades`) y alta, vinculación y desvinculación de dispositivos (`/dispositivos`), el catálogo de tareas y el plan de cada unidad (`/tareas-catalogo` y `/unidades/{patente}/planes`) y el alta y la edición de usuarios (`/usuarios`). Pide las unidades a la API por su cuenta. | No importa nada de `fleet`: la ruta al detalle de una unidad se la entrega `routes/AppRouter` por props. No decide quién es administrador: la ruta se protege en `routes` con `RequireRole` y el servidor responde 403 a quien no lo es. |
 | `session` | Inicia y cierra la sesión (Supabase Auth, o la **simulada** en desarrollo), protege las rutas y obtiene el usuario actual (`/me`). `initSession()` conecta el token y el manejo del 401 con el cliente HTTP. | No decide qué puede hacer cada rol: lo resuelve la API (RN11). No guarda datos de dominio. |
 
@@ -265,7 +270,9 @@ Las reglas 1–3 y 5 las comprueba `npm run lint` (`import/no-cycle` y `no-restr
 - **Fechas sin hora.** `services.fecha` es un día de calendario, no un instante: se muestra con `formatDateOnly`, no con `formatDate`, que la correría un día hacia atrás en Buenos Aires.
 - **Unidades del filtro de alertas.** Salen de la API (`GET /unidades` con `activa=true` y con `activa=false`, para incluir las dadas de baja, que pueden tener alertas). Es un acceso mínimo propio de la feature `alerts`, que reutiliza `api/pagination` y no importa nada de `fleet`.
 - **Regreso desde el detalle.** Al abrir una unidad desde la flota o desde una alerta se pasa el destino de regreso (con sus filtros) en el estado de navegación del router; el detalle lo usa para "← Volver a …". Si se entró directamente al detalle, vuelve a `/unidades`. El estado se valida (solo rutas internas).
-- **Recuperación tras una caída de la API.** "Reintentar" en Flota, Detalle y Alertas vuelve a pedir **todas las consultas en uso que terminaron en error** (`useRetryFailedQueries`), no solo la de la pantalla: así también se recupera el usuario del encabezado. No conoce dominios (mira el estado de las consultas, no sus claves), no recarga la página y no vuelve a pedir lo que está bien. No hay reintentos automáticos.
+- **Recuperación tras una caída de la API.** "Reintentar" en Flota, Detalle, Alertas y Analíticas vuelve a pedir **todas las consultas en uso que terminaron en error** (`useRetryFailedQueries`), no solo la de la pantalla: así también se recupera el usuario del encabezado. No conoce dominios (mira el estado de las consultas, no sus claves), no recarga la página y no vuelve a pedir lo que está bien. No hay reintentos automáticos.
+- **Analíticas (`/analiticas`).** No hay endpoints de agregados: la pantalla trae **todas** las unidades activas y **todas** las alertas (`getAllPages`, de a 100) y calcula en el navegador. Es razonable para una flota de decenas de unidades; con miles habría que pedirle al backend los agregados. Muestra seis indicadores (unidades, km promedio y total, % al día, alertas abiertas y la más antigua, tiempo medio de revisión, unidades con fallas) y seis gráficos: estado de mantenimiento, km promedio por tenencia, unidades con más km, alertas por tipo (abiertas y revisadas), alertas por día (últimos 30, en hora de Buenos Aires) y fallas más frecuentes (cada aparición genera una alerta de falla nueva, así que se cuentan desde `/alertas`). Se actualiza sola cada 30 s y con el botón "Actualizar"; mientras se refresca, los gráficos quedan atenuados en lugar de desaparecer, y si falla un refresco se conserva lo anterior junto al error. Los gráficos solo se redibujan si cambian los datos. **Limitación:** la API no expone lecturas ni historial de kilometraje, así que no hay curva de km en el tiempo por unidad; haría falta un endpoint nuevo (p. ej. `GET /unidades/{patente}/lecturas`), que es del backend. El dataset del mock tiene fechas fijas, por eso "hace 43,6 d" y "alertas por día" salen desfasados con él; con el backend real son relativos a hoy.
+- **Gráficos (ECharts).** Se importa solo lo necesario (`shared/components/charts/echarts.ts`: barras, ejes, leyenda y tooltip sobre canvas) y la pantalla se carga **bajo demanda** (`React.lazy` en `routes/AppRouter.tsx`), de modo que ECharts (~175 kB comprimido) no pesa en el resto de la aplicación. Los colores salen de variables CSS (`--chart-*` en `css/main.css`) con su variante oscura, y se vuelven a leer si cambia el tema del sistema. Criterios: barras de hasta 16 px con la punta redondeada y el nacimiento recto, grilla de trazo fino y continuo, **una sola serie = un solo color y sin leyenda**, valor en la punta de la barra, hueco del color de la tarjeta entre segmentos apilados, y los estados de mantenimiento con la paleta de estado más ícono y texto (el significado nunca es solo color). El tooltip nunca es la única vía: **cada gráfico tiene su tabla de datos** ("Ver los datos en una tabla") y una etiqueta accesible con el resumen. Los textos de los tooltips (códigos de falla que informan los dispositivos) se escapan: no son de confianza. Se respeta `prefers-reduced-motion`.
 - **El frontend no recalcula el mantenimiento.** El estado de cada tarea, los km restantes y el "estado más crítico" los calcula la API y se muestran tal cual.
 - **Tipos generados sin `required`.** El contrato no marca campos obligatorios en las respuestas, así que `openapi-typescript` los genera todos como opcionales. `Complete<T>` en `src/api/types.ts` los vuelve obligatorios (conservando `| null`) y `api/guards.ts` verifica la forma general en tiempo de ejecución.
 - **TypeScript 5.9.** Se fija en `~5.9` porque `openapi-typescript` 7 declara `typescript@^5` como peer dependency.

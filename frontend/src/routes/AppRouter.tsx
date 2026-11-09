@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import { APP_NAME } from '../config/app'
 import {
@@ -21,11 +22,18 @@ import {
   useCurrentUser,
 } from '../features/session'
 import AppLayout, { type NavItem } from '../shared/components/layout/AppLayout'
+import LoaderSpinner from '../shared/components/ui/LoaderSpinner'
 import NotFoundPage from './NotFoundPage'
+
+// Las analíticas traen ECharts (pesado): se descargan recién al entrar a esa pantalla.
+const AnalyticsPage = lazy(() =>
+  import('../features/analytics').then((module) => ({ default: module.AnalyticsPage })),
+)
 
 const NAV_ITEMS: NavItem[] = [
   { to: '/unidades', label: 'Flota' },
   { to: '/alertas', label: 'Alertas' },
+  { to: '/analiticas', label: 'Analíticas' },
 ]
 
 // Solo para administradores (RN11). Activa también con las subrutas (/administracion/...).
@@ -71,6 +79,14 @@ export const AppRouter = () => (
         <Route path="/unidades/:patente" element={<UnitDetailPage />} />
         <Route path="/unidades/:patente/historial" element={<HistoryPage />} />
         <Route path="/alertas" element={<AlertsPage unitPath={unitPath} />} />
+        <Route
+          path="/analiticas"
+          element={
+            <Suspense fallback={<LoaderSpinner label="Cargando analíticas…" />}>
+              <AnalyticsPage />
+            </Suspense>
+          }
+        />
         <Route element={<RequireRole roles={['admin']} />}>
           <Route path="/administracion" element={<Navigate to="/administracion/unidades" replace />} />
           <Route element={<AdminLayout />}>
