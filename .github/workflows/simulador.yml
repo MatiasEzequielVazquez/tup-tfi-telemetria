@@ -1,0 +1,43 @@
+name: Simulador
+
+on:
+  push:
+    paths:
+      - 'simuladores-mock/**'
+      - 'backend/src/modulos/ingesta/parser.ts'   # el test de contrato valida contra este parser
+      - '.github/workflows/simulador.yml'
+  pull_request:
+    paths:
+      - 'simuladores-mock/**'
+      - 'backend/src/modulos/ingesta/parser.ts'
+      - '.github/workflows/simulador.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: Tests (modelo, transporte y contrato con el backend)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: simuladores-mock
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'      # mínimo soportado por el simulador
+          cache: pip
+          cache-dependency-path: simuladores-mock/requirements*.txt
+
+      # test_contrato_backend.py ejecuta parser.ts con Node (>= 22.18); sin Node se saltea.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - run: pip install -r requirements-dev.txt
+
+      - name: Tests
+        run: python -m pytest -rs
