@@ -41,12 +41,14 @@ Computadora del vehículo (SAE J1939 / J1979)
     → Supabase (PostgreSQL + Auth)
     → Dashboard web (React), servido por Caddy en el mismo dominio que la API
 ```
+> En esta versión el tramo del vehículo (OBD-II → ESP32 → 4G) lo reemplaza el [simulador de camiones](simuladores-mock/README.md), que publica en el mismo broker con el mismo contrato. Ver [Limitaciones](#limitaciones).
 
 ## Stack tecnológico
 
 | Capa | Tecnología |
 |---|---|
-| Hardware | ESP32, SparkFun OBD-II UART (STN1110), módulo 4G |
+| Hardware (planificado, ver Limitaciones) | ESP32, SparkFun OBD-II UART (STN1110), módulo 4G |
+| Simulador de camiones | Python 3.11+, paho-mqtt |
 | Frontend | React 19, TypeScript, Vite, Tailwind CSS, TanStack Query |
 | Backend | Node.js 22+, TypeScript, Express 5, postgres.js, mqtt.js |
 | Base de datos y autenticación | Supabase (PostgreSQL + Auth) |
@@ -72,7 +74,8 @@ Computadora del vehículo (SAE J1939 / J1979)
 ├── simuladores-mock/        # Simulador de camiones: publica por MQTT como el dispositivo (ver simuladores-mock/README.md)
 ├── db/
 │   ├── schema.sql           # DDL: 12 tablas, restricciones e índices, con RLS habilitado
-│   └── seed.sql             # DML: flota de ejemplo (generado por backend/scripts/seed.ts)
+│   ├── seed.sql             # DML: flota de ejemplo (generado por backend/scripts/seed.ts)
+│   └── migraciones/         # Cambios incrementales sobre una base ya creada
 ├── deploy/                  # Producción: docker-compose, Caddy, HiveMQ y renovación de certificados
 └── docs/
     ├── entregas/            # Informes de cada instancia de entrega
@@ -82,11 +85,11 @@ Computadora del vehículo (SAE J1939 / J1979)
 
 ## Base de datos
 
-El esquema completo está en [`db/schema.sql`](db/schema.sql) y los datos de ejemplo en [`db/seed.sql`](db/seed.sql). Row Level Security está habilitado en todas las tablas, sin políticas: ningún cliente (dashboard, mobile, etc.) accede directo a la base. Solo el backend se conecta, con la cadena de conexión de PostgreSQL. El dashboard usa Supabase únicamente para iniciar sesión.
+El esquema completo está en [`db/schema.sql`](db/schema.sql) y los datos de ejemplo en [`db/seed.sql`](db/seed.sql). Row Level Security está habilitado en todas las tablas, sin políticas: ningún cliente (dashboard, mobile, etc.) accede directo a la base. Solo el backend se conecta, con la cadena de conexión de PostgreSQL. El dashboard usa Supabase únicamente para iniciar sesión. Las bases creadas con una versión anterior del esquema se actualizan con los scripts de [`db/migraciones/`](db/migraciones/).
 
 ## Instalación y ejecución
 
-Requisitos: Node.js 22 o superior, y Docker para la base y el broker locales.
+Requisitos: Node.js 22 o superior, Docker para la base y el broker locales, y Python 3.11 o superior para el simulador de camiones.
 
 ### Backend
 
@@ -124,7 +127,7 @@ El firmware del dispositivo no forma parte de esta versión (ver [Limitaciones](
 |---|---|---|
 | [`simuladores-mock/`](simuladores-mock/README.md) | Simula camiones con su dispositivo y publica lecturas por MQTT/TLS al broker, con el mismo contrato que el firmware. No accede a la base. | Demo en producción: reemplaza al hardware. |
 | [`backend/scripts/simulador.ts`](backend/README.md#simulador-de-flota) | Lee la flota de la base y publica por MQTT o procesa directo contra la base. | Desarrollo y pruebas rápidas de las reglas de mantenimiento. |
-| [`mock/`](mock/README.md) | API REST simulada a partir del contrato OpenAPI. | Desarrollar el frontend sin backend. |
+| [`mock/`](mock/README.md) | API REST simulada que respeta el contrato OpenAPI, con datos de ejemplo y escrituras en memoria. | Desarrollar el frontend sin backend. |
 
 ## Pruebas
 
@@ -153,4 +156,4 @@ Las tres suites corren en GitHub Actions en cada push y pull request.
 - **Firmware:** el dispositivo físico (ESP32 + SparkFun OBD-II UART + 4G) no se implementó en esta versión y queda como trabajo futuro. Las lecturas las genera el [simulador de camiones](simuladores-mock/README.md), que publica con el mismo contrato MQTT; un test valida sus mensajes contra el parser real del backend.
 - **Lecturas soportadas:** la ingesta persiste kilometraje, horas de motor y códigos de falla. Otras lecturas (velocidad, rpm, GPS) se ignoran.
 - **Analíticas:** se calculan en el navegador con lo que expone la API; no hay endpoints de agregados ni historial de lecturas de km.
-- **Infraestructura gratuita:** la VM es Oracle Always Free (AMD Micro, 1 GB de RAM más swap) y la base usa el plan gratuito de Supabase, que pausa los proyectos sin actividad. La capacidad alcanza para la demo, no para una flota real.
+- **Infraestructura gratuita:** la VM es Oracle Always Free (AMD Micro, 1 GB de RAM más swap) y la base usa el plan gratuito de Supabase, con límites de almacenamiento y conexiones. La capacidad alcanza para la demo, no para una flota real.
