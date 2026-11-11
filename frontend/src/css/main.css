@@ -26,6 +26,18 @@
   --neutral-bg: #e9ecf0;
   --neutral-fg: #3b4554;
 
+  /*
+   * Colores de los gráficos (guía dataviz). Serie principal y gris de énfasis cambian en
+   * oscuro, con su propio paso; los de estado son fijos en ambos modos y siempre van
+   * acompañados de ícono y texto, nunca solo color.
+   */
+  --chart-series: #2a78d6;
+  --chart-muted: #898781;
+  --chart-ok: #0ca30c;
+  --chart-warn: #fab219;
+  --chart-serious: #ec835a;
+  --chart-danger: #d03b3b;
+
   color-scheme: light dark;
 }
 
@@ -49,6 +61,8 @@
     --postponed-fg: #ffd9b3;
     --neutral-bg: #2a323e;
     --neutral-fg: #cdd5e0;
+
+    --chart-series: #3987e5;
   }
 }
 

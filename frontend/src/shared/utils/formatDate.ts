@@ -26,11 +26,15 @@ const todayParts = new Intl.DateTimeFormat('en-US', {
   day: '2-digit',
 })
 
-/** El día de hoy en Buenos Aires como `YYYY-MM-DD`, sin depender de la zona del navegador. */
-export const todayDateOnly = (now: Date = new Date()): string => {
-  const part = (type: string) => todayParts.formatToParts(now).find((p) => p.type === type)?.value ?? ''
+/** El día calendario de un instante en Buenos Aires como `YYYY-MM-DD`, sin depender de la zona del navegador. */
+export const toDateOnly = (instant: Date): string => {
+  const parts = todayParts.formatToParts(instant)
+  const part = (type: string) => parts.find((p) => p.type === type)?.value ?? ''
   return `${part('year')}-${part('month')}-${part('day')}`
 }
+
+/** El día de hoy en Buenos Aires como `YYYY-MM-DD`. */
+export const todayDateOnly = (now: Date = new Date()): string => toDateOnly(now)
 
 // Una fecha sin hora (`YYYY-MM-DD`, como `services.fecha`) es un día de calendario, no un
 // instante: pasarla por `formatDate` la tomaría como medianoche UTC y en Buenos Aires

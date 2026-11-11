@@ -84,6 +84,10 @@
                   "**/admin/**",
                   "**/features/admin",
                   "**/features/admin/**",
+                  "**/analytics",
+                  "**/analytics/**",
+                  "**/features/analytics",
+                  "**/features/analytics/**",
                   "**/routes/**"
                 ],
                 "message": "Una feature no importa a otra ni a routes. Si hace falta compartir algo, subirlo a shared o componer en routes/AppRouter."
@@ -116,6 +120,10 @@
                   "**/admin/**",
                   "**/features/admin",
                   "**/features/admin/**",
+                  "**/analytics",
+                  "**/analytics/**",
+                  "**/features/analytics",
+                  "**/features/analytics/**",
                   "**/routes/**"
                 ],
                 "message": "Una feature no importa a otra ni a routes. Si hace falta compartir algo, subirlo a shared o componer en routes/AppRouter."
@@ -148,6 +156,10 @@
                   "**/admin/**",
                   "**/features/admin",
                   "**/features/admin/**",
+                  "**/analytics",
+                  "**/analytics/**",
+                  "**/features/analytics",
+                  "**/features/analytics/**",
                   "**/routes/**"
                 ],
                 "message": "Una feature no importa a otra ni a routes. Si hace falta compartir algo, subirlo a shared o componer en routes/AppRouter."
@@ -180,6 +192,46 @@
                   "**/alerts/**",
                   "**/features/alerts",
                   "**/features/alerts/**",
+                  "**/analytics",
+                  "**/analytics/**",
+                  "**/features/analytics",
+                  "**/features/analytics/**",
+                  "**/routes/**"
+                ],
+                "message": "Una feature no importa a otra ni a routes. Si hace falta compartir algo, subirlo a shared o componer en routes/AppRouter."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/features/analytics/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/fleet",
+                  "**/fleet/**",
+                  "**/features/fleet",
+                  "**/features/fleet/**",
+                  "**/session",
+                  "**/session/**",
+                  "**/features/session",
+                  "**/features/session/**",
+                  "**/alerts",
+                  "**/alerts/**",
+                  "**/features/alerts",
+                  "**/features/alerts/**",
+                  "**/admin",
+                  "**/admin/**",
+                  "**/features/admin",
+                  "**/features/admin/**",
                   "**/routes/**"
                 ],
                 "message": "Una feature no importa a otra ni a routes. Si hace falta compartir algo, subirlo a shared o componer en routes/AppRouter."
