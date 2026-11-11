@@ -1,0 +1,58 @@
+name: Backend
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - 'db/**'                       # los tests cargan db/schema.sql y db/seed.sql
+      - '.github/workflows/backend.yml'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - 'db/**'
+      - '.github/workflows/backend.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: Tipos y tests (unitarios + integración)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    services:
+      postgres:
+        image: postgres:17-alpine     # misma versión mayor que Supabase y que docker-compose.dev.yml
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5433:5432                 # mismo puerto que .env.test
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      # Explícito: sin esta variable los tests de integración se saltean y el CI quedaría verde sin probarlos.
+      TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5433/postgres
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24            # igual que el Dockerfile de producción
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - run: npm ci
+
+      - name: Tipos
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm test
