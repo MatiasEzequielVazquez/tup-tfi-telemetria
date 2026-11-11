@@ -1,5 +1,9 @@
 # Sistema de Telemetría Vehicular para el Mantenimiento Preventivo de Flotas Mixtas
 
+![Backend](https://github.com/MatiasEzequielVazquez/tup-tfi-telemetria/actions/workflows/backend.yml/badge.svg)
+![Frontend](https://github.com/MatiasEzequielVazquez/tup-tfi-telemetria/actions/workflows/frontend.yml/badge.svg)
+![Simulador](https://github.com/MatiasEzequielVazquez/tup-tfi-telemetria/actions/workflows/simulador.yml/badge.svg)
+
 Trabajo Final Integrador — Tecnicatura Universitaria en Programación a Distancia (UTN)
 
 Las pymes de transporte con flotas mixtas (camiones de distintas marcas, propios y de terceros) suelen controlar el mantenimiento preventivo con registros manuales, porque la telemetría de fábrica solo cubre a las unidades recientes de cada marca. Este proyecto propone un dispositivo independiente de la marca que lee kilometraje, horas de motor y códigos de falla desde el conector de diagnóstico del vehículo (SAE J1939 / J1979), los transmite por MQTT a la nube y calcula automáticamente el estado de mantenimiento de cada unidad en un dashboard web.
@@ -8,10 +12,10 @@ Las pymes de transporte con flotas mixtas (camiones de distintas marcas, propios
 
 ## Integrantes
 
-- **Patricio Sussini Guanziroli** — hardware y firmware, frontend
+- **Patricio Sussini Guanziroli** — frontend y simulador de camiones
 - **Matias Ezequiel Vazquez** — backend, bases de datos e infraestructura
 
-**Tutor:** Sebastián Bruselario
+**Grupo:** N.º 147 · **Tutor:** Sebastián Bruselario
 
 ## Documentación
 
@@ -65,6 +69,7 @@ Computadora del vehículo (SAE J1939 / J1979)
 ├── backend/                 # API REST + ingesta MQTT + temporizador (ver backend/README.md)
 ├── frontend/                # Dashboard web (ver frontend/README.md)
 ├── mock/                    # API simulada para desarrollar el frontend sin backend
+├── simuladores-mock/        # Simulador de camiones: publica por MQTT como el dispositivo (ver simuladores-mock/README.md)
 ├── db/
 │   ├── schema.sql           # DDL: 12 tablas, restricciones e índices, con RLS habilitado
 │   └── seed.sql             # DML: flota de ejemplo (generado por backend/scripts/seed.ts)
@@ -111,13 +116,41 @@ El frontend funciona igual contra el backend (con `AUTH_MODE=dev`) o contra el m
 
 Ver [`docs/despliegue.md`](docs/despliegue.md).
 
+## Simuladores y mocks
+
+El firmware del dispositivo no forma parte de esta versión (ver [Limitaciones](#limitaciones)). Para probar y demostrar el circuito completo hay tres herramientas, cada una con un propósito distinto:
+
+| Herramienta | Qué hace | Para qué se usa |
+|---|---|---|
+| [`simuladores-mock/`](simuladores-mock/README.md) | Simula camiones con su dispositivo y publica lecturas por MQTT/TLS al broker, con el mismo contrato que el firmware. No accede a la base. | Demo en producción: reemplaza al hardware. |
+| [`backend/scripts/simulador.ts`](backend/README.md#simulador-de-flota) | Lee la flota de la base y publica por MQTT o procesa directo contra la base. | Desarrollo y pruebas rápidas de las reglas de mantenimiento. |
+| [`mock/`](mock/README.md) | API REST simulada a partir del contrato OpenAPI. | Desarrollar el frontend sin backend. |
+
+## Pruebas
+
+| Componente | Cobertura | Cómo correrlas |
+|---|---|---|
+| Backend | Unitarias (parser MQTT, reglas de mantenimiento) e integración contra PostgreSQL real (API, ingesta, temporizador) | `cd backend && npm test` (requiere el Postgres de `docker-compose.dev.yml`) |
+| Frontend | Unitarias de servicios, formularios, filtros, sesión y analíticas | `cd frontend && npm test` |
+| Simulador | Modelo, mensajes, transporte MQTT y validación de los mensajes contra el parser del backend | `cd simuladores-mock && python -m pytest` |
+
+Las tres suites corren en GitHub Actions en cada push y pull request.
+
 ## Estado del proyecto
 
 | Componente | Estado |
 |---|---|
 | Documentación (1ª y 2ª entrega) | Completa |
-| Base de datos | Esquema y datos de ejemplo aplicados en Supabase |
-| Backend | Completo: API REST (M1, M2, M4–M7, M9), ingesta MQTT (M3) y temporizador (M8). 39 tests. Desplegado en producción. |
+| Base de datos | Esquema, migraciones y datos de ejemplo aplicados en Supabase |
+| Backend | Completo: API REST (M1, M2, M4–M7, M9), ingesta MQTT (M3) y temporizador (M8). Desplegado en producción. |
 | Infraestructura | VM de Oracle con HiveMQ CE (TLS y usuarios por dispositivo), Caddy con HTTPS y renovación automática de certificados |
-| Frontend | Login con Supabase Auth, flota, detalle de unidad y alertas. Carga manual de kilometraje, postergación de tareas, registro de services, historial de mantenimiento y administración de unidades, dispositivos, catálogo de tareas, planes de mantenimiento y usuarios. Desplegado en producción, con login real contra Supabase Auth |
-| Firmware | Pendiente |
+| Frontend | Completo: flota, detalle de unidad, alertas, kilometraje manual, postergaciones, services, historial, analíticas y administración (unidades, dispositivos, catálogo, planes y usuarios). Desplegado en producción con login real. |
+| Simulador de camiones | Completo: publica en el broker de producción con el contrato del firmware |
+| Firmware | Fuera del alcance de esta versión (ver Limitaciones) |
+
+## Limitaciones
+
+- **Firmware:** el dispositivo físico (ESP32 + SparkFun OBD-II UART + 4G) no se implementó en esta versión y queda como trabajo futuro. Las lecturas las genera el [simulador de camiones](simuladores-mock/README.md), que publica con el mismo contrato MQTT; un test valida sus mensajes contra el parser real del backend.
+- **Lecturas soportadas:** la ingesta persiste kilometraje, horas de motor y códigos de falla. Otras lecturas (velocidad, rpm, GPS) se ignoran.
+- **Analíticas:** se calculan en el navegador con lo que expone la API; no hay endpoints de agregados ni historial de lecturas de km.
+- **Infraestructura gratuita:** la VM es Oracle Always Free (AMD Micro, 1 GB de RAM más swap) y la base usa el plan gratuito de Supabase, que pausa los proyectos sin actividad. La capacidad alcanza para la demo, no para una flota real.
