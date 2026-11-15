@@ -23,6 +23,7 @@ Las pymes de transporte con flotas mixtas (camiones de distintas marcas, propios
 |---|---|
 | [1ª Entrega — Propuesta de proyecto](docs/entregas/01-propuesta-proyecto.md) | Problemática y evidencia (caso de estudio), propuesta de valor, actores, alcance, requerimientos funcionales y no funcionales, reglas de negocio, casos de uso, plan de trabajo y ficha de la entrevista. |
 | [2ª Entrega — Arquitectura y módulos](docs/entregas/02-arquitectura-modulos.md) | Esquema de base de datos (PostgreSQL/Supabase), listado de módulos y contrato del mensaje MQTT. |
+| [Informe Final](docs/entregas/03-informe-final.md) | Informe de la entrega final: problema y contexto, objetivos y alcance implementado, modelo, arquitectura y tecnologías, implementación con capturas, pruebas y validación, resultados, limitaciones y trabajo futuro. |
 | [Contrato de la API](docs/openapi.yaml) | Especificación OpenAPI de la API REST, compartida por el backend, el mock y el frontend. |
 | [Prototipo del backend](docs/prototipo-backend.md) y [del frontend](docs/prototipo-frontend.md) | Endpoints y pantallas a partir de los casos de uso. |
 | [Despliegue](docs/despliegue.md) | Puesta en producción en Oracle Cloud: Docker, HiveMQ CE, Caddy y certificados. |
@@ -78,7 +79,8 @@ Computadora del vehículo (SAE J1939 / J1979)
 │   └── migraciones/         # Cambios incrementales sobre una base ya creada
 ├── deploy/                  # Producción: docker-compose, Caddy, HiveMQ y renovación de certificados
 └── docs/
-    ├── entregas/            # Informes de cada instancia de entrega
+    ├── entregas/            # Informes de cada instancia de entrega (1ª, 2ª e informe final)
+    ├── capturas/            # Capturas del sistema en producción (usadas en el informe final)
     ├── diagramas/           # Diagramas en PNG (fuentes .drawio en drawio/)
     └── openapi.yaml         # Contrato de la API REST
 ```
@@ -118,6 +120,7 @@ El frontend funciona igual contra el backend (con `AUTH_MODE=dev`) o contra el m
 ### Producción
 
 Ver [`docs/despliegue.md`](docs/despliegue.md).
+**Informe final:** [docs/entregas/03-informe-final.md](docs/entregas/03-informe-final.md)
 
 ## Simuladores y mocks
 
@@ -143,7 +146,7 @@ Las tres suites corren en GitHub Actions en cada push y pull request.
 
 | Componente | Estado |
 |---|---|
-| Documentación (1ª y 2ª entrega) | Completa |
+| Documentación (1ª y 2ª entrega e informe final) | Completa |
 | Base de datos | Esquema, migraciones y datos de ejemplo aplicados en Supabase |
 | Backend | Completo: API REST (M1, M2, M4–M7, M9), ingesta MQTT (M3) y temporizador (M8). Desplegado en producción. |
 | Infraestructura | VM de Oracle con HiveMQ CE (TLS y usuarios por dispositivo), Caddy con HTTPS y renovación automática de certificados |
