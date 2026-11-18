@@ -16,7 +16,7 @@
 | **Año** | 2026 |
 | **Repositorio** | https://github.com/MatiasEzequielVazquez/tup-tfi-telemetria (versión entregada: `v1.0.0`) |
 | **Sistema desplegado** | https://157-151-13-187.sslip.io |
-| **Video de presentación** | PENDIENTE |
+| **Video de presentación** | [Video_Explicativo-TPFI-Telemetry(sub-es)](https://drive.google.com/file/d/1xBGob1QIqpzcUPetAbQ0Q-4TJeRK-7gX/view?usp=drive_link) |
 
 ---
 

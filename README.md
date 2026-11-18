@@ -24,6 +24,8 @@ Las pymes de transporte con flotas mixtas (camiones de distintas marcas, propios
 | [1ª Entrega — Propuesta de proyecto](docs/entregas/01-propuesta-proyecto.md) | Problemática y evidencia (caso de estudio), propuesta de valor, actores, alcance, requerimientos funcionales y no funcionales, reglas de negocio, casos de uso, plan de trabajo y ficha de la entrevista. |
 | [2ª Entrega — Arquitectura y módulos](docs/entregas/02-arquitectura-modulos.md) | Esquema de base de datos (PostgreSQL/Supabase), listado de módulos y contrato del mensaje MQTT. |
 | [Informe Final](docs/entregas/03-informe-final.md) | Informe de la entrega final: problema y contexto, objetivos y alcance implementado, modelo, arquitectura y tecnologías, implementación con capturas, pruebas y validación, resultados, limitaciones y trabajo futuro. |
+| [Informe Final (PDF)](docs/entregas/03-informe-final.pdf) | Versión en PDF del informe final. |
+| [Video de presentación](https://drive.google.com/file/d/1xBGob1QIqpzcUPetAbQ0Q-4TJeRK-7gX/view?usp=sharing) | Video explicativo del proyecto (en inglés, con subtítulos en español). |
 | [Contrato de la API](docs/openapi.yaml) | Especificación OpenAPI de la API REST, compartida por el backend, el mock y el frontend. |
 | [Prototipo del backend](docs/prototipo-backend.md) y [del frontend](docs/prototipo-frontend.md) | Endpoints y pantallas a partir de los casos de uso. |
 | [Despliegue](docs/despliegue.md) | Puesta en producción en Oracle Cloud: Docker, HiveMQ CE, Caddy y certificados. |
@@ -119,8 +121,9 @@ El frontend funciona igual contra el backend (con `AUTH_MODE=dev`) o contra el m
 
 ### Producción
 
-Ver [`docs/despliegue.md`](docs/despliegue.md).
-**Informe final:** [docs/entregas/03-informe-final.md](docs/entregas/03-informe-final.md)
+**Producción:** https://157-151-13-187.sslip.io (estado del servicio en [`/health`](https://157-151-13-187.sslip.io/health))
+
+**Informe final:** [PDF](docs/entregas/03-informe-final.pdf) · [Markdown](docs/entregas/03-informe-final.md) · **Video:** [presentación](https://drive.google.com/file/d/1xBGob1QIqpzcUPetAbQ0Q-4TJeRK-7gX/view?usp=sharing)
 
 ## Simuladores y mocks
 
