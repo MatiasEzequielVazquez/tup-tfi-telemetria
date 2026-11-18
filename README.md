@@ -10,6 +10,8 @@ Las pymes de transporte con flotas mixtas (camiones de distintas marcas, propios
 
 **Producción:** https://157-151-13-187.sslip.io (estado del servicio en [`/health`](https://157-151-13-187.sslip.io/health))
 
+**Informe final:** [PDF](docs/entregas/03-informe-final.pdf) · [Markdown](docs/entregas/03-informe-final.md) · **Video:** [presentación](https://drive.google.com/file/d/1xBGob1QIqpzcUPetAbQ0Q-4TJeRK-7gX/view?usp=sharing)
+
 ## Integrantes
 
 - **Patricio Sussini Guanziroli** — frontend y simulador de camiones
@@ -121,9 +123,7 @@ El frontend funciona igual contra el backend (con `AUTH_MODE=dev`) o contra el m
 
 ### Producción
 
-**Producción:** https://157-151-13-187.sslip.io (estado del servicio en [`/health`](https://157-151-13-187.sslip.io/health))
-
-**Informe final:** [PDF](docs/entregas/03-informe-final.pdf) · [Markdown](docs/entregas/03-informe-final.md) · **Video:** [presentación](https://drive.google.com/file/d/1xBGob1QIqpzcUPetAbQ0Q-4TJeRK-7gX/view?usp=sharing)
+Ver [`docs/despliegue.md`](docs/despliegue.md).
 
 ## Simuladores y mocks
 
